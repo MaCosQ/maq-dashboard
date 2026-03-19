@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Supervision — Cabinet QUERCY</title>
+<title>Dashboard — QUERCY & Associés</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -18,8 +18,11 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--g100);color:var(--g900);font-size:13px;min-height:100vh;}
 
+/* HEADER */
 .header{background:var(--q700);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:300;box-shadow:0 2px 8px rgba(0,0,0,.3);}
-.logo{font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:white;display:flex;align-items:center;gap:8px;}
+.logo{color:white;display:flex;align-items:center;gap:10px;}
+.logo img{height:30px;width:auto;object-fit:contain;}
+.logo-fallback{font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:8px;}
 .logo-mark{width:28px;height:28px;background:var(--q300);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;}
 .sep{width:1px;height:18px;background:rgba(255,255,255,.25);}
 .header-title{font-size:12px;color:rgba(255,255,255,.65);}
@@ -33,6 +36,7 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g100);color:var(--g
 .profile-banner{background:var(--q50);border-bottom:1px solid var(--q100);padding:5px 20px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--q600);}
 .profile-banner strong{font-weight:600;}
 
+/* KPI */
 .synthese{background:white;border-bottom:1px solid var(--g200);padding:12px 20px;display:flex;gap:10px;}
 .kpi{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 14px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:all .15s;gap:1px;user-select:none;}
 .kpi:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
@@ -40,19 +44,16 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g100);color:var(--g
 .kpi .kl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
 .kpi .ks{font-size:10px;opacity:.6;}
 .kpi .ksub{font-size:10px;margin-top:4px;padding-top:4px;border-top:1px solid rgba(0,0,0,.08);width:100%;text-align:center;min-height:16px;}
-.kpi-all{background:var(--g50);color:var(--g700);}         .kpi-all.active{border-color:var(--g500);}
-.kpi-red{background:var(--red-bg);color:var(--red);}       .kpi-red.active{border-color:var(--red);}
-.kpi-ora{background:var(--ora-bg);color:var(--ora);}       .kpi-ora.active{border-color:var(--ora);}
-.kpi-grn{background:var(--em-bg);color:var(--em);}         .kpi-grn.active{border-color:var(--em);}
-.kpi-cli{background:#fdf4ff;color:#7e22ce;flex:0.8;}       .kpi-cli.active{border-color:#7e22ce;}
+.kpi-all{background:var(--g50);color:var(--g700);}   .kpi-all.active{border-color:var(--g500);}
+.kpi-red{background:var(--red-bg);color:var(--red);} .kpi-red.active{border-color:var(--red);}
+.kpi-ora{background:var(--ora-bg);color:var(--ora);} .kpi-ora.active{border-color:var(--ora);}
+.kpi-grn{background:var(--em-bg);color:var(--em);}   .kpi-grn.active{border-color:var(--em);}
+.kpi-cli{background:#fdf4ff;color:#7e22ce;flex:0.8;} .kpi-cli.active{border-color:#7e22ce;}
 
+/* TOOLBAR */
 .toolbar{background:white;border-bottom:1px solid var(--g200);padding:7px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .tb-sel{border:1px solid var(--g200);border-radius:6px;padding:5px 9px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--g600);background:var(--g50);cursor:pointer;outline:none;transition:border-color .15s;}
 .tb-sel:focus,.tb-sel.active{border-color:var(--q400);color:var(--q700);background:var(--q50);}
-.reset-btn{padding:5px 12px;border:1px solid var(--g200);border-radius:6px;background:white;font-size:11px;color:var(--g500);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .12s;}
-.reset-btn:hover{border-color:var(--g300);color:var(--g700);}
-.export-btn{margin-left:auto;padding:5px 12px;border:1px solid var(--q300);border-radius:6px;background:var(--q50);font-size:11px;color:var(--q600);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500;transition:all .12s;display:flex;align-items:center;gap:5px;}
-.export-btn:hover{background:var(--q100);border-color:var(--q400);}
 .tb-sep{width:1px;height:20px;background:var(--g200);margin:0 2px;}
 .cb-group{display:flex;align-items:center;gap:10px;padding:4px 10px;border:1px solid var(--g200);border-radius:6px;background:var(--g50);}
 .cb-group label{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--g600);cursor:pointer;user-select:none;white-space:nowrap;}
@@ -61,97 +62,112 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g100);color:var(--g
 .cb-group label.cb-ora{color:var(--ora);}
 .cb-group label.cb-grn{color:var(--em);}
 .cb-cli label{color:#7e22ce;}
+.cb-sum label{color:var(--q600);font-weight:500;}
+.reset-btn{padding:5px 12px;border:1px solid var(--g200);border-radius:6px;background:white;font-size:11px;color:var(--g500);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .12s;}
+.reset-btn:hover{border-color:var(--g300);color:var(--g700);}
+.export-btn{margin-left:auto;padding:5px 12px;border:1px solid var(--q300);border-radius:6px;background:var(--q50);font-size:11px;color:var(--q600);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500;transition:all .12s;display:flex;align-items:center;gap:5px;}
+.export-btn:hover{background:var(--q100);border-color:var(--q400);}
 
+/* TABLE */
 .table-wrap{padding:12px 20px 20px;overflow-x:auto;}
 table{width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;border:1px solid var(--g200);box-shadow:0 1px 4px rgba(0,0,0,.06);table-layout:fixed;}
 
+/* THEAD */
 thead tr.thead-angled th{background:var(--q800);padding:0;vertical-align:bottom;border-right:1px solid rgba(255,255,255,.07);white-space:nowrap;height:100px;}
-thead tr.thead-angled th.th-num{position:sticky;left:0;z-index:20;background:var(--q800);vertical-align:middle;text-align:center;width:44px;min-width:44px;}
+thead tr.thead-angled th.th-num  {position:sticky;left:0;z-index:20;background:var(--q800);vertical-align:middle;text-align:center;width:44px;min-width:44px;}
 thead tr.thead-angled th.th-score{position:sticky;left:44px;z-index:20;background:var(--q800);vertical-align:middle;text-align:center;width:52px;min-width:52px;}
-thead tr.thead-angled th.th-name{position:sticky;left:96px;z-index:20;background:var(--q800);vertical-align:middle;padding:0 12px;width:180px;min-width:180px;max-width:180px;}
+thead tr.thead-angled th.th-name {position:sticky;left:96px;z-index:20;background:var(--q800);vertical-align:middle;padding:0 12px;width:180px;min-width:180px;max-width:180px;}
 .th-fixed-label{color:rgba(255,255,255,.8);font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;}
 .th-num-label,.th-score-label{color:rgba(255,255,255,.7);font-size:9px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;}
 .th-angle-wrap{display:block;height:100%;position:relative;}
-.th-angled-inner{position:absolute;bottom:8px;left:4px;display:block;transform-origin:bottom left;transform:rotate(-45deg);color:rgba(255,255,255,.8);font-size:9px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;cursor:help;}
+.th-angled-inner{position:absolute;bottom:8px;left:4px;display:block;transform-origin:bottom left;transform:rotate(-45deg);color:rgba(255,255,255,.8);font-size:9px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;}
+.th-sortable{cursor:pointer;}
+.th-sortable:hover{color:white;}
 thead tr.thead-angled th.col-init{width:32px;min-width:32px;}
-thead tr.thead-angled th.col-date{width:44px;min-width:44px;}
+thead tr.thead-angled th.col-date{width:46px;min-width:46px;}
 thead tr.thead-angled th.col-feu {width:32px;min-width:32px;}
 thead tr.thead-angled th.col-ged {width:40px;min-width:40px;}
 thead tr.thead-angled th.col-cli {width:72px;min-width:72px;}
 thead tr.thead-angled th.col-comm{width:120px;min-width:120px;}
 
+/* FILTER ROW */
 thead tr.filter-row th{background:var(--q900);padding:4px 3px 5px;border-right:1px solid rgba(255,255,255,.06);}
-thead tr.filter-row th.fr-num{position:sticky;left:0;z-index:20;background:var(--q900);width:44px;}
+thead tr.filter-row th.fr-num  {position:sticky;left:0;z-index:20;background:var(--q900);width:44px;}
 thead tr.filter-row th.fr-score{position:sticky;left:44px;z-index:20;background:var(--q900);width:52px;}
-thead tr.filter-row th.fr-name{position:sticky;left:96px;z-index:20;background:var(--q900);padding:4px 6px 5px;}
+thead tr.filter-row th.fr-name {position:sticky;left:96px;z-index:20;background:var(--q900);padding:4px 6px 5px;}
 .col-inp{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.75);font-size:9px;font-family:'IBM Plex Sans',sans-serif;padding:3px 5px;outline:none;}
 .col-inp:focus{border-color:var(--q300);}
 .col-fsel{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.75);font-size:9px;font-family:'IBM Plex Sans',sans-serif;padding:2px 3px;outline:none;cursor:pointer;}
 .col-fsel:focus{border-color:var(--q300);}
 .col-fsel option{background:#1a2e1c;color:white;}
 
+/* TBODY */
 tbody tr{border-bottom:1px solid var(--g100);transition:background .08s;cursor:pointer;}
-tbody tr:hover{background:rgba(0,0,0,.03);}
-/* Couleurs de fond par score — violet écrase tout si bloqué client */
-tbody tr.row-red  {background:#fff5f5;}
-tbody tr.row-ora  {background:#fffbeb;}
-tbody tr.row-grn  {background:white;}
+tbody tr.row-red   {background:#fff5f5;}
+tbody tr.row-ora   {background:#fffbeb;}
+tbody tr.row-grn   {background:white;}
 tbody tr.row-client{background:#fdf4ff;}
-tbody tr.row-red:hover  {background:#ffe4e4;}
-tbody tr.row-ora:hover  {background:#fef3c7;}
-tbody tr.row-grn:hover  {background:var(--q50);}
+tbody tr.row-red:hover   {background:#ffe4e4;}
+tbody tr.row-ora:hover   {background:#fef3c7;}
+tbody tr.row-grn:hover   {background:var(--q50);}
 tbody tr.row-client:hover{background:#f5e8ff;}
+tbody tr.row-selected{outline:2px solid var(--q400);outline-offset:-2px;}
 tbody td{padding:5px 4px;border-right:1px solid var(--g100);text-align:center;vertical-align:middle;}
-tbody td.td-num{position:sticky;left:0;z-index:5;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--g500);width:44px;border-right:1px solid var(--g200);}
+tbody td.td-num  {position:sticky;left:0;z-index:5;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--g500);width:44px;border-right:1px solid var(--g200);}
 tbody td.td-score{position:sticky;left:44px;z-index:5;width:52px;border-right:1px solid var(--g200);padding:4px 5px;}
-tbody td.td-name{position:sticky;left:96px;z-index:5;text-align:left;font-weight:500;font-size:11px;color:var(--q600);width:180px;min-width:180px;max-width:180px;padding-left:8px;border-left:3px solid transparent;}
-/* Couleur de fond des cellules sticky selon la ligne */
-tbody tr.row-red   td.td-num,tbody tr.row-red   td.td-score,tbody tr.row-red   td.td-name{background:#fff5f5;}
-tbody tr.row-ora   td.td-num,tbody tr.row-ora   td.td-score,tbody tr.row-ora   td.td-name{background:#fffbeb;}
-tbody tr.row-grn   td.td-num,tbody tr.row-grn   td.td-score,tbody tr.row-grn   td.td-name{background:white;}
+tbody td.td-name {position:sticky;left:96px;z-index:5;text-align:left;font-weight:500;font-size:11px;color:var(--q600);width:180px;min-width:180px;max-width:180px;padding-left:8px;border-left:3px solid transparent;}
+tbody tr.row-red    td.td-num,tbody tr.row-red    td.td-score,tbody tr.row-red    td.td-name{background:#fff5f5;}
+tbody tr.row-ora    td.td-num,tbody tr.row-ora    td.td-score,tbody tr.row-ora    td.td-name{background:#fffbeb;}
+tbody tr.row-grn    td.td-num,tbody tr.row-grn    td.td-score,tbody tr.row-grn    td.td-name{background:white;}
 tbody tr.row-client td.td-num,tbody tr.row-client td.td-score,tbody tr.row-client td.td-name{background:#fdf4ff;}
-tbody tr.row-red:hover   td.td-num,tbody tr.row-red:hover   td.td-score,tbody tr.row-red:hover   td.td-name{background:#ffe4e4;}
-tbody tr.row-ora:hover   td.td-num,tbody tr.row-ora:hover   td.td-score,tbody tr.row-ora:hover   td.td-name{background:#fef3c7;}
-tbody tr.row-grn:hover   td.td-num,tbody tr.row-grn:hover   td.td-score,tbody tr.row-grn:hover   td.td-name{background:var(--q50);}
+tbody tr.row-red:hover    td.td-num,tbody tr.row-red:hover    td.td-score,tbody tr.row-red:hover    td.td-name{background:#ffe4e4;}
+tbody tr.row-ora:hover    td.td-num,tbody tr.row-ora:hover    td.td-score,tbody tr.row-ora:hover    td.td-name{background:#fef3c7;}
+tbody tr.row-grn:hover    td.td-num,tbody tr.row-grn:hover    td.td-score,tbody tr.row-grn:hover    td.td-name{background:var(--q50);}
 tbody tr.row-client:hover td.td-num,tbody tr.row-client:hover td.td-score,tbody tr.row-client:hover td.td-name{background:#f5e8ff;}
-/* Bordure gauche indicateur de score */
-tbody tr.row-red   td.td-name{border-left:3px solid var(--red);}
-tbody tr.row-ora   td.td-name{border-left:3px solid var(--ora);}
+tbody tr.row-red    td.td-name{border-left:3px solid var(--red);}
+tbody tr.row-ora    td.td-name{border-left:3px solid var(--ora);}
 tbody tr.row-client td.td-name{border-left:3px solid #a855f7;}
-tbody tr.row-grn   td.td-name{border-left:3px solid transparent;}
+tbody tr.row-grn    td.td-name{border-left:3px solid transparent;}
 tbody td.td-init{font-size:9px;color:var(--g500);font-weight:500;}
 tbody td.td-date{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--g400);}
 
+/* SUMMARY ROWS */
+tbody tr.row-summary{background:var(--q800);border-bottom:2px solid var(--q600);}
+tbody tr.row-summary td{padding:5px 8px;color:rgba(255,255,255,.8);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;}
+tbody tr.row-summary td.sum-label{position:sticky;left:0;background:var(--q800);z-index:5;text-align:left;}
+tbody tr.row-summary td.sum-score{position:sticky;left:44px;background:var(--q800);z-index:5;}
+tbody tr.row-summary td.sum-name{position:sticky;left:96px;background:var(--q800);z-index:5;text-align:left;color:white;font-size:10px;}
+.sum-pill{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:14px;border-radius:3px;font-size:8px;font-weight:700;padding:0 3px;margin:0 1px;}
+.sum-r{background:var(--red-bg);color:var(--red);}
+.sum-o{background:var(--ora-bg);color:var(--ora);}
+.sum-g{background:var(--em-bg);color:var(--em);}
+.sum-c{background:#fdf4ff;color:#7e22ce;}
+
+/* SCORE */
 .score-badge{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:18px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;padding:0 5px;}
 .score-ora{background:var(--ora-bg);color:var(--ora);}
 .score-red{background:var(--red-bg);color:var(--red);}
 
-/* FEU avec tooltip inline */
+/* FEUX */
 .feu-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;cursor:default;}
 .feu{width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0;}
 .feu-g{background:var(--em);}
 .feu-o{background:var(--ora);}
 .feu-r{background:var(--red);}
 .feu-n{background:var(--g300);}
-.feu-wrap .ft{
-  visibility:hidden;opacity:0;pointer-events:none;
-  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);
-  background:var(--g900);color:white;font-size:10px;line-height:1.5;
-  border-radius:5px;padding:6px 9px;white-space:normal;min-width:160px;max-width:220px;
-  box-shadow:0 4px 12px rgba(0,0,0,.35);z-index:999;text-align:left;font-weight:400;
-  letter-spacing:0;text-transform:none;
-  transition:opacity .15s;
-}
+.feu-wrap .ft{visibility:hidden;opacity:0;pointer-events:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--g900);color:white;font-size:10px;line-height:1.5;border-radius:5px;padding:6px 9px;white-space:normal;min-width:160px;max-width:220px;box-shadow:0 4px 12px rgba(0,0,0,.35);z-index:999;text-align:left;font-weight:400;letter-spacing:0;text-transform:none;transition:opacity .15s;}
 .feu-wrap:hover .ft{visibility:visible;opacity:1;}
 .ft-arr{display:block;width:7px;height:7px;background:var(--g900);transform:rotate(45deg);position:absolute;bottom:-3px;left:50%;margin-left:-3px;}
 .ft-since{display:block;margin-top:4px;font-size:9px;color:#f87171;font-style:italic;}
 
+/* GED */
 .ged{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:16px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;padding:0 4px;}
 .ged-0{background:var(--g100);color:var(--g400);}
 .ged-l{background:var(--em-bg);color:var(--em);}
 .ged-m{background:var(--ora-bg);color:var(--ora);}
 .ged-h{background:var(--red-bg);color:var(--red);}
 
+/* CLIENT */
 .cli-btn{background:none;border:1px solid var(--g200);border-radius:4px;padding:2px 6px;font-size:9px;color:var(--g400);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .12s;white-space:nowrap;}
 .cli-btn:hover{border-color:#a855f7;color:#7e22ce;background:#fdf4ff;}
 .cli-badge{display:inline-flex;align-items:center;gap:3px;border-radius:4px;padding:2px 6px;font-size:9px;font-weight:600;cursor:pointer;white-space:nowrap;border:1px solid transparent;}
@@ -159,10 +175,12 @@ tbody td.td-date{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(-
 .cli-badge-red{background:var(--red-bg);color:var(--red);border-color:var(--red-bd);animation:pulse-r 2s infinite;}
 @keyframes pulse-r{0%,100%{opacity:1}50%{opacity:.65}}
 
+/* COMM */
 .comm-txt{font-size:9px;color:var(--g400);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px;display:block;text-align:left;}
 .btn-comm{background:none;border:1px solid var(--g200);border-radius:3px;padding:2px 6px;font-size:9px;color:var(--g400);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .12s;white-space:nowrap;}
 .btn-comm:hover{border-color:var(--q300);color:var(--q600);background:var(--q50);}
 
+/* TFOOT */
 tfoot tr td{background:var(--q900);padding:5px 4px;border-right:1px solid rgba(255,255,255,.06);text-align:center;vertical-align:middle;}
 tfoot tr td.tf-label{position:sticky;left:0;z-index:10;background:var(--q900);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.5);text-align:left;padding-left:8px;width:44px;}
 tfoot tr td.tf-score{position:sticky;left:44px;z-index:10;background:var(--q900);width:52px;}
@@ -171,16 +189,25 @@ tfoot tr td.tf-name{position:sticky;left:96px;z-index:10;background:var(--q900);
 .tf-zero{background:rgba(255,255,255,.06);color:rgba(255,255,255,.25);}
 .tf-has{background:var(--red-bg);color:var(--red);}
 
+/* TOOLTIP */
 .tooltip{position:relative;}
 .tooltip .tt-box{visibility:hidden;opacity:0;pointer-events:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--g900);color:white;font-size:10px;line-height:1.6;letter-spacing:0;text-transform:none;font-weight:400;border-radius:6px;padding:8px 11px;white-space:normal;box-shadow:0 4px 14px rgba(0,0,0,.35);z-index:999;transition:opacity .15s;min-width:180px;max-width:240px;text-align:left;}
 .tooltip:hover .tt-box{visibility:visible;opacity:1;}
 .tt-arr{display:block;width:8px;height:8px;background:var(--g900);transform:rotate(45deg);position:absolute;bottom:-4px;left:50%;margin-left:-4px;}
 
-.footer{background:white;border-top:1px solid var(--g200);padding:8px 20px;display:flex;align-items:center;gap:18px;}
+/* FOOTER */
+.footer{background:white;border-top:1px solid var(--g200);padding:8px 20px;display:flex;align-items:center;gap:14px;}
 .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--g600);}
 .leg-dot{width:9px;height:9px;border-radius:50%;}
+.kbd-hint{margin-left:16px;font-size:10px;color:var(--g400);border-left:1px solid var(--g200);padding-left:14px;}
+.kbd{display:inline-flex;align-items:center;justify-content:center;background:var(--g100);border:1px solid var(--g300);border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:9px;padding:1px 5px;color:var(--g600);margin:0 2px;}
 .count{margin-left:auto;font-size:11px;color:var(--g400);font-family:'IBM Plex Mono',monospace;}
 
+/* TOAST */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--q700);color:white;padding:10px 18px;border-radius:8px;font-size:12px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.25);opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;z-index:600;}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* MODALS */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .overlay.open{opacity:1;pointer-events:all;}
 .modal{background:white;border-radius:10px;padding:24px;width:460px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.25);transform:translateY(8px);transition:transform .2s;}
@@ -190,7 +217,7 @@ tfoot tr td.tf-name{position:sticky;left:96px;z-index:10;background:var(--q900);
 .modal-hist{max-height:150px;overflow-y:auto;border:1px solid var(--g200);border-radius:6px;padding:8px 10px;margin-bottom:10px;background:var(--g50);display:flex;flex-direction:column;gap:8px;}
 .hist-entry{border-bottom:1px solid var(--g200);padding-bottom:8px;}
 .hist-entry:last-child{border-bottom:none;padding-bottom:0;}
-.hist-meta{font-size:10px;color:var(--g400);margin-bottom:3px;display:flex;justify-content:space-between;align-items:center;}
+.hist-meta{font-size:10px;color:var(--g400);margin-bottom:3px;display:flex;justify-content:space-between;}
 .hist-text{font-size:12px;color:var(--g700);}
 .hist-resolved{font-size:10px;color:var(--em);font-style:italic;margin-top:3px;}
 .hist-empty{font-size:11px;color:var(--g400);font-style:italic;text-align:center;padding:8px 0;}
@@ -199,7 +226,7 @@ tfoot tr td.tf-name{position:sticky;left:96px;z-index:10;background:var(--q900);
 .modal-field{margin-bottom:10px;}
 .modal-label{font-size:11px;color:var(--g600);margin-bottom:4px;display:block;font-weight:500;}
 .modal-label span{color:var(--red);}
-.modal-date{width:100%;border:1px solid var(--g200);border-radius:6px;padding:6px 10px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--g800);outline:none;transition:border-color .15s;}
+.modal-date{width:100%;border:1px solid var(--g200);border-radius:6px;padding:6px 10px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--g800);outline:none;}
 .modal-date:focus{border-color:#a855f7;}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;}
 .btn-cancel{padding:7px 14px;border:1px solid var(--g200);border-radius:5px;background:white;font-size:12px;cursor:pointer;color:var(--g600);font-family:'IBM Plex Sans',sans-serif;}
@@ -208,7 +235,7 @@ tfoot tr td.tf-name{position:sticky;left:96px;z-index:10;background:var(--q900);
 .btn-save:hover{background:var(--q600);}
 .btn-uncli{padding:7px 14px;border:1px solid var(--red-bd);border-radius:5px;background:var(--red-bg);font-size:12px;cursor:pointer;color:var(--red);font-family:'IBM Plex Sans',sans-serif;}
 .cli-warning{background:#fdf4ff;border:1px solid #d8b4fe;border-radius:6px;padding:8px 10px;font-size:11px;color:#6b21a8;margin-bottom:10px;}
-.cli-hist-sep{font-size:10px;font-weight:600;color:var(--g500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;margin-top:2px;}
+.cli-hist-sep{font-size:10px;font-weight:600;color:var(--g500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
 
 tr.hidden{display:none!important;}
 </style>
@@ -217,9 +244,12 @@ tr.hidden{display:none!important;}
 
 <div class="header">
   <div style="display:flex;align-items:center;gap:14px;">
-    <div class="logo"><div class="logo-mark">Q</div>QUERCY</div>
+    <div class="logo">
+      <img src="https://macosq.github.io/maq-dashboard/assets/logo.png" alt="QUERCY" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div class="logo-fallback" style="display:none"><div class="logo-mark">Q</div>QUERCY</div>
+    </div>
     <div class="sep"></div>
-    <span class="header-title">Supervision — Avancement des dossiers</span>
+    <span class="header-title">Dashboard — QUERCY &amp; Associés</span>
   </div>
   <div class="header-right">
     <span class="update-info" id="update-info">—</span>
@@ -251,6 +281,9 @@ tr.hidden{display:none!important;}
   <select class="tb-sel" id="fil-resp" onchange="applyFilters();markActive(this)">
     <option value="">Tous les RM</option><option>MO</option><option>BE</option><option>PE</option><option>RI</option>
   </select>
+  <select class="tb-sel" id="fil-coll" onchange="applyFilters();markActive(this)">
+    <option value="">Tous les collab.</option><option>AL</option><option>CM</option><option>JB</option><option>NL</option><option>SR</option>
+  </select>
   <div class="tb-sep"></div>
   <div class="cb-group">
     <label class="cb-red"><input type="checkbox" id="cb-red" checked onchange="applyFilters()">Alertes</label>
@@ -261,7 +294,11 @@ tr.hidden{display:none!important;}
   <div class="cb-group cb-cli">
     <label><input type="checkbox" id="cb-cli" onchange="applyFilters()">Bloqué client seulement</label>
   </div>
-  <button class="reset-btn" onclick="resetFilters()">Réinitialiser</button>
+  <div class="tb-sep"></div>
+  <div class="cb-group cb-sum">
+    <label><input type="checkbox" id="cb-sum" onchange="render()">Lignes résumé</label>
+  </div>
+  <button class="reset-btn" onclick="resetFilters()" title="R">Réinitialiser</button>
   <button class="export-btn" onclick="exportCSV()">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     Export CSV
@@ -275,33 +312,37 @@ tr.hidden{display:none!important;}
       <th class="th-num"><span class="th-num-label">N°</span></th>
       <th class="th-score">
         <div class="tooltip"><span class="th-score-label">Score</span>
-          <div class="tt-box">% d'indicateurs au vert (9 à poids égal)<br>🔴 Forcé rouge si au moins 1 rouge<br>🟢 ≥ 80 % sans rouge<br>🟠 &lt; 80 % sans rouge<div class="tt-arr"></div></div>
+          <div class="tt-box">% d'indicateurs au vert · 🔴 si au moins 1 rouge · 🟠 si orange sans rouge · Pas de badge si 100%<div class="tt-arr"></div></div>
         </div>
       </th>
       <th class="th-name"><span class="th-fixed-label">Dossier</span></th>
-      <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Ass.</span></div><div class="tt-box">Associé référent (initiales)<div class="tt-arr"></div></div></div></th>
-      <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">RM</span></div><div class="tt-box">Responsable de mission (initiales)<div class="tt-arr"></div></div></div></th>
-      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner" style="cursor:pointer;" onclick="sortBy('clot')">Clôture</span></div><div class="tt-box">Cliquer pour trier par date de clôture<div class="tt-arr"></div></div></div></th>
-      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner" style="cursor:pointer;" onclick="sortBy('sit')">Situation</span></div><div class="tt-box">Cliquer pour trier par date de situation<div class="tt-arr"></div></div></div></th>
-      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Rappro</span></div><div class="tt-box">🟢 M-1 rapproché · 🟠 M-2 rapproché M-1 non · 🔴 M-2 non rapproché<div class="tt-arr"></div></div></div></th>
-      <th class="col-ged"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">GED</span></div><div class="tt-box">Nb pièces en attente de classement GED<div class="tt-arr"></div></div></div></th>
+      <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner th-sortable" onclick="sortBy('ass')">Ass.</span></div><div class="tt-box">Associé référent · cliquer pour trier<div class="tt-arr"></div></div></div></th>
+      <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner th-sortable" onclick="sortBy('resp')">RM</span></div><div class="tt-box">Responsable de mission · cliquer pour trier<div class="tt-arr"></div></div></div></th>
+      <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner th-sortable" onclick="sortBy('coll')">Coll.</span></div><div class="tt-box">Collaborateur · cliquer pour trier<div class="tt-arr"></div></div></div></th>
+      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner th-sortable" onclick="sortBy('clot')">Clôture</span></div><div class="tt-box">Date de clôture (MM/AA) · cliquer pour trier<div class="tt-arr"></div></div></div></th>
+      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner th-sortable" onclick="sortBy('sit')">Situation</span></div><div class="tt-box">Dernière situation (MM/AA) · cliquer pour trier<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Rappro</span></div><div class="tt-box">🟢 M-1 rapproché · 🟠 M-2 rapproché, M-1 non · 🔴 M-2 non rapproché<div class="tt-arr"></div></div></div></th>
+      <th class="col-ged"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner th-sortable" onclick="sortBy('ged')">GED</span></div><div class="tt-box">Nb pièces en attente GED · cliquer pour trier<div class="tt-arr"></div></div></div></th>
       <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">472</span></div><div class="tt-box">🟢 Solde=0 · 🟠 Solde≠0 · 🔴 Montant &gt;5 000€<div class="tt-arr"></div></div></div></th>
       <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">FLCR</span></div><div class="tt-box">🟢 Solde=0 sur M-1 · 🔴 Solde≠0 sur M-1<div class="tt-arr"></div></div></div></th>
       <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse M-1</span></div><div class="tt-box">🟢 Remplie M-1 · 🟠 Remplie M-2 · 🔴 Non remplie M-2<div class="tt-arr"></div></div></div></th>
       <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse solde</span></div><div class="tt-box">🟢 Jamais créditrice · 🔴 Au moins 1 jour créditrice<div class="tt-arr"></div></div></div></th>
-      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse cohér.</span></div><div class="tt-box">🟢 Écart &lt;5% · 🟠 Écart 5–10% · 🔴 Écart &gt;10%<div class="tt-arr"></div></div></div></th>
-      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">455</span></div><div class="tt-box">Compte courant associé · 🟢 Jamais débiteur · 🔴 Passé débiteur<div class="tt-arr"></div></div></div></th>
-      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Salaires</span></div><div class="tt-box">P47 · 🟢 Passé M-1 · 🟠 Passé M-2 · 🔴 Non passé M-2<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse cohér.</span></div><div class="tt-box">🟢 Écart &lt;5% · 🟠 5–10% · 🔴 &gt;10%<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">455</span></div><div class="tt-box">CCA · 🟢 Jamais débiteur · 🔴 Passé débiteur<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Salaires</span></div><div class="tt-box">P47 · 🟢 M-1 · 🟠 M-2 · 🔴 Non passé M-2<div class="tt-arr"></div></div></div></th>
       <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Frns déb.</span></div><div class="tt-box">🟢 Révision &gt;90% · 🟠 Déb. &lt;10% · 🔴 Déb. &gt;10%<div class="tt-arr"></div></div></div></th>
-      <th class="col-cli"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Bloqué client</span></div><div class="tt-box">Attente élément client · 🟣 Relance à venir · 🔴 Relance dépassée/+30j<div class="tt-arr"></div></div></div></th>
+      <th class="col-cli"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Bloqué client</span></div><div class="tt-box">🟣 Relance à venir · 🔴 Relance dépassée/+30j<div class="tt-arr"></div></div></div></th>
       <th class="col-comm"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Commentaire</span></div><div class="tt-box">Note de suivi — cliquer pour consulter ou ajouter<div class="tt-arr"></div></div></div></th>
     </tr>
     <tr class="filter-row">
-      <th class="fr-num"></th><th class="fr-score"></th>
+      <th class="fr-num"><input class="col-inp" type="text" placeholder="N°" oninput="applyFilters()" style="text-align:center;"></th>
+      <th class="fr-score"></th>
       <th class="fr-name"><input class="col-inp" type="text" placeholder="Filtrer par nom…" oninput="applyFilters()"></th>
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">Ts</option><option>MA</option><option>DU</option><option>LE</option></select></th>
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">Ts</option><option>MO</option><option>BE</option><option>PE</option><option>RI</option></select></th>
-      <th></th><th></th>
+      <th><select class="col-fsel" onchange="applyFilters()"><option value="">Ts</option><option>AL</option><option>CM</option><option>JB</option><option>NL</option><option>SR</option></select></th>
+      <th><select class="col-fsel" id="fsel-clot" onchange="applyFilters()"><option value="">Ts</option></select></th>
+      <th><select class="col-fsel" id="fsel-sit" onchange="applyFilters()"><option value="">Ts</option></select></th>
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">—</option><option value="g">V</option><option value="o">O</option><option value="r">R</option></select></th>
       <th></th>
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">—</option><option value="g">V</option><option value="o">O</option><option value="r">R</option></select></th>
@@ -312,15 +353,16 @@ tr.hidden{display:none!important;}
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">—</option><option value="g">V</option><option value="o">O</option><option value="r">R</option></select></th>
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">—</option><option value="g">V</option><option value="o">O</option><option value="r">R</option></select></th>
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">—</option><option value="g">V</option><option value="o">O</option><option value="r">R</option></select></th>
-      <th></th><th></th>
+      <th></th>
+      <th><select class="col-fsel" id="fsel-comm" onchange="applyFilters()"><option value="">Ts</option><option value="1">Avec</option><option value="0">Sans</option></select></th>
     </tr>
   </thead>
   <tbody id="tbody"></tbody>
-  <tfoot id="tfoot">
+  <tfoot>
     <tr>
       <td class="tf-label">Total R</td><td class="tf-score"></td>
       <td class="tf-name">Alertes rouges par indicateur (vue filtrée)</td>
-      <td></td><td></td><td></td><td></td>
+      <td></td><td></td><td></td><td></td><td></td>
       <td id="tf-rappro"></td><td></td>
       <td id="tf-c472"></td><td id="tf-flcr"></td>
       <td id="tf-cm1"></td><td id="tf-csolde"></td><td id="tf-ccoher"></td>
@@ -333,16 +375,22 @@ tr.hidden{display:none!important;}
 
 <div class="footer">
   <span style="font-size:10px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Légende :</span>
-  <div class="leg"><div class="leg-dot" style="background:var(--em)"></div>OK</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--ora)"></div>Attention</div>
   <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>Alerte</div>
-  <div class="leg" style="margin-left:10px;border-left:1px solid var(--g200);padding-left:10px;">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--em-bg);color:var(--em);padding:1px 5px;border-radius:3px;">85%</span>&nbsp;≥80
+  <div class="leg"><div class="leg-dot" style="background:var(--ora)"></div>Attention</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--em)"></div>OK</div>
+  <div class="kbd-hint">
+    <span class="kbd">R</span>reset ·
+    <span class="kbd">↑↓</span>naviguer ·
+    <span class="kbd">PgUp/Dn</span>×10 ·
+    <span class="kbd">Home/End</span>début/fin ·
+    <span class="kbd">C</span>commentaire ·
+    <span class="kbd">B</span>blocage client ·
+    <span class="kbd">Esc</span>fermer
   </div>
-  <div class="leg"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--ora-bg);color:var(--ora);padding:1px 5px;border-radius:3px;">60%</span>&nbsp;&lt;80</div>
-  <div class="leg"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--red-bg);color:var(--red);padding:1px 5px;border-radius:3px;">30%</span>&nbsp;rouge</div>
   <span class="count" id="count-label"></span>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <!-- MODAL COMMENTAIRE -->
 <div class="overlay" id="overlay-comm" onclick="if(event.target===this)closeModal('comm')">
@@ -386,111 +434,106 @@ tr.hidden{display:none!important;}
 
 <script>
 const DATA=[
-  {id:1, num:'0611',nom:'Pharmacie des Arcades',   ass:'MA',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:3, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
-  {id:2, num:'1245',nom:'Pharmacie du Marché',     ass:'MA',resp:'MO',clot:'12/25',sit:'01/26',rappro:'r',ged:47,c472:'r',flcr:'r',cm1:'o',csolde:'g',ccoher:'o',c455:'g',sal:'o',frns:'r',rougeDepuis:{rappro:'2026-01-20',c472:'2026-01-20',flcr:'2026-01-20',frns:'2026-02-05'},comms:[{d:'10/03/2026',u:'MO',t:'En attente des relevés de caisse — relancé le 10/03'}],client:{motif:'Relevés de caisse manquants depuis jan.',relance:'2026-03-25',setDate:'2026-03-10'},clientHistory:[{motif:'Relevés de caisse manquants depuis jan.',relance:'2026-03-25',setDate:'2026-03-10',resolvedDate:null}]},
-  {id:3, num:'0874',nom:'Pharmacie Saint-Jean',    ass:'DU',resp:'BE',clot:'12/25',sit:'02/26',rappro:'g',ged:0, c472:'o',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'o',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
-  {id:4, num:'1387',nom:'Pharmacie de la Gare',    ass:'DU',resp:'BE',clot:'12/25',sit:'02/26',rappro:'o',ged:12,c472:'g',flcr:'g',cm1:'g',csolde:'r',ccoher:'g',c455:'r',sal:'g',frns:'g',rougeDepuis:{csolde:'2026-02-10',c455:'2026-02-10'},comms:[{d:'15/03/2026',u:'BE',t:'CCA passé débiteur jan. — à investiguer'}],client:null,clientHistory:[]},
-  {id:5, num:'0422',nom:'Pharmacie du Parc',       ass:'LE',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:5, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
-  {id:6, num:'2001',nom:'Pharmacie Centrale',      ass:'MA',resp:'RI',clot:'12/25',sit:'01/26',rappro:'r',ged:89,c472:'r',flcr:'r',cm1:'r',csolde:'g',ccoher:'r',c455:'g',sal:'r',frns:'r',rougeDepuis:{rappro:'2026-01-05',c472:'2026-01-05',flcr:'2026-01-05',cm1:'2026-01-05',ccoher:'2026-01-05',sal:'2026-01-05',frns:'2026-01-05'},comms:[{d:'18/03/2026',u:'RI',t:'Dossier très en retard — RDV prévu 22/03'},{d:'05/03/2026',u:'MA',t:'Priorité absolue ce mois'}],client:null,clientHistory:[]},
-  {id:7, num:'0955',nom:"Pharmacie de l'Église",   ass:'LE',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:8, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'o',c455:'g',sal:'g',frns:'o',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
-  {id:8, num:'1102',nom:'Pharmacie des Halles',    ass:'DU',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:1, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
-  {id:9, num:'0731',nom:'Pharmacie du Château',    ass:'MA',resp:'BE',clot:'12/25',sit:'01/26',rappro:'o',ged:31,c472:'o',flcr:'o',cm1:'o',csolde:'o',ccoher:'o',c455:'g',sal:'o',frns:'o',rougeDepuis:{},comms:[{d:'12/03/2026',u:'BE',t:'Retard suite arrêt maladie du gérant'}],client:{motif:'Attente documents comptables du gérant hospitalisé',relance:'2026-03-10',setDate:'2026-02-20'},clientHistory:[{motif:'Retard pièces Q4 2025',relance:'2026-01-15',setDate:'2026-01-05',resolvedDate:'2026-02-01'},{motif:'Attente documents comptables du gérant hospitalisé',relance:'2026-03-10',setDate:'2026-02-20',resolvedDate:null}]},
-  {id:10,num:'1560',nom:'Pharmacie de la Fontaine',ass:'LE',resp:'RI',clot:'12/25',sit:'02/26',rappro:'g',ged:2, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
-  {id:11,num:'0318',nom:'Pharmacie du Bourg',      ass:'DU',resp:'PE',clot:'12/25',sit:'01/26',rappro:'r',ged:24,c472:'g',flcr:'r',cm1:'r',csolde:'g',ccoher:'g',c455:'g',sal:'r',frns:'o',rougeDepuis:{rappro:'2026-02-01',flcr:'2026-02-01',cm1:'2026-02-01',sal:'2026-02-01'},comms:[],client:null,clientHistory:[]},
-  {id:12,num:'1893',nom:'Pharmacie des Fleurs',    ass:'MA',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:6, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
-  {id:13,num:'0647',nom:'Pharmacie de la Croix',   ass:'LE',resp:'RI',clot:'12/25',sit:'02/26',rappro:'g',ged:0, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
-  {id:14,num:'2145',nom:'Pharmacie du Port',       ass:'DU',resp:'BE',clot:'12/25',sit:'01/26',rappro:'r',ged:56,c472:'r',flcr:'r',cm1:'r',csolde:'r',ccoher:'r',c455:'r',sal:'r',frns:'r',rougeDepuis:{rappro:'2026-01-15',c472:'2026-01-15',flcr:'2026-01-15',cm1:'2026-01-15',csolde:'2026-01-15',ccoher:'2026-01-15',c455:'2026-01-15',sal:'2026-01-15',frns:'2026-01-15'},comms:[{d:'19/03/2026',u:'BE',t:'Nouveau client — prise en charge difficile'}],client:null,clientHistory:[]},
-  {id:15,num:'0509',nom:'Pharmacie de la Place',   ass:'MA',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:4, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'o',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:1, num:'0611',nom:'Pharmacie des Arcades',   ass:'MA',resp:'MO',coll:'AL',clot:'12/25',sit:'02/26',rappro:'g',ged:3, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:2, num:'1245',nom:'Pharmacie du Marché',     ass:'MA',resp:'MO',coll:'AL',clot:'12/25',sit:'01/26',rappro:'r',ged:47,c472:'r',flcr:'r',cm1:'o',csolde:'g',ccoher:'o',c455:'g',sal:'o',frns:'r',rougeDepuis:{rappro:'2026-01-20',c472:'2026-01-20',flcr:'2026-01-20',frns:'2026-02-05'},comms:[{d:'10/03/2026',u:'MO',t:'En attente des relevés de caisse — relancé le 10/03'}],client:{motif:'Relevés de caisse manquants depuis jan.',relance:'2026-03-25',setDate:'2026-03-10'},clientHistory:[{motif:'Relevés de caisse manquants',relance:'2026-03-25',setDate:'2026-03-10',resolvedDate:null}]},
+  {id:3, num:'0874',nom:'Pharmacie Saint-Jean',    ass:'DU',resp:'BE',coll:'CM',clot:'12/25',sit:'02/26',rappro:'g',ged:0, c472:'o',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'o',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:4, num:'1387',nom:'Pharmacie de la Gare',    ass:'DU',resp:'BE',coll:'CM',clot:'12/25',sit:'02/26',rappro:'o',ged:12,c472:'g',flcr:'g',cm1:'g',csolde:'r',ccoher:'g',c455:'r',sal:'g',frns:'g',rougeDepuis:{csolde:'2026-02-10',c455:'2026-02-10'},comms:[{d:'15/03/2026',u:'BE',t:'CCA passé débiteur jan. — à investiguer'}],client:null,clientHistory:[]},
+  {id:5, num:'0422',nom:'Pharmacie du Parc',       ass:'LE',resp:'PE',coll:'JB',clot:'12/25',sit:'02/26',rappro:'g',ged:5, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:6, num:'2001',nom:'Pharmacie Centrale',      ass:'MA',resp:'RI',coll:'NL',clot:'12/25',sit:'01/26',rappro:'r',ged:89,c472:'r',flcr:'r',cm1:'r',csolde:'g',ccoher:'r',c455:'g',sal:'r',frns:'r',rougeDepuis:{rappro:'2026-01-05',c472:'2026-01-05',flcr:'2026-01-05',cm1:'2026-01-05',ccoher:'2026-01-05',sal:'2026-01-05',frns:'2026-01-05'},comms:[{d:'18/03/2026',u:'RI',t:'Dossier très en retard — RDV prévu 22/03'},{d:'05/03/2026',u:'MA',t:'Priorité absolue ce mois'}],client:null,clientHistory:[]},
+  {id:7, num:'0955',nom:"Pharmacie de l'Église",   ass:'LE',resp:'PE',coll:'JB',clot:'12/25',sit:'02/26',rappro:'g',ged:8, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'o',c455:'g',sal:'g',frns:'o',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:8, num:'1102',nom:'Pharmacie des Halles',    ass:'DU',resp:'MO',coll:'SR',clot:'12/25',sit:'02/26',rappro:'g',ged:1, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:9, num:'0731',nom:'Pharmacie du Château',    ass:'MA',resp:'BE',coll:'CM',clot:'12/25',sit:'01/26',rappro:'o',ged:31,c472:'o',flcr:'o',cm1:'o',csolde:'o',ccoher:'o',c455:'g',sal:'o',frns:'o',rougeDepuis:{},comms:[{d:'12/03/2026',u:'BE',t:'Retard suite arrêt maladie du gérant'}],client:{motif:'Attente documents gérant hospitalisé',relance:'2026-03-10',setDate:'2026-02-20'},clientHistory:[{motif:'Retard pièces Q4',relance:'2026-01-15',setDate:'2026-01-05',resolvedDate:'2026-02-01'},{motif:'Attente documents gérant hospitalisé',relance:'2026-03-10',setDate:'2026-02-20',resolvedDate:null}]},
+  {id:10,num:'1560',nom:'Pharmacie de la Fontaine',ass:'LE',resp:'RI',coll:'NL',clot:'12/25',sit:'02/26',rappro:'g',ged:2, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:11,num:'0318',nom:'Pharmacie du Bourg',      ass:'DU',resp:'PE',coll:'JB',clot:'12/25',sit:'01/26',rappro:'r',ged:24,c472:'g',flcr:'r',cm1:'r',csolde:'g',ccoher:'g',c455:'g',sal:'r',frns:'o',rougeDepuis:{rappro:'2026-02-01',flcr:'2026-02-01',cm1:'2026-02-01',sal:'2026-02-01'},comms:[],client:null,clientHistory:[]},
+  {id:12,num:'1893',nom:'Pharmacie des Fleurs',    ass:'MA',resp:'MO',coll:'AL',clot:'12/25',sit:'02/26',rappro:'g',ged:6, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:13,num:'0647',nom:'Pharmacie de la Croix',   ass:'LE',resp:'RI',coll:'SR',clot:'12/25',sit:'02/26',rappro:'g',ged:0, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
+  {id:14,num:'2145',nom:'Pharmacie du Port',       ass:'DU',resp:'BE',coll:'CM',clot:'12/25',sit:'01/26',rappro:'r',ged:56,c472:'r',flcr:'r',cm1:'r',csolde:'r',ccoher:'r',c455:'r',sal:'r',frns:'r',rougeDepuis:{rappro:'2026-01-15',c472:'2026-01-15',flcr:'2026-01-15',cm1:'2026-01-15',csolde:'2026-01-15',ccoher:'2026-01-15',c455:'2026-01-15',sal:'2026-01-15',frns:'2026-01-15'},comms:[{d:'19/03/2026',u:'BE',t:'Nouveau client — prise en charge difficile'}],client:null,clientHistory:[]},
+  {id:15,num:'0509',nom:'Pharmacie de la Place',   ass:'MA',resp:'PE',coll:'SR',clot:'12/25',sit:'02/26',rappro:'g',ged:4, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'o',rougeDepuis:{},comms:[],client:null,clientHistory:[]},
 ];
 
 const PROFILES={
-  collab:{label:'Collaborateur — MOREAU',desc:'Dossiers visibles : responsable MO uniquement',filter:d=>d.resp==='MO',canComment:true},
-  resp:  {label:'Responsable — MOREAU',  desc:'Dossiers visibles : MO + PE (équipe)',       filter:d=>['MO','PE'].includes(d.resp),canComment:true},
-  assoc: {label:'Associé — MARTIN',      desc:'Accès à tous les dossiers du cabinet',        filter:()=>true,canComment:true},
+  collab:{label:'Collaborateur — MOREAU',desc:'Dossiers visibles : collab AL uniquement',filter:d=>d.coll==='AL',canComment:true},
+  resp:  {label:'Responsable — MOREAU',  desc:'Dossiers visibles : MO + PE (équipe)',   filter:d=>['MO','PE'].includes(d.resp),canComment:true},
+  assoc: {label:'Associé — MARTIN',      desc:'Accès à tous les dossiers du cabinet',   filter:()=>true,canComment:true},
 };
 
 const FEUX_KEYS=['rappro','c472','flcr','cm1','csolde','ccoher','c455','sal','frns'];
-const FEU_LABELS={rappro:'Rappro',c472:'472',flcr:'FLCR',cm1:'Caisse M-1',csolde:'Caisse solde',ccoher:'Caisse cohér.',c455:'455',sal:'Salaires',frns:'Frns déb.'};
 const FEU_MSG={
   rappro:{r:'M-2 non rapproché',o:'M-1 non rapproché (M-2 OK)'},
   c472:  {r:'Solde > 5 000 €',o:'Solde ≠ 0'},
   flcr:  {r:'Solde ≠ 0 sur M-1',o:null},
-  cm1:   {r:'Caisse non remplie sur M-2',o:'Caisse remplie sur M-2 (M-1 manquant)'},
+  cm1:   {r:'Caisse non remplie sur M-2',o:'Remplie M-2 (M-1 manquant)'},
   csolde:{r:'Caisse créditrice au moins 1 jour',o:null},
-  ccoher:{r:'Écart caisse vs N-1 > 10 %',o:'Écart caisse vs N-1 entre 5 et 10 %'},
-  c455:  {r:'CCA passé débiteur au moins 1 jour',o:null},
-  sal:   {r:'P47 non passé sur M-2',o:'P47 passé sur M-2 (M-1 manquant)'},
-  frns:  {r:'Fournisseurs débiteurs > 10 % du total',o:'Fournisseurs débiteurs < 10 % (révision < 90 %)'},
+  ccoher:{r:'Écart caisse vs N-1 > 10 %',o:'Écart entre 5 et 10 %'},
+  c455:  {r:'CCA passé débiteur',o:null},
+  sal:   {r:'P47 non passé sur M-2',o:'P47 passé M-2 (M-1 manquant)'},
+  frns:  {r:'Fournisseurs débiteurs > 10 %',o:'Fournisseurs débiteurs < 10 %'},
 };
 
-let profile='resp', activeKpi=null, modalCommId=null, modalCliId=null, sortCol=null, sortDir=1;
+let profile='resp', activeKpi=null, modalCommId=null, modalCliId=null;
+let sortCol=null, sortDir=1, selectedIdx=null;
 
+/* ── UTILS ── */
 function today(){return new Date().toISOString().slice(0,10);}
-function daysDiff(dateStr){if(!dateStr)return 0;return Math.floor((new Date()-new Date(dateStr))/(1000*60*60*24));}
-function daysLabel(dateStr){
-  if(!dateStr)return null;
-  const d=daysDiff(dateStr);
-  if(d<=0)return null;
-  if(d<30)return`depuis ${d} jour${d>1?'s':''}`;
-  const m=Math.floor(d/30);
-  return`depuis ${m} mois`;
-}
+function daysDiff(s){if(!s)return 0;return Math.floor((new Date()-new Date(s))/(1000*60*60*24));}
+function daysLabel(s){const d=daysDiff(s);if(d<=0)return null;if(d<30)return`depuis ${d}j`;const m=Math.floor(d/30);return`depuis ${m} mois`;}
 function fmtDate(iso){if(!iso)return'—';const[y,m,j]=iso.split('-');return`${j}/${m}/${y}`;}
-
+function parseMMYY(s){if(!s)return 0;const[m,y]=s.split('/');return parseInt('20'+y)*100+parseInt(m);}
 function clientStatus(d){
-  if(!d.client)return 'none';
+  if(!d.client)return'none';
   return(d.client.relance&&today()>d.client.relance)||daysDiff(d.client.setDate)>30?'overdue':'active';
 }
-function globalScore(d){
-  const f=FEUX_KEYS.map(k=>d[k]);
-  if(f.includes('r'))return 'red';
-  if(f.includes('o'))return 'ora';
-  return 'grn';
-}
+function globalScore(d){const f=FEUX_KEYS.map(k=>d[k]);if(f.includes('r'))return'red';if(f.includes('o'))return'ora';return'grn';}
 function calcScore(d){return Math.round(FEUX_KEYS.filter(k=>d[k]==='g').length/FEUX_KEYS.length*100);}
-function scoreClass(d){
-  const f=FEUX_KEYS.map(k=>d[k]);
-  if(f.includes('r'))return 'score-red';
-  if(f.includes('o'))return 'score-ora';
-  return null; // 100% vert → pas de badge
-}
+function scoreClass(d){const f=FEUX_KEYS.map(k=>d[k]);if(f.includes('r'))return'score-red';if(f.includes('o'))return'score-ora';return null;}
 function gedH(n){const c=n===0?'ged-0':n<10?'ged-l':n<30?'ged-m':'ged-h';return`<span class="ged ${c}">${n}</span>`;}
-
 function feuH(key,val,d){
   if(val==='g')return`<div class="feu-wrap"><div class="feu feu-g"></div></div>`;
-  const msg=FEU_MSG[key]?FEU_MSG[key][val]||null:null;
-  const since=val==='r'&&d.rougeDepuis&&d.rougeDepuis[key]?daysLabel(d.rougeDepuis[key]):null;
+  const msg=FEU_MSG[key]?.[val]||null;
+  const since=val==='r'&&d.rougeDepuis?.[key]?daysLabel(d.rougeDepuis[key]):null;
   if(!msg&&!since)return`<div class="feu-wrap"><div class="feu feu-${val||'n'}"></div></div>`;
-  return`<div class="feu-wrap">
-    <div class="feu feu-${val}"></div>
-    <div class="ft">${msg||''}${since?`<span class="ft-since">⏱ ${since}</span>`:''}<div class="ft-arr"></div></div>
-  </div>`;
+  return`<div class="feu-wrap"><div class="feu feu-${val}"></div><div class="ft">${msg||''}${since?`<span class="ft-since">⏱ ${since}</span>`:''}<div class="ft-arr"></div></div></div>`;
 }
-
 function clientBadgeH(d,canC){
   const st=clientStatus(d);
   if(st==='none')return canC?`<button class="cli-btn" onclick="event.stopPropagation();openCliModal(${d.id})">+ Client</button>`:`<span style="color:var(--g300);font-size:10px">—</span>`;
   const ov=st==='overdue';
-  const cls=ov?'cli-badge cli-badge-red':'cli-badge cli-badge-ora';
-  const lbl=ov?'⚠ Dépassé':'⏳ Client';
-  return`<span class="${cls}" onclick="event.stopPropagation();openCliModal(${d.id})">${lbl}</span>`;
+  return`<span class="${ov?'cli-badge cli-badge-red':'cli-badge cli-badge-ora'}" onclick="event.stopPropagation();openCliModal(${d.id})">${ov?'⚠ Dépassé':'⏳ Client'}</span>`;
 }
 
+/* ── SUMMARY ── */
+function makeSummaryRow(label, rows){
+  const n=rows.length;
+  const reds=rows.filter(d=>globalScore(d)==='red').length;
+  const oras=rows.filter(d=>globalScore(d)==='ora').length;
+  const grns=rows.filter(d=>globalScore(d)==='grn').length;
+  const clis=rows.filter(d=>clientStatus(d)!=='none').length;
+  const avgScore=n?Math.round(rows.reduce((a,d)=>a+calcScore(d),0)/n):0;
+  const sc=reds>0?'score-red':oras>0?'score-ora':null;
+  const badge=sc?`<span class="score-badge ${sc}" style="font-size:9px;height:14px;min-width:30px;">${avgScore}%</span>`:'';
+  return`<tr class="row-summary">
+    <td class="sum-label">${label}</td>
+    <td class="sum-score">${badge}</td>
+    <td class="sum-name">${n} dossier${n>1?'s':''} · <span class="sum-pill sum-r">${reds}</span><span class="sum-pill sum-o">${oras}</span><span class="sum-pill sum-g">${grns}</span>${clis>0?`<span class="sum-pill sum-c">⏳${clis}</span>`:''}</td>
+    <td colspan="17"></td>
+  </tr>`;
+}
+
+/* ── RENDER ── */
 function render(){
   const prof=PROFILES[profile];
   document.getElementById('banner-text').innerHTML=`<strong>${prof.label}</strong> &nbsp;·&nbsp; ${prof.desc}`;
   const canC=prof.canComment;
   const baseRows=DATA.filter(prof.filter);
+  const showSum=document.getElementById('cb-sum').checked;
 
-  // Tri : score d'abord (rouge > orange > vert), puis client en dernier dans chaque groupe, puis score %
   const so={red:2,ora:1,grn:0};
   let rows=[...baseRows].sort((a,b)=>{
-    if(sortCol==='clot'||sortCol==='sit'){
-      // Tri par date MM/YY → on compare YY puis MM
-      const parseDate=s=>{if(!s)return 0;const[m,y]=s.split('/');return parseInt('20'+y)*100+parseInt(m);};
-      const va=parseDate(a[sortCol==='clot'?'clot':'sit']);
-      const vb=parseDate(b[sortCol==='clot'?'clot':'sit']);
-      if(va!==vb)return(va-vb)*sortDir;
+    if(sortCol){
+      let va=a[sortCol],vb=b[sortCol];
+      if(sortCol==='clot'||sortCol==='sit'){va=parseMMYY(va);vb=parseMMYY(vb);}
+      else if(sortCol==='ged'){va=Number(va);vb=Number(vb);}
+      if(va<vb)return -sortDir;if(va>vb)return sortDir;
     }
     const sd=(so[globalScore(b)]||0)-(so[globalScore(a)]||0);
     if(sd!==0)return sd;
@@ -499,40 +542,70 @@ function render(){
     return calcScore(a)-calcScore(b);
   });
 
-  document.getElementById('tbody').innerHTML=rows.map(d=>{
-    const gs=globalScore(d);const isCli=clientStatus(d)!=='none';
-    // La couleur de la ligne reste celle du score — le fond violet ne s'applique qu'aux dossiers OK bloqués client
-    const rc=gs==='red'?'row-red':(gs==='ora'?'row-ora':(isCli?'row-client':'row-grn'));
-    const pct=calcScore(d);const sc=scoreClass(d);
-    const scoreBadge=sc?`<span class="score-badge ${sc}">${pct}%</span>`:'';
-    const last=d.comms.length?d.comms[d.comms.length-1].t:'';
-    const commCell=last
-      ?`<div style="display:flex;flex-direction:column;gap:2px;padding:0 4px;"><span class="comm-txt" title="${last.replace(/"/g,'&quot;')}">${last}</span>${canC?`<button class="btn-comm" onclick="event.stopPropagation();openCommModal(${d.id})">Modifier</button>`:''}</div>`
-      :(canC?`<button class="btn-comm" onclick="event.stopPropagation();openCommModal(${d.id})">+ Note</button>`:`<span style="color:var(--g300);font-size:10px">—</span>`);
-    return`<tr class="${rc}"
-      data-nom="${d.nom.toLowerCase()}" data-ass="${d.ass}" data-resp="${d.resp}"
-      data-score="${gs}" data-pct="${pct}" data-cli="${isCli?'1':'0'}"
-      data-rappro="${d.rappro}" data-c472="${d.c472}" data-flcr="${d.flcr}"
-      data-cm1="${d.cm1}" data-csolde="${d.csolde}" data-ccoher="${d.ccoher}"
-      data-c455="${d.c455}" data-sal="${d.sal}" data-frns="${d.frns}">
-      <td class="td-num">${d.num}</td>
-      <td class="td-score">${scoreBadge}</td>
-      <td class="td-name">${d.nom}</td>
-      <td class="td-init">${d.ass}</td><td class="td-init">${d.resp}</td>
-      <td class="td-date">${d.clot}</td><td class="td-date">${d.sit}</td>
-      <td>${feuH('rappro',d.rappro,d)}</td><td>${gedH(d.ged)}</td>
-      <td>${feuH('c472',d.c472,d)}</td><td>${feuH('flcr',d.flcr,d)}</td>
-      <td>${feuH('cm1',d.cm1,d)}</td><td>${feuH('csolde',d.csolde,d)}</td><td>${feuH('ccoher',d.ccoher,d)}</td>
-      <td>${feuH('c455',d.c455,d)}</td><td>${feuH('sal',d.sal,d)}</td><td>${feuH('frns',d.frns,d)}</td>
-      <td>${clientBadgeH(d,canC)}</td>
-      <td>${commCell}</td>
-    </tr>`;
-  }).join('');
+  // Groupement pour lignes résumé
+  const groupKey=sortCol==='ass'?'ass':sortCol==='resp'?'resp':sortCol==='coll'?'coll':
+    document.getElementById('fil-assoc').value?'ass':document.getElementById('fil-resp').value?'resp':
+    document.getElementById('fil-coll').value?'coll':null;
+
+  let html='';
+  if(showSum&&groupKey){
+    const groups={};
+    rows.forEach(d=>{const k=d[groupKey];if(!groups[k])groups[k]=[];groups[k].push(d);});
+    Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0])).forEach(([key,grpRows])=>{
+      html+=makeSummaryRow(key,grpRows);
+      html+=grpRows.map(d=>rowHTML(d,canC)).join('');
+    });
+  } else {
+    html=rows.map(d=>rowHTML(d,canC)).join('');
+  }
+  document.getElementById('tbody').innerHTML=html;
+
+  // Peupler les selects clôture/situation
+  ['clot','sit'].forEach(k=>{
+    const sel=document.getElementById('fsel-'+k);
+    const cur=sel.value;
+    const vals=[...new Set(baseRows.map(d=>d[k]))].sort((a,b)=>parseMMYY(a)-parseMMYY(b));
+    sel.innerHTML=`<option value="">Ts</option>`+vals.map(v=>`<option${v===cur?' selected':''}>${v}</option>`).join('');
+  });
 
   updateKpi(baseRows);
   applyFilters();
 }
 
+function rowHTML(d,canC){
+  const gs=globalScore(d);const isCli=clientStatus(d)!=='none';
+  const rc=isCli?'row-client':(gs==='red'?'row-red':gs==='ora'?'row-ora':'row-grn');
+  const pct=calcScore(d);const sc=scoreClass(d);
+  const scoreBadge=sc?`<span class="score-badge ${sc}">${pct}%</span>`:'';
+  const last=d.comms.length?d.comms[d.comms.length-1].t:'';
+  const commCell=last
+    ?`<div style="display:flex;flex-direction:column;gap:2px;padding:0 4px;"><span class="comm-txt" title="${last.replace(/"/g,'&quot;')}">${last}</span>${canC?`<button class="btn-comm" onclick="event.stopPropagation();openCommModal(${d.id})">Modifier</button>`:''}</div>`
+    :(canC?`<button class="btn-comm" onclick="event.stopPropagation();openCommModal(${d.id})">+ Note</button>`:`<span style="color:var(--g300);font-size:10px">—</span>`);
+  return`<tr class="${rc}" data-id="${d.id}"
+    data-nom="${d.nom.toLowerCase()}" data-num="${d.num}"
+    data-ass="${d.ass}" data-resp="${d.resp}" data-coll="${d.coll}"
+    data-clot="${d.clot}" data-sit="${d.sit}"
+    data-score="${gs}" data-pct="${pct}" data-cli="${isCli?'1':'0'}"
+    data-hascomm="${d.comms.length>0?'1':'0'}"
+    data-rappro="${d.rappro}" data-c472="${d.c472}" data-flcr="${d.flcr}"
+    data-cm1="${d.cm1}" data-csolde="${d.csolde}" data-ccoher="${d.ccoher}"
+    data-c455="${d.c455}" data-sal="${d.sal}" data-frns="${d.frns}"
+    onclick="selectRow(this)">
+    <td class="td-num">${d.num}</td>
+    <td class="td-score">${scoreBadge}</td>
+    <td class="td-name">${d.nom}</td>
+    <td class="td-init">${d.ass}</td><td class="td-init">${d.resp}</td><td class="td-init">${d.coll}</td>
+    <td class="td-date">${d.clot}</td><td class="td-date">${d.sit}</td>
+    <td>${feuH('rappro',d.rappro,d)}</td><td>${gedH(d.ged)}</td>
+    <td>${feuH('c472',d.c472,d)}</td><td>${feuH('flcr',d.flcr,d)}</td>
+    <td>${feuH('cm1',d.cm1,d)}</td><td>${feuH('csolde',d.csolde,d)}</td><td>${feuH('ccoher',d.ccoher,d)}</td>
+    <td>${feuH('c455',d.c455,d)}</td><td>${feuH('sal',d.sal,d)}</td><td>${feuH('frns',d.frns,d)}</td>
+    <td>${clientBadgeH(d,canC)}</td>
+    <td>${commCell}</td>
+  </tr>`;
+}
+
+/* ── KPI ── */
 function updateKpi(rows){
   const reds=rows.filter(d=>globalScore(d)==='red').length;
   const oras=rows.filter(d=>globalScore(d)==='ora').length;
@@ -551,115 +624,159 @@ function updateKpi(rows){
   document.getElementById('ksub-cli').innerHTML=cliOvd>0?`${cliOvd} relance${cliOvd>1?'s':''} dépassée${cliOvd>1?'s':''}`:cliAll>0?'toutes à jour':'';
 }
 
+/* ── FILTERS ── */
 function applyFilters(){
-  const search=document.querySelector('.filter-row .col-inp').value.toLowerCase().trim();
+  const numSearch=document.querySelector('.filter-row .col-inp').value.trim();
+  const search=document.querySelectorAll('.filter-row .col-inp')[1]?.value.toLowerCase().trim()||'';
   const selAss=document.getElementById('fil-assoc').value;
   const selResp=document.getElementById('fil-resp').value;
+  const selColl=document.getElementById('fil-coll').value;
   const showRed=document.getElementById('cb-red').checked;
   const showOra=document.getElementById('cb-ora').checked;
   const showGrn=document.getElementById('cb-grn').checked;
   const cliOnly=document.getElementById('cb-cli').checked;
+  const commFil=document.getElementById('fsel-comm').value;
+
   const colF=[...document.querySelectorAll('.filter-row .col-fsel')];
-  const colMap=[null,null,null,'ass','resp',null,null,'rappro',null,'c472','flcr','cm1','csolde','ccoher','c455','sal','frns',null,null];
+  const colMap=[null,null,null,'ass','resp','coll','clot','sit','rappro',null,'c472','flcr','cm1','csolde','ccoher','c455','sal','frns',null,null];
   const tfKeys=['rappro','c472','flcr','cm1','csolde','ccoher','c455','sal','frns'];
   const tfC={};tfKeys.forEach(k=>tfC[k]=0);
   let vis=0;
-  document.querySelectorAll('#tbody tr').forEach(row=>{
+
+  document.querySelectorAll('#tbody tr:not(.row-summary)').forEach(row=>{
     let show=true;
-    if(search&&!row.dataset.nom.includes(search))show=false;
+    if(numSearch&&!row.dataset.num?.startsWith(numSearch))show=false;
+    if(search&&!row.dataset.nom?.includes(search))show=false;
     if(selAss&&row.dataset.ass!==selAss)show=false;
     if(selResp&&row.dataset.resp!==selResp)show=false;
+    if(selColl&&row.dataset.coll!==selColl)show=false;
     const sc=row.dataset.score;
     if(!showRed&&sc==='red')show=false;
     if(!showOra&&sc==='ora')show=false;
     if(!showGrn&&sc==='grn')show=false;
     if(cliOnly&&row.dataset.cli!=='1')show=false;
+    if(commFil==='1'&&row.dataset.hascomm!=='1')show=false;
+    if(commFil==='0'&&row.dataset.hascomm!=='0')show=false;
     colF.forEach((f,i)=>{if(!f||!f.value)return;const a=colMap[i];if(a&&row.dataset[a]!==f.value)show=false;});
     row.classList.toggle('hidden',!show);
     if(show){vis++;tfKeys.forEach(k=>{if(row.dataset[k]==='r')tfC[k]++;});}
   });
+
+  // Cacher lignes résumé si tous les dossiers du groupe sont cachés
+  document.querySelectorAll('#tbody tr.row-summary').forEach(sumRow=>{
+    let next=sumRow.nextElementSibling;
+    let hasVisible=false;
+    while(next&&!next.classList.contains('row-summary')){
+      if(!next.classList.contains('hidden'))hasVisible=true;
+      next=next.nextElementSibling;
+    }
+    sumRow.classList.toggle('hidden',!hasVisible);
+  });
+
   tfKeys.forEach(k=>{const el=document.getElementById('tf-'+k);if(el)el.innerHTML=`<span class="tf-count ${tfC[k]>0?'tf-has':'tf-zero'}">${tfC[k]}</span>`;});
   document.getElementById('count-label').textContent=`${vis} dossier${vis>1?'s':''} affiché${vis>1?'s':''}`;
 }
 
+/* ── SORT ── */
+function sortBy(col){
+  sortDir=sortCol===col?-sortDir:1;
+  sortCol=col;
+  render();
+}
+
+/* ── QUICK FILTER KPI ── */
 function quickFilter(k){
   activeKpi=activeKpi===k?null:k;
   ['all','red','ora','grn','cli'].forEach(x=>document.getElementById('kpi-'+x).classList.toggle('active',activeKpi===x));
-  // KPI → synchronise les checkboxes
-  const isActive=activeKpi===k;
   if(k==='cli'){
-    document.getElementById('cb-cli').checked=isActive;
+    document.getElementById('cb-cli').checked=activeKpi==='cli';
   } else if(k==='red'){
-    document.getElementById('cb-red').checked=true;
-    document.getElementById('cb-ora').checked=!isActive;
-    document.getElementById('cb-grn').checked=!isActive;
+    document.getElementById('cb-red').checked=true;document.getElementById('cb-ora').checked=activeKpi!=='red';document.getElementById('cb-grn').checked=activeKpi!=='red';
   } else if(k==='ora'){
-    document.getElementById('cb-red').checked=!isActive;
-    document.getElementById('cb-ora').checked=true;
-    document.getElementById('cb-grn').checked=!isActive;
+    document.getElementById('cb-red').checked=activeKpi!=='ora';document.getElementById('cb-ora').checked=true;document.getElementById('cb-grn').checked=activeKpi!=='ora';
   } else if(k==='grn'){
-    document.getElementById('cb-red').checked=!isActive;
-    document.getElementById('cb-ora').checked=!isActive;
-    document.getElementById('cb-grn').checked=true;
+    document.getElementById('cb-red').checked=activeKpi!=='grn';document.getElementById('cb-ora').checked=activeKpi!=='grn';document.getElementById('cb-grn').checked=true;
   } else {
-    // all ou reset
-    document.getElementById('cb-red').checked=true;
-    document.getElementById('cb-ora').checked=true;
-    document.getElementById('cb-grn').checked=true;
-    document.getElementById('cb-cli').checked=false;
+    document.getElementById('cb-red').checked=true;document.getElementById('cb-ora').checked=true;document.getElementById('cb-grn').checked=true;document.getElementById('cb-cli').checked=false;
   }
   applyFilters();
 }
-function quickFilterFromSel(sel){
-  markActive(sel);activeKpi=sel.value||null;
-  ['all','red','ora','grn','cli'].forEach(x=>document.getElementById('kpi-'+x).classList.toggle('active',activeKpi===x));
-  applyFilters();
-}
+
 function resetFilters(){
   document.getElementById('fil-assoc').value='';
   document.getElementById('fil-resp').value='';
+  document.getElementById('fil-coll').value='';
   document.getElementById('cb-red').checked=true;
   document.getElementById('cb-ora').checked=true;
   document.getElementById('cb-grn').checked=true;
   document.getElementById('cb-cli').checked=false;
-  document.querySelector('.filter-row .col-inp').value='';
+  document.querySelectorAll('.filter-row input').forEach(i=>i.value='');
   document.querySelectorAll('.filter-row .col-fsel').forEach(s=>s.value='');
   document.querySelectorAll('.tb-sel').forEach(s=>s.classList.remove('active'));
-  activeKpi=null;
-  ['all','red','ora','grn','cli'].forEach(x=>document.getElementById('kpi-'+x).classList.remove('active'));
-  applyFilters();
-}
-function sortBy(col){
-  if(sortCol===col){sortDir*=-1;}else{sortCol=col;sortDir=1;}
-  render();
-}
-function markActive(el){el.classList.toggle('active',!!el.value);}
-function setProfile(p){
-  profile=p;
-  document.querySelectorAll('.profile-btn').forEach(b=>b.classList.toggle('active',b.dataset.p===p));
-  activeKpi=null;
+  activeKpi=null;sortCol=null;sortDir=1;selectedIdx=null;
   ['all','red','ora','grn','cli'].forEach(x=>document.getElementById('kpi-'+x).classList.remove('active'));
   render();
 }
 
+function markActive(el){el.classList.toggle('active',!!el.value);}
+function setProfile(p){
+  profile=p;
+  document.querySelectorAll('.profile-btn').forEach(b=>b.classList.toggle('active',b.dataset.p===p));
+  activeKpi=null;['all','red','ora','grn','cli'].forEach(x=>document.getElementById('kpi-'+x).classList.remove('active'));
+  render();
+}
+
+/* ── SÉLECTION CLAVIER ── */
+function getVisibleRows(){return[...document.querySelectorAll('#tbody tr:not(.row-summary):not(.hidden)')];}
+function selectRow(trEl){
+  document.querySelectorAll('#tbody tr.row-selected').forEach(r=>r.classList.remove('row-selected'));
+  if(trEl){
+    trEl.classList.add('row-selected');
+    const rows=getVisibleRows();
+    selectedIdx=rows.indexOf(trEl);
+  }
+}
+function navigateTo(idx){
+  const rows=getVisibleRows();
+  if(!rows.length)return;
+  idx=Math.max(0,Math.min(idx,rows.length-1));
+  selectedIdx=idx;
+  selectRow(rows[idx]);
+  rows[idx].scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function selectedData(){
+  const rows=getVisibleRows();
+  if(selectedIdx===null||!rows[selectedIdx])return null;
+  const id=parseInt(rows[selectedIdx].dataset.id);
+  return DATA.find(d=>d.id===id)||null;
+}
+
+/* ── TOAST ── */
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  if(toastTimer)clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
 /* ── EXPORT CSV ── */
 function exportCSV(){
-  const headers=['N°','Score','Dossier','Ass.','RM','Clôture','Situation','Rappro','GED','472','FLCR','Caisse M-1','Caisse solde','Caisse cohér.','455','Salaires','Frns déb.','Bloqué client','Commentaire'];
-  const rows=[...document.querySelectorAll('#tbody tr:not(.hidden)')].map(row=>{
-    const d=DATA.find(x=>x.num===row.querySelector('.td-num').textContent);
-    if(!d)return null;
-    const pct=calcScore(d);
+  const headers=['N°','Score','Dossier','Ass.','RM','Coll.','Clôture','Situation','Rappro','GED','472','FLCR','Caisse M-1','Caisse solde','Caisse cohér.','455','Salaires','Frns déb.','Bloqué client','Commentaire'];
+  const rows=[...document.querySelectorAll('#tbody tr:not(.row-summary):not(.hidden)')].map(row=>{
+    const d=DATA.find(x=>x.num===row.dataset.num);if(!d)return null;
     const fv=k=>d[k]==='g'?'OK':d[k]==='o'?'Attention':d[k]==='r'?'Alerte':'—';
     const cli=clientStatus(d)==='none'?'Non':clientStatus(d)==='overdue'?'Dépassé':'Actif';
     const comm=d.comms.length?d.comms[d.comms.length-1].t:'';
-    return[d.num,pct+'%',d.nom,d.ass,d.resp,d.clot,d.sit,fv('rappro'),d.ged,fv('c472'),fv('flcr'),fv('cm1'),fv('csolde'),fv('ccoher'),fv('c455'),fv('sal'),fv('frns'),cli,comm].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';');
+    return[d.num,calcScore(d)+'%',d.nom,d.ass,d.resp,d.coll,d.clot,d.sit,fv('rappro'),d.ged,fv('c472'),fv('flcr'),fv('cm1'),fv('csolde'),fv('ccoher'),fv('c455'),fv('sal'),fv('frns'),cli,comm].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(';');
   }).filter(Boolean);
   const csv='\uFEFF'+[headers.join(';'),...rows].join('\n');
   const a=document.createElement('a');
-  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
   const now=new Date();const pad=n=>String(n).padStart(2,'0');
-  a.download=`supervision_quercy_${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}.csv`;
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download=`quercy_supervision_${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}.csv`;
   a.click();
+  showToast('✓ Export CSV téléchargé');
 }
 
 /* ── MODAL COMMENTAIRE ── */
@@ -680,50 +797,34 @@ function saveComm(){
   const d=DATA.find(x=>x.id===modalCommId);
   const now=new Date();const pad=n=>String(n).padStart(2,'0');
   d.comms.push({d:`${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`,u:PROFILES[profile].label.split('—')[1]?.trim().split(' ')[0]||profile,t:txt});
-  closeModal('comm');render();
+  closeModal('comm');render();showToast('✓ Commentaire enregistré');
 }
 
 /* ── MODAL CLIENT ── */
 function openCliModal(id){
   const d=DATA.find(x=>x.id===id);modalCliId=id;
   document.getElementById('cli-nom').textContent=d.nom+' — '+d.num;
-  const st=clientStatus(d);
-  const warn=document.getElementById('cli-warning');
-  const btnDel=document.getElementById('cli-btn-del');
-  const histWrap=document.getElementById('cli-hist-wrap');
-  const hist=document.getElementById('cli-hist');
-
-  // Historique des blocages
-  if(d.clientHistory&&d.clientHistory.length>0){
+  const st=clientStatus(d);const warn=document.getElementById('cli-warning');
+  const btnDel=document.getElementById('cli-btn-del');const histWrap=document.getElementById('cli-hist-wrap');
+  if(d.clientHistory?.length>0){
     histWrap.style.display='block';
-    hist.innerHTML=[...d.clientHistory].reverse().map(h=>{
-      const resolved=h.resolvedDate?`<div class="hist-resolved">✓ Levé le ${fmtDate(h.resolvedDate)}</div>`:'';
-      const ovd=!h.resolvedDate&&h.relance&&today()>h.relance?'<span style="color:var(--red);font-size:9px;"> ⚠ dépassé</span>':'';
-      return`<div class="hist-entry">
-        <div class="hist-meta"><span>Depuis le ${fmtDate(h.setDate)}</span><span>Relance : ${fmtDate(h.relance)}${ovd}</span></div>
-        <div class="hist-text">${h.motif}</div>
-        ${resolved}
-      </div>`;
+    document.getElementById('cli-hist').innerHTML=[...d.clientHistory].reverse().map(h=>{
+      const ov=!h.resolvedDate&&h.relance&&today()>h.relance?'<span style="color:var(--red);font-size:9px"> ⚠ dépassé</span>':'';
+      const res=h.resolvedDate?`<div class="hist-resolved">✓ Levé le ${fmtDate(h.resolvedDate)}</div>`:'';
+      return`<div class="hist-entry"><div class="hist-meta"><span>Depuis ${fmtDate(h.setDate)}</span><span>Relance : ${fmtDate(h.relance)}${ov}</span></div><div class="hist-text">${h.motif}</div>${res}</div>`;
     }).join('');
-  } else {
-    histWrap.style.display='none';
-  }
-
+  } else histWrap.style.display='none';
   if(d.client){
     document.getElementById('cli-sub').textContent='Mettre à jour le blocage client';
     document.getElementById('cli-ta').value=d.client.motif||'';
     document.getElementById('cli-date').value=d.client.relance||'';
     btnDel.style.display='inline-block';
-    if(st==='overdue'){
-      warn.style.display='block';
-      warn.innerHTML=`⚠ <strong>Attention :</strong> ${d.client.relance&&today()>d.client.relance?'La date de relance est dépassée.':'Ce dossier est bloqué depuis plus de 30 jours.'} Mettez à jour ou levez le blocage.`;
-    } else {warn.style.display='none';}
+    if(st==='overdue'){warn.style.display='block';warn.innerHTML=`⚠ <strong>Attention :</strong> ${d.client.relance&&today()>d.client.relance?'Date de relance dépassée.':'Bloqué depuis plus de 30 jours.'} Mettez à jour ou levez le blocage.`;}
+    else warn.style.display='none';
   } else {
     document.getElementById('cli-sub').textContent='Marquer ce dossier comme bloqué côté client';
-    document.getElementById('cli-ta').value='';
-    document.getElementById('cli-date').value='';
-    btnDel.style.display='none';
-    warn.style.display='none';
+    document.getElementById('cli-ta').value='';document.getElementById('cli-date').value='';
+    btnDel.style.display='none';warn.style.display='none';
   }
   document.getElementById('overlay-cli').classList.add('open');
   setTimeout(()=>document.getElementById('cli-ta').focus(),50);
@@ -736,25 +837,43 @@ function saveClient(){
   const d=DATA.find(x=>x.id===modalCliId);
   const setDate=d.client?.setDate||today();
   d.client={motif,relance,setDate};
-  // Mettre à jour ou créer l'entrée active dans l'historique
   if(!d.clientHistory)d.clientHistory=[];
-  const existing=d.clientHistory.find(h=>!h.resolvedDate);
-  if(existing){existing.motif=motif;existing.relance=relance;}
-  else d.clientHistory.push({motif,relance,setDate,resolvedDate:null});
-  closeModal('cli');render();
+  const ex=d.clientHistory.find(h=>!h.resolvedDate);
+  if(ex){ex.motif=motif;ex.relance=relance;}else d.clientHistory.push({motif,relance,setDate,resolvedDate:null});
+  closeModal('cli');render();showToast('✓ Blocage client enregistré');
 }
 function removeClient(){
   if(modalCliId===null)return;
   const d=DATA.find(x=>x.id===modalCliId);
-  // Marquer l'épisode actif comme résolu
-  if(d.clientHistory){const e=d.clientHistory.find(h=>!h.resolvedDate);if(e)e.resolvedDate=today();}
-  d.client=null;
-  closeModal('cli');render();
+  const e=d.clientHistory?.find(h=>!h.resolvedDate);if(e)e.resolvedDate=today();
+  d.client=null;closeModal('cli');render();showToast('✓ Blocage levé');
 }
 
 function closeModal(type){document.getElementById('overlay-'+type).classList.remove('open');if(type==='comm')modalCommId=null;else modalCliId=null;}
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal('comm');closeModal('cli');}});
 
+/* ── CLAVIER ── */
+document.addEventListener('keydown',e=>{
+  const tag=document.activeElement.tagName;
+  const inInput=tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT';
+  if(e.key==='Escape'){closeModal('comm');closeModal('cli');return;}
+  if(inInput)return;
+  const rows=getVisibleRows();
+  if(e.key==='r'||e.key==='R'){e.preventDefault();resetFilters();return;}
+  if(e.key==='ArrowUp'){e.preventDefault();navigateTo(selectedIdx===null?rows.length-1:selectedIdx-1);return;}
+  if(e.key==='ArrowDown'){e.preventDefault();navigateTo(selectedIdx===null?0:selectedIdx+1);return;}
+  if(e.key==='PageUp'){e.preventDefault();navigateTo((selectedIdx||0)-10);return;}
+  if(e.key==='PageDown'){e.preventDefault();navigateTo((selectedIdx||0)+10);return;}
+  if(e.key==='Home'){e.preventDefault();navigateTo(0);return;}
+  if(e.key==='End'){e.preventDefault();navigateTo(rows.length-1);return;}
+  if((e.key==='c'||e.key==='C')&&selectedIdx!==null){
+    const d=selectedData();if(d)openCommModal(d.id);return;
+  }
+  if((e.key==='b'||e.key==='B')&&selectedIdx!==null){
+    const d=selectedData();if(d)openCliModal(d.id);return;
+  }
+});
+
+/* ── INIT ── */
 (function(){
   const now=new Date();const pad=n=>String(n).padStart(2,'0');
   document.getElementById('update-info').textContent=`Mis à jour le ${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} à ${pad(now.getHours())}h${pad(now.getMinutes())}`;
