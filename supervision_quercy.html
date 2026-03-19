@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supervision Dossiers — Cabinet QUERCY</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --q900: #001208;
+  --q800: #001f10;
+  --q700: #003018;
+  --q600: #004220;
+  --q500: #005a2c;
+  --q400: #007a3c;
+  --q300: #1a9e56;
+  --q200: #5ec98a;
+  --q100: #a8e8c0;
+  --q50:  #e4f7ec;
+  --red:  #dc2626;
+  --red-bg: #fef2f2;
+  --red-border: #fca5a5;
+  --orange: #d97706;
+  --orange-bg: #fffbeb;
+  --orange-border: #fcd34d;
+  --emerald: #059669;
+  --emerald-bg: #ecfdf5;
+  --emerald-border: #6ee7b7;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--gray-100);
+  color: var(--gray-900);
+  font-size: 13px;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--q700);
+  color: white;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.logo {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.logo-mark {
+  width: 28px; height: 28px;
+  background: var(--q300);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: white;
+  letter-spacing: 0;
+}
+.sep { width: 1px; height: 18px; background: rgba(255,255,255,0.25); }
+.header-title { font-size: 12px; color: rgba(255,255,255,0.65); font-weight: 400; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.update-info {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.45);
+  background: rgba(0,0,0,0.2);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.profile-switcher {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 6px;
+  padding: 3px;
+}
+.profile-btn {
+  padding: 4px 11px;
+  border: none;
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 11px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: all 0.15s;
+}
+.profile-btn:hover { color: rgba(255,255,255,0.9); }
+.profile-btn.active { background: white; color: var(--q700); }
+
+/* ── TOOLBAR ── */
+.toolbar {
+  background: white;
+  border-bottom: 1px solid var(--gray-200);
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  border: 1px solid var(--gray-200);
+  border-radius: 6px;
+  padding: 5px 10px;
+  background: var(--gray-50);
+  width: 220px;
+  transition: border-color 0.15s;
+}
+.search-wrap:focus-within { border-color: var(--q400); background: white; }
+.search-wrap input {
+  border: none; outline: none;
+  font-size: 12px; font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--gray-800); width: 100%; background: transparent;
+}
+.search-wrap input::placeholder { color: var(--gray-400); }
+.filter-sel {
+  border: 1px solid var(--gray-200);
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 12px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--gray-600);
+  background: var(--gray-50);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.filter-sel:focus { border-color: var(--q400); }
+.filter-sel.active { border-color: var(--q400); color: var(--q700); background: var(--q50); }
+.stats-area {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.stat-pill {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 500;
+  padding: 3px 9px; border-radius: 20px;
+  cursor: pointer; transition: opacity 0.15s;
+}
+.stat-pill:hover { opacity: 0.75; }
+.stat-pill.p-red { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+.stat-pill.p-orange { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.stat-pill.p-green { background: var(--emerald-bg); color: var(--emerald); border: 1px solid var(--emerald-border); }
+.dot { width: 7px; height: 7px; border-radius: 50%; }
+
+/* ── TABLE WRAPPER ── */
+.table-wrap {
+  padding: 12px 20px 20px;
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  min-width: 1500px;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--gray-200);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* ── THEAD ── */
+thead tr:first-child th {
+  background: var(--q800);
+  color: rgba(255,255,255,0.85);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 10px 10px 4px;
+  text-align: left;
+  white-space: nowrap;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.1s;
+}
+thead tr:first-child th:hover { background: var(--q700); }
+thead tr:first-child th.sorted { color: white; }
+thead tr:first-child th:first-child {
+  position: sticky; left: 0; z-index: 20;
+  min-width: 200px;
+}
+thead tr.filter-row th {
+  background: var(--q900);
+  padding: 4px 6px 8px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+}
+thead tr.filter-row th:first-child {
+  position: sticky; left: 0; z-index: 20;
+}
+.col-filter {
+  width: 100%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 3px;
+  color: rgba(255,255,255,0.75);
+  font-size: 10px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  padding: 3px 5px;
+  outline: none;
+  cursor: pointer;
+}
+.col-filter:focus { border-color: var(--q300); }
+.col-filter option { background: #1a2e1c; color: white; }
+
+/* ── TBODY ── */
+tbody tr {
+  border-bottom: 1px solid var(--gray-100);
+  transition: background 0.08s;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--q50); }
+tbody tr.row-red { border-left: 3px solid var(--red); }
+tbody tr.row-orange { border-left: 3px solid var(--orange); }
+tbody tr.row-green { border-left: 3px solid transparent; }
+tbody td {
+  padding: 7px 10px;
+  border-right: 1px solid var(--gray-100);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+tbody td:first-child {
+  position: sticky; left: 0; z-index: 5;
+  background: white;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--q600);
+  min-width: 200px;
+}
+tbody tr:hover td:first-child { background: var(--q50); }
+tbody tr.row-red td:first-child { color: var(--gray-800); }
+
+/* ── TRAFFIC LIGHTS ── */
+.feu-wrap { display: flex; justify-content: center; align-items: center; }
+.feu {
+  width: 20px; height: 20px; border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+.feu::after {
+  content: '';
+  position: absolute; inset: 3px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+}
+.feu-red    { background: var(--red); box-shadow: 0 0 0 2px rgba(220,38,38,0.2); }
+.feu-orange { background: var(--orange); box-shadow: 0 0 0 2px rgba(217,119,6,0.2); }
+.feu-green  { background: var(--emerald); box-shadow: 0 0 0 2px rgba(5,150,105,0.2); }
+.feu-gray   { background: var(--gray-300); }
+
+/* ── GED BADGE ── */
+.ged-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 30px; height: 20px; border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 500; padding: 0 6px;
+}
+.ged-0    { background: var(--gray-100); color: var(--gray-400); }
+.ged-low  { background: var(--emerald-bg); color: var(--emerald); }
+.ged-med  { background: var(--orange-bg); color: var(--orange); }
+.ged-high { background: var(--red-bg); color: var(--red); }
+
+/* ── DATE / PERSON CELLS ── */
+.mono { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--gray-500); }
+.tag {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.04em;
+  padding: 2px 7px; border-radius: 3px; text-transform: uppercase;
+}
+.tag-assoc { background: var(--q50); color: var(--q600); }
+.tag-resp  { background: var(--gray-100); color: var(--gray-600); }
+
+/* ── COMMENT CELL ── */
+.comm-wrap { display: flex; flex-direction: column; gap: 3px; max-width: 160px; }
+.comm-text {
+  font-size: 11px; color: var(--gray-500); font-style: italic;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.btn-comm {
+  background: none; border: 1px solid var(--gray-200); border-radius: 4px;
+  padding: 2px 7px; font-size: 10px; color: var(--gray-400);
+  cursor: pointer; font-family: 'IBM Plex Sans', sans-serif;
+  transition: all 0.12s; align-self: flex-start;
+}
+.btn-comm:hover { border-color: var(--q300); color: var(--q600); background: var(--q50); }
+
+/* ── SORT ARROWS ── */
+.th-inner { display: flex; align-items: center; gap: 5px; }
+.sort-arrow { font-size: 9px; color: rgba(255,255,255,0.4); }
+.sorted .sort-arrow { color: white; }
+
+/* ── MODAL ── */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 500;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: white; border-radius: 10px; padding: 24px;
+  width: 420px; max-width: 95vw;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+  transform: translateY(8px);
+  transition: transform 0.2s;
+}
+.overlay.open .modal { transform: translateY(0); }
+.modal-header { margin-bottom: 16px; }
+.modal-dossier {
+  font-size: 14px; font-weight: 600; color: var(--q700); margin-bottom: 3px;
+}
+.modal-sub { font-size: 12px; color: var(--gray-500); }
+.modal textarea {
+  width: 100%; height: 96px; resize: none;
+  border: 1px solid var(--gray-200); border-radius: 6px;
+  padding: 10px; font-size: 13px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  color: var(--gray-800); outline: none;
+  transition: border-color 0.15s;
+}
+.modal textarea:focus { border-color: var(--q400); }
+.modal-actions {
+  display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px;
+}
+.btn-cancel {
+  padding: 7px 14px; border: 1px solid var(--gray-200); border-radius: 5px;
+  background: white; font-size: 12px; cursor: pointer;
+  color: var(--gray-600); font-family: 'IBM Plex Sans', sans-serif;
+  transition: background 0.1s;
+}
+.btn-cancel:hover { background: var(--gray-50); }
+.btn-save {
+  padding: 7px 16px; border: none; border-radius: 5px;
+  background: var(--q700); color: white;
+  font-size: 12px; cursor: pointer;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 500; transition: background 0.1s;
+}
+.btn-save:hover { background: var(--q600); }
+
+/* ── LEGEND + FOOTER ── */
+.footer {
+  background: white;
+  border-top: 1px solid var(--gray-200);
+  padding: 8px 20px;
+  display: flex; align-items: center; gap: 20px;
+}
+.legend-label {
+  font-size: 10px; color: var(--gray-400);
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray-600); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+.visible-count {
+  margin-left: auto;
+  font-size: 11px; color: var(--gray-400);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ── PROFILE INFO BANNER ── */
+.profile-banner {
+  background: var(--q50); border-bottom: 1px solid var(--q100);
+  padding: 5px 20px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; color: var(--q600);
+}
+.profile-banner strong { font-weight: 600; }
+.profile-banner-icon { font-size: 14px; }
+
+tr.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo">
+      <div class="logo-mark">Q</div>
+      QUERCY
+    </div>
+    <div class="sep"></div>
+    <span class="header-title">Tableau de bord — Avancement des dossiers</span>
+  </div>
+  <div class="header-right">
+    <span class="update-info" id="update-info">—</span>
+    <div class="profile-switcher">
+      <button class="profile-btn" data-p="collab" onclick="setProfile('collab')">Collaborateur</button>
+      <button class="profile-btn active" data-p="resp" onclick="setProfile('resp')">Responsable</button>
+      <button class="profile-btn" data-p="assoc" onclick="setProfile('assoc')">Associé</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE BANNER -->
+<div class="profile-banner" id="profile-banner">
+  <span class="profile-banner-icon">👤</span>
+  <span id="banner-text"></span>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input type="text" id="search" placeholder="Rechercher un dossier…" oninput="applyFilters()">
+  </div>
+
+  <select class="filter-sel" id="fil-assoc" onchange="applyFilters(); updateSelectState(this)">
+    <option value="">Tous les associés</option>
+    <option>MARTIN</option>
+    <option>DUPONT</option>
+    <option>LEFEBVRE</option>
+  </select>
+
+  <select class="filter-sel" id="fil-resp" onchange="applyFilters(); updateSelectState(this)">
+    <option value="">Tous les responsables</option>
+    <option>MOREAU</option>
+    <option>BERNARD</option>
+    <option>PETIT</option>
+    <option>RICHARD</option>
+  </select>
+
+  <select class="filter-sel" id="fil-alert" onchange="applyFilters(); updateSelectState(this)">
+    <option value="">Tous niveaux</option>
+    <option value="2">🔴 Alertes seulement</option>
+    <option value="1">🟠 Attention + Alertes</option>
+  </select>
+
+  <div class="stats-area" id="stats-area"></div>
+</div>
+
+<!-- TABLE -->
+<div class="table-wrap">
+<table id="tbl">
+  <thead>
+    <tr id="thead-labels">
+      <th onclick="sortBy('nom')"><div class="th-inner">Dossier <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('assoc')"><div class="th-inner">Ass. <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('resp')"><div class="th-inner">Resp. Miss. <span class="sort-arrow">↕</span></div></th>
+      <th><div class="th-inner">Clôture</div></th>
+      <th><div class="th-inner">Situation</div></th>
+      <th><div class="th-inner">Dern. circu</div></th>
+      <th onclick="sortBy('rappro')"><div class="th-inner">Rappro M-1 <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('ged')"><div class="th-inner">GED pièces <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('c472')"><div class="th-inner">472 <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('flcr')"><div class="th-inner">FLCR <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('caisseM1')"><div class="th-inner">Caisse M-1 <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('caisseSolde')"><div class="th-inner">Caisse solde <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('caisseCoher')"><div class="th-inner">Caisse cohér. <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('c455')"><div class="th-inner">455 <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('salaires')"><div class="th-inner">Salaires M-1 <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('comptesFDeb')"><div class="th-inner">Cptes F déb. <span class="sort-arrow">↕</span></div></th>
+      <th><div class="th-inner">Commentaire</div></th>
+    </tr>
+    <tr class="filter-row">
+      <th><input class="col-filter" type="text" placeholder="Filtrer…" oninput="applyFilters()"></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option>MARTIN</option><option>DUPONT</option><option>LEFEBVRE</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option>MOREAU</option><option>BERNARD</option><option>PETIT</option><option>RICHARD</option></select></th>
+      <th></th><th></th><th></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">✅ Vert</option><option value="orange">🟠 Orange</option><option value="red">🔴 Rouge</option></select></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+</div>
+
+<!-- FOOTER LEGEND -->
+<div class="footer">
+  <span class="legend-label">Légende :</span>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--emerald)"></div> OK / À jour</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Attention</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Alerte</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--gray-300)"></div> N/A</div>
+  <span class="visible-count" id="visible-count"></span>
+</div>
+
+<!-- MODAL COMMENTAIRE -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-dossier" id="modal-nom">—</div>
+      <div class="modal-sub">Note de suivi / Commentaire</div>
+    </div>
+    <textarea id="modal-ta" placeholder="Saisissez votre commentaire ou note de suivi…"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-save" onclick="saveComm()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+const DATA = [
+  { id:1,  nom:"Pharmacie des Arcades",    assoc:"MARTIN",   resp:"MOREAU",   clot:"31/12/2025", situat:"28/02/2026", circu:"15/02/2026", rappro:"green",  ged:3,  c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"green",  comptesFDeb:"green",  comm:"" },
+  { id:2,  nom:"Pharmacie du Marché",      assoc:"MARTIN",   resp:"MOREAU",   clot:"31/12/2025", situat:"31/01/2026", circu:"10/01/2026", rappro:"red",    ged:47, c472:"red",    flcr:"red",    caisseM1:"orange", caisseSolde:"green",  caisseCoher:"orange", c455:"green",  salaires:"orange", comptesFDeb:"red",    comm:"En attente des relevés de caisse" },
+  { id:3,  nom:"Pharmacie Saint-Jean",     assoc:"DUPONT",   resp:"BERNARD",  clot:"31/12/2025", situat:"28/02/2026", circu:"18/02/2026", rappro:"green",  ged:0,  c472:"orange", flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"green",  comptesFDeb:"orange", comm:"" },
+  { id:4,  nom:"Pharmacie de la Gare",     assoc:"DUPONT",   resp:"BERNARD",  clot:"31/12/2025", situat:"28/02/2026", circu:"01/03/2026", rappro:"orange", ged:12, c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"red",    caisseCoher:"green",  c455:"red",    salaires:"green",  comptesFDeb:"green",  comm:"CCA passé débiteur jan. — à investiguer" },
+  { id:5,  nom:"Pharmacie du Parc",        assoc:"LEFEBVRE", resp:"PETIT",    clot:"31/12/2025", situat:"28/02/2026", circu:"20/02/2026", rappro:"green",  ged:5,  c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"green",  comptesFDeb:"green",  comm:"" },
+  { id:6,  nom:"Pharmacie Centrale",       assoc:"MARTIN",   resp:"RICHARD",  clot:"31/12/2025", situat:"31/01/2026", circu:"05/02/2026", rappro:"red",    ged:89, c472:"red",    flcr:"red",    caisseM1:"red",    caisseSolde:"green",  caisseCoher:"red",    c455:"green",  salaires:"red",    comptesFDeb:"red",    comm:"Dossier en retard — RDV prévu 22/03" },
+  { id:7,  nom:"Pharmacie de l'Église",    assoc:"LEFEBVRE", resp:"PETIT",    clot:"31/12/2025", situat:"28/02/2026", circu:"10/03/2026", rappro:"green",  ged:8,  c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"orange", c455:"green",  salaires:"green",  comptesFDeb:"orange", comm:"" },
+  { id:8,  nom:"Pharmacie des Halles",     assoc:"DUPONT",   resp:"MOREAU",   clot:"31/12/2025", situat:"28/02/2026", circu:"28/02/2026", rappro:"green",  ged:1,  c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"green",  comptesFDeb:"green",  comm:"" },
+  { id:9,  nom:"Pharmacie du Château",     assoc:"MARTIN",   resp:"BERNARD",  clot:"31/12/2025", situat:"31/01/2026", circu:"20/01/2026", rappro:"orange", ged:31, c472:"orange", flcr:"orange", caisseM1:"orange", caisseSolde:"orange", caisseCoher:"orange", c455:"green",  salaires:"orange", comptesFDeb:"orange", comm:"Retard suite arrêt maladie du gérant" },
+  { id:10, nom:"Pharmacie de la Fontaine", assoc:"LEFEBVRE", resp:"RICHARD",  clot:"31/12/2025", situat:"28/02/2026", circu:"05/03/2026", rappro:"green",  ged:2,  c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"green",  comptesFDeb:"green",  comm:"" },
+  { id:11, nom:"Pharmacie du Bourg",       assoc:"DUPONT",   resp:"PETIT",    clot:"31/12/2025", situat:"31/01/2026", circu:"15/02/2026", rappro:"red",    ged:24, c472:"green",  flcr:"red",    caisseM1:"red",    caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"red",    comptesFDeb:"orange", comm:"" },
+  { id:12, nom:"Pharmacie des Fleurs",     assoc:"MARTIN",   resp:"MOREAU",   clot:"31/12/2025", situat:"28/02/2026", circu:"01/03/2026", rappro:"green",  ged:6,  c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"green",  comptesFDeb:"green",  comm:"" },
+  { id:13, nom:"Pharmacie de la Croix",    assoc:"LEFEBVRE", resp:"RICHARD",  clot:"31/12/2025", situat:"28/02/2026", circu:"12/03/2026", rappro:"green",  ged:0,  c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"green",  comptesFDeb:"green",  comm:"" },
+  { id:14, nom:"Pharmacie du Port",        assoc:"DUPONT",   resp:"BERNARD",  clot:"31/12/2025", situat:"31/01/2026", circu:"08/02/2026", rappro:"red",    ged:56, c472:"red",    flcr:"red",    caisseM1:"red",    caisseSolde:"red",    caisseCoher:"red",    c455:"red",    salaires:"red",    comptesFDeb:"red",    comm:"Nouveau client — prise en charge difficile" },
+  { id:15, nom:"Pharmacie de la Place",    assoc:"MARTIN",   resp:"PETIT",    clot:"31/12/2025", situat:"28/02/2026", circu:"18/03/2026", rappro:"green",  ged:4,  c472:"green",  flcr:"green",  caisseM1:"green",  caisseSolde:"green",  caisseCoher:"green",  c455:"green",  salaires:"green",  comptesFDeb:"orange", comm:"" },
+];
+
+// ── PROFILES ─────────────────────────────────────────────────────────────
+const PROFILES = {
+  collab: {
+    label: 'Collaborateur — MOREAU',
+    desc: 'Vous voyez uniquement vos dossiers (resp. MOREAU)',
+    canComment: true,
+    filter: d => d.resp === 'MOREAU',
+  },
+  resp: {
+    label: 'Responsable — MOREAU',
+    desc: 'Vous voyez vos dossiers et ceux de votre équipe (MOREAU + PETIT)',
+    canComment: true,
+    filter: d => ['MOREAU','PETIT'].includes(d.resp),
+  },
+  assoc: {
+    label: 'Associé — MARTIN',
+    desc: 'Vous avez accès à tous les dossiers du cabinet',
+    canComment: true,
+    filter: () => true,
+  },
+};
+
+// ── STATE ─────────────────────────────────────────────────────────────────
+let profile  = 'resp';
+let sortCol  = null;
+let sortDir  = 1;
+let modalId  = null;
+
+// ── HELPERS ───────────────────────────────────────────────────────────────
+const feuScore = v => ({ red:2, orange:1, green:0, gray:-1 }[v] ?? -1);
+
+function dossierScore(d) {
+  const feux = [d.rappro, d.c472, d.flcr, d.caisseM1, d.caisseSolde, d.caisseCoher, d.c455, d.salaires, d.comptesFDeb];
+  if (feux.includes('red'))    return 2;
+  if (feux.includes('orange')) return 1;
+  return 0;
+}
+
+function feuHTML(v) {
+  const cls = { green:'feu-green', orange:'feu-orange', red:'feu-red', gray:'feu-gray' }[v] || 'feu-gray';
+  return `<div class="feu-wrap"><div class="feu ${cls}"></div></div>`;
+}
+
+function gedHTML(n) {
+  const cls = n === 0 ? 'ged-0' : n < 10 ? 'ged-low' : n < 30 ? 'ged-med' : 'ged-high';
+  return `<div style="text-align:center"><span class="ged-badge ${cls}">${n}</span></div>`;
+}
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+function render() {
+  const prof = PROFILES[profile];
+  document.getElementById('banner-text').innerHTML =
+    `<strong>${prof.label}</strong> &nbsp;·&nbsp; ${prof.desc}`;
+
+  let rows = DATA.filter(prof.filter);
+
+  // Sort
+  if (sortCol) {
+    rows = [...rows].sort((a, b) => {
+      let va = a[sortCol], vb = b[sortCol];
+      if (typeof va === 'string' && ['green','orange','red','gray'].includes(va)) {
+        va = feuScore(va); vb = feuScore(vb);
+      }
+      if (va < vb) return -sortDir;
+      if (va > vb) return  sortDir;
+      return 0;
+    });
+  } else {
+    // Default: alertes en premier
+    rows = [...rows].sort((a,b) => dossierScore(b) - dossierScore(a));
+  }
+
+  const canC = prof.canComment;
+
+  document.getElementById('tbody').innerHTML = rows.map(d => {
+    const score = dossierScore(d);
+    const rowCls = score === 2 ? 'row-red' : score === 1 ? 'row-orange' : 'row-green';
+
+    let commCell;
+    if (d.comm) {
+      commCell = `<div class="comm-wrap">
+        <span class="comm-text" title="${d.comm.replace(/"/g,'&quot;')}">${d.comm}</span>
+        ${canC ? `<button class="btn-comm" onclick="openModal(${d.id})">Modifier</button>` : ''}
+      </div>`;
+    } else {
+      commCell = canC
+        ? `<button class="btn-comm" onclick="openModal(${d.id})">+ Note</button>`
+        : `<span style="color:var(--gray-300);font-size:11px">—</span>`;
+    }
+
+    return `<tr class="${rowCls}"
+        data-nom="${d.nom.toLowerCase()}"
+        data-assoc="${d.assoc}"
+        data-resp="${d.resp}"
+        data-score="${score}"
+        data-rappro="${d.rappro}"
+        data-c472="${d.c472}"
+        data-flcr="${d.flcr}"
+        data-caissem1="${d.caisseM1}"
+        data-caissesolde="${d.caisseSolde}"
+        data-caissecoher="${d.caisseCoher}"
+        data-c455="${d.c455}"
+        data-salaires="${d.salaires}"
+        data-comptesfDeb="${d.comptesFDeb}">
+      <td>${d.nom}</td>
+      <td><span class="tag tag-assoc">${d.assoc}</span></td>
+      <td><span class="tag tag-resp">${d.resp}</span></td>
+      <td><span class="mono">${d.clot}</span></td>
+      <td><span class="mono">${d.situat}</span></td>
+      <td><span class="mono">${d.circu}</span></td>
+      <td>${feuHTML(d.rappro)}</td>
+      <td>${gedHTML(d.ged)}</td>
+      <td>${feuHTML(d.c472)}</td>
+      <td>${feuHTML(d.flcr)}</td>
+      <td>${feuHTML(d.caisseM1)}</td>
+      <td>${feuHTML(d.caisseSolde)}</td>
+      <td>${feuHTML(d.caisseCoher)}</td>
+      <td>${feuHTML(d.c455)}</td>
+      <td>${feuHTML(d.salaires)}</td>
+      <td>${feuHTML(d.comptesFDeb)}</td>
+      <td>${commCell}</td>
+    </tr>`;
+  }).join('');
+
+  updateStats(rows);
+  applyFilters();
+}
+
+function updateStats(rows) {
+  const reds    = rows.filter(d => dossierScore(d) === 2).length;
+  const oranges = rows.filter(d => dossierScore(d) === 1).length;
+  const greens  = rows.filter(d => dossierScore(d) === 0).length;
+  document.getElementById('stats-area').innerHTML = `
+    <div class="stat-pill p-red"    onclick="quickFilter(2)"><div class="dot" style="background:var(--red)"></div>${reds} alerte${reds>1?'s':''}</div>
+    <div class="stat-pill p-orange" onclick="quickFilter(1)"><div class="dot" style="background:var(--orange)"></div>${oranges} attention</div>
+    <div class="stat-pill p-green"  onclick="quickFilter(0)"><div class="dot" style="background:var(--emerald)"></div>${greens} OK</div>
+  `;
+}
+
+// ── FILTERS ───────────────────────────────────────────────────────────────
+function applyFilters() {
+  const search    = document.getElementById('search').value.toLowerCase().trim();
+  const selAssoc  = document.getElementById('fil-assoc').value;
+  const selResp   = document.getElementById('fil-resp').value;
+  const selAlert  = document.getElementById('fil-alert').value;
+
+  // Column-level filters (filter-row selects)
+  const colFilters = [...document.querySelectorAll('.filter-row .col-filter')];
+
+  let visible = 0;
+  document.querySelectorAll('#tbody tr').forEach(row => {
+    const nom    = row.dataset.nom || '';
+    const assoc  = row.dataset.assoc;
+    const resp   = row.dataset.resp;
+    const score  = parseInt(row.dataset.score);
+
+    let show = true;
+    if (search && !nom.includes(search)) show = false;
+    if (selAssoc && assoc !== selAssoc)  show = false;
+    if (selResp  && resp  !== selResp)   show = false;
+    if (selAlert && score < parseInt(selAlert)) show = false;
+
+    // Column filters (rappro=col6 idx0→6, c472=idx1→8, etc.)
+    // We map the filter-row inputs to their data attributes
+    const colMap = [null, null, null, null, null, null, 'rappro', null, 'c472', 'flcr', 'caissem1', 'caissesolde', 'caissecoher', 'c455', 'salaires', 'comptesfDeb', null];
+    colFilters.forEach((f, i) => {
+      if (!f || !f.value) return;
+      const attr = colMap[i];
+      if (attr && row.dataset[attr] !== f.value) show = false;
+    });
+
+    row.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+
+  document.getElementById('visible-count').textContent = `${visible} dossier${visible>1?'s':''} affiché${visible>1?'s':''}`;
+}
+
+function quickFilter(minScore) {
+  const sel = document.getElementById('fil-alert');
+  sel.value = minScore > 0 ? String(minScore) : '';
+  updateSelectState(sel);
+  applyFilters();
+}
+
+function updateSelectState(el) {
+  el.classList.toggle('active', !!el.value);
+}
+
+// ── SORT ──────────────────────────────────────────────────────────────────
+function sortBy(col) {
+  if (sortCol === col) { sortDir *= -1; }
+  else { sortCol = col; sortDir = -1; }
+  // Update arrow indicators
+  document.querySelectorAll('#thead-labels th .sort-arrow').forEach(a => a.textContent = '↕');
+  document.querySelectorAll('#thead-labels th').forEach(th => th.classList.remove('sorted'));
+  render();
+}
+
+// ── PROFILE ───────────────────────────────────────────────────────────────
+function setProfile(p) {
+  profile = p;
+  document.querySelectorAll('.profile-btn').forEach(b => b.classList.toggle('active', b.dataset.p === p));
+  render();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
+function openModal(id) {
+  const d = DATA.find(x => x.id === id);
+  modalId = id;
+  document.getElementById('modal-nom').textContent = d.nom;
+  document.getElementById('modal-ta').value = d.comm || '';
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modal-ta').focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  modalId = null;
+}
+
+function saveComm() {
+  if (modalId === null) return;
+  const d = DATA.find(x => x.id === modalId);
+  if (d) d.comm = document.getElementById('modal-ta').value.trim();
+  closeModal();
+  render();
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+function init() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('update-info').textContent =
+    `Mis à jour le ${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} à ${pad(now.getHours())}h${pad(now.getMinutes())}`;
+  render();
+}
+
+init();
+</script>
+</body>
+</html>
