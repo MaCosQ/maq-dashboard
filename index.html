@@ -53,6 +53,14 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g100);color:var(--g
 .reset-btn:hover{border-color:var(--g300);color:var(--g700);}
 .export-btn{margin-left:auto;padding:5px 12px;border:1px solid var(--q300);border-radius:6px;background:var(--q50);font-size:11px;color:var(--q600);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500;transition:all .12s;display:flex;align-items:center;gap:5px;}
 .export-btn:hover{background:var(--q100);border-color:var(--q400);}
+.tb-sep{width:1px;height:20px;background:var(--g200);margin:0 2px;}
+.cb-group{display:flex;align-items:center;gap:10px;padding:4px 10px;border:1px solid var(--g200);border-radius:6px;background:var(--g50);}
+.cb-group label{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--g600);cursor:pointer;user-select:none;white-space:nowrap;}
+.cb-group input[type=checkbox]{width:13px;height:13px;accent-color:var(--q400);cursor:pointer;}
+.cb-group label.cb-red{color:var(--red);}
+.cb-group label.cb-ora{color:var(--ora);}
+.cb-group label.cb-grn{color:var(--em);}
+.cb-cli label{color:#7e22ce;}
 
 .table-wrap{padding:12px 20px 20px;overflow-x:auto;}
 table{width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;border:1px solid var(--g200);box-shadow:0 1px 4px rgba(0,0,0,.06);table-layout:fixed;}
@@ -83,24 +91,38 @@ thead tr.filter-row th.fr-name{position:sticky;left:96px;z-index:20;background:v
 .col-fsel option{background:#1a2e1c;color:white;}
 
 tbody tr{border-bottom:1px solid var(--g100);transition:background .08s;cursor:pointer;}
-tbody tr:hover{background:var(--q50);}
+tbody tr:hover{background:rgba(0,0,0,.03);}
+/* Couleurs de fond par score — violet écrase tout si bloqué client */
+tbody tr.row-red  {background:#fff5f5;}
+tbody tr.row-ora  {background:#fffbeb;}
+tbody tr.row-grn  {background:white;}
 tbody tr.row-client{background:#fdf4ff;}
+tbody tr.row-red:hover  {background:#ffe4e4;}
+tbody tr.row-ora:hover  {background:#fef3c7;}
+tbody tr.row-grn:hover  {background:var(--q50);}
 tbody tr.row-client:hover{background:#f5e8ff;}
 tbody td{padding:5px 4px;border-right:1px solid var(--g100);text-align:center;vertical-align:middle;}
-tbody td.td-num{position:sticky;left:0;z-index:5;background:white;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--g500);width:44px;border-right:1px solid var(--g200);}
-tbody td.td-score{position:sticky;left:44px;z-index:5;background:white;width:52px;border-right:1px solid var(--g200);padding:4px 5px;}
-tbody td.td-name{position:sticky;left:96px;z-index:5;background:white;text-align:left;font-weight:500;font-size:11px;color:var(--q600);width:180px;min-width:180px;max-width:180px;padding-left:8px;border-left:3px solid transparent;}
+tbody td.td-num{position:sticky;left:0;z-index:5;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--g500);width:44px;border-right:1px solid var(--g200);}
+tbody td.td-score{position:sticky;left:44px;z-index:5;width:52px;border-right:1px solid var(--g200);padding:4px 5px;}
+tbody td.td-name{position:sticky;left:96px;z-index:5;text-align:left;font-weight:500;font-size:11px;color:var(--q600);width:180px;min-width:180px;max-width:180px;padding-left:8px;border-left:3px solid transparent;}
+/* Couleur de fond des cellules sticky selon la ligne */
+tbody tr.row-red   td.td-num,tbody tr.row-red   td.td-score,tbody tr.row-red   td.td-name{background:#fff5f5;}
+tbody tr.row-ora   td.td-num,tbody tr.row-ora   td.td-score,tbody tr.row-ora   td.td-name{background:#fffbeb;}
+tbody tr.row-grn   td.td-num,tbody tr.row-grn   td.td-score,tbody tr.row-grn   td.td-name{background:white;}
 tbody tr.row-client td.td-num,tbody tr.row-client td.td-score,tbody tr.row-client td.td-name{background:#fdf4ff;}
+tbody tr.row-red:hover   td.td-num,tbody tr.row-red:hover   td.td-score,tbody tr.row-red:hover   td.td-name{background:#ffe4e4;}
+tbody tr.row-ora:hover   td.td-num,tbody tr.row-ora:hover   td.td-score,tbody tr.row-ora:hover   td.td-name{background:#fef3c7;}
+tbody tr.row-grn:hover   td.td-num,tbody tr.row-grn:hover   td.td-score,tbody tr.row-grn:hover   td.td-name{background:var(--q50);}
 tbody tr.row-client:hover td.td-num,tbody tr.row-client:hover td.td-score,tbody tr.row-client:hover td.td-name{background:#f5e8ff;}
-tbody tr.row-red  td.td-name{border-left:3px solid var(--red);}
-tbody tr.row-ora  td.td-name{border-left:3px solid var(--ora);}
-tbody tr.row-grn  td.td-name{border-left:3px solid transparent;}
-tbody tr:hover td.td-num,tbody tr:hover td.td-score,tbody tr:hover td.td-name{background:var(--q50);}
+/* Bordure gauche indicateur de score */
+tbody tr.row-red   td.td-name{border-left:3px solid var(--red);}
+tbody tr.row-ora   td.td-name{border-left:3px solid var(--ora);}
+tbody tr.row-client td.td-name{border-left:3px solid #a855f7;}
+tbody tr.row-grn   td.td-name{border-left:3px solid transparent;}
 tbody td.td-init{font-size:9px;color:var(--g500);font-weight:500;}
 tbody td.td-date{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--g400);}
 
 .score-badge{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:18px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;padding:0 5px;}
-.score-grn{background:var(--em-bg);color:var(--em);}
 .score-ora{background:var(--ora-bg);color:var(--ora);}
 .score-red{background:var(--red-bg);color:var(--red);}
 
@@ -229,13 +251,16 @@ tr.hidden{display:none!important;}
   <select class="tb-sel" id="fil-resp" onchange="applyFilters();markActive(this)">
     <option value="">Tous les RM</option><option>MO</option><option>BE</option><option>PE</option><option>RI</option>
   </select>
-  <select class="tb-sel" id="fil-alert" onchange="quickFilterFromSel(this)">
-    <option value="">Tous niveaux</option>
-    <option value="red">Alertes seulement</option>
-    <option value="ora">Attention + Alertes</option>
-    <option value="grn">OK seulement</option>
-    <option value="cli">Bloqués client</option>
-  </select>
+  <div class="tb-sep"></div>
+  <div class="cb-group">
+    <label class="cb-red"><input type="checkbox" id="cb-red" checked onchange="applyFilters()">Alertes</label>
+    <label class="cb-ora"><input type="checkbox" id="cb-ora" checked onchange="applyFilters()">Attention</label>
+    <label class="cb-grn"><input type="checkbox" id="cb-grn" checked onchange="applyFilters()">OK</label>
+  </div>
+  <div class="tb-sep"></div>
+  <div class="cb-group cb-cli">
+    <label><input type="checkbox" id="cb-cli" onchange="applyFilters()">Bloqué client seulement</label>
+  </div>
   <button class="reset-btn" onclick="resetFilters()">Réinitialiser</button>
   <button class="export-btn" onclick="exportCSV()">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -256,8 +281,8 @@ tr.hidden{display:none!important;}
       <th class="th-name"><span class="th-fixed-label">Dossier</span></th>
       <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Ass.</span></div><div class="tt-box">Associé référent (initiales)<div class="tt-arr"></div></div></div></th>
       <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">RM</span></div><div class="tt-box">Responsable de mission (initiales)<div class="tt-arr"></div></div></div></th>
-      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Clôture</span></div><div class="tt-box">Mois/année de clôture (MM/AA)<div class="tt-arr"></div></div></div></th>
-      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Situation</span></div><div class="tt-box">Dernière situation comptable saisie (MM/AA)<div class="tt-arr"></div></div></div></th>
+      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner" style="cursor:pointer;" onclick="sortBy('clot')">Clôture</span></div><div class="tt-box">Cliquer pour trier par date de clôture<div class="tt-arr"></div></div></div></th>
+      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner" style="cursor:pointer;" onclick="sortBy('sit')">Situation</span></div><div class="tt-box">Cliquer pour trier par date de situation<div class="tt-arr"></div></div></div></th>
       <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Rappro</span></div><div class="tt-box">🟢 M-1 rapproché · 🟠 M-2 rapproché M-1 non · 🔴 M-2 non rapproché<div class="tt-arr"></div></div></div></th>
       <th class="col-ged"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">GED</span></div><div class="tt-box">Nb pièces en attente de classement GED<div class="tt-arr"></div></div></div></th>
       <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">472</span></div><div class="tt-box">🟢 Solde=0 · 🟠 Solde≠0 · 🔴 Montant &gt;5 000€<div class="tt-arr"></div></div></div></th>
@@ -398,7 +423,7 @@ const FEU_MSG={
   frns:  {r:'Fournisseurs débiteurs > 10 % du total',o:'Fournisseurs débiteurs < 10 % (révision < 90 %)'},
 };
 
-let profile='resp', activeKpi=null, modalCommId=null, modalCliId=null;
+let profile='resp', activeKpi=null, modalCommId=null, modalCliId=null, sortCol=null, sortDir=1;
 
 function today(){return new Date().toISOString().slice(0,10);}
 function daysDiff(dateStr){if(!dateStr)return 0;return Math.floor((new Date()-new Date(dateStr))/(1000*60*60*24));}
@@ -423,9 +448,11 @@ function globalScore(d){
   return 'grn';
 }
 function calcScore(d){return Math.round(FEUX_KEYS.filter(k=>d[k]==='g').length/FEUX_KEYS.length*100);}
-function scoreClass(d,pct){
-  if(FEUX_KEYS.map(k=>d[k]).includes('r'))return 'score-red';
-  return pct>=80?'score-grn':'score-ora';
+function scoreClass(d){
+  const f=FEUX_KEYS.map(k=>d[k]);
+  if(f.includes('r'))return 'score-red';
+  if(f.includes('o'))return 'score-ora';
+  return null; // 100% vert → pas de badge
 }
 function gedH(n){const c=n===0?'ged-0':n<10?'ged-l':n<30?'ged-m':'ged-h';return`<span class="ged ${c}">${n}</span>`;}
 
@@ -454,18 +481,30 @@ function render(){
   document.getElementById('banner-text').innerHTML=`<strong>${prof.label}</strong> &nbsp;·&nbsp; ${prof.desc}`;
   const canC=prof.canComment;
   const baseRows=DATA.filter(prof.filter);
-  const rows=[...baseRows].sort((a,b)=>{
-    const so={red:2,ora:1,grn:0};
+
+  // Tri : score d'abord (rouge > orange > vert), puis client en dernier dans chaque groupe, puis score %
+  const so={red:2,ora:1,grn:0};
+  let rows=[...baseRows].sort((a,b)=>{
+    if(sortCol==='clot'||sortCol==='sit'){
+      // Tri par date MM/YY → on compare YY puis MM
+      const parseDate=s=>{if(!s)return 0;const[m,y]=s.split('/');return parseInt('20'+y)*100+parseInt(m);};
+      const va=parseDate(a[sortCol==='clot'?'clot':'sit']);
+      const vb=parseDate(b[sortCol==='clot'?'clot':'sit']);
+      if(va!==vb)return(va-vb)*sortDir;
+    }
+    const sd=(so[globalScore(b)]||0)-(so[globalScore(a)]||0);
+    if(sd!==0)return sd;
     const ac=clientStatus(a)!=='none',bc=clientStatus(b)!=='none';
     if(ac!==bc)return ac?1:-1;
-    const sd=(so[globalScore(b)]||0)-(so[globalScore(a)]||0);
-    return sd!==0?sd:calcScore(a)-calcScore(b);
+    return calcScore(a)-calcScore(b);
   });
 
   document.getElementById('tbody').innerHTML=rows.map(d=>{
     const gs=globalScore(d);const isCli=clientStatus(d)!=='none';
-    const rc=isCli?'row-client':(gs==='red'?'row-red':gs==='ora'?'row-ora':'row-grn');
-    const pct=calcScore(d);const sc=scoreClass(d,pct);
+    // La couleur de la ligne reste celle du score — le fond violet ne s'applique qu'aux dossiers OK bloqués client
+    const rc=gs==='red'?'row-red':(gs==='ora'?'row-ora':(isCli?'row-client':'row-grn'));
+    const pct=calcScore(d);const sc=scoreClass(d);
+    const scoreBadge=sc?`<span class="score-badge ${sc}">${pct}%</span>`:'';
     const last=d.comms.length?d.comms[d.comms.length-1].t:'';
     const commCell=last
       ?`<div style="display:flex;flex-direction:column;gap:2px;padding:0 4px;"><span class="comm-txt" title="${last.replace(/"/g,'&quot;')}">${last}</span>${canC?`<button class="btn-comm" onclick="event.stopPropagation();openCommModal(${d.id})">Modifier</button>`:''}</div>`
@@ -477,7 +516,7 @@ function render(){
       data-cm1="${d.cm1}" data-csolde="${d.csolde}" data-ccoher="${d.ccoher}"
       data-c455="${d.c455}" data-sal="${d.sal}" data-frns="${d.frns}">
       <td class="td-num">${d.num}</td>
-      <td class="td-score"><span class="score-badge ${sc}">${pct}%</span></td>
+      <td class="td-score">${scoreBadge}</td>
       <td class="td-name">${d.nom}</td>
       <td class="td-init">${d.ass}</td><td class="td-init">${d.resp}</td>
       <td class="td-date">${d.clot}</td><td class="td-date">${d.sit}</td>
@@ -516,6 +555,10 @@ function applyFilters(){
   const search=document.querySelector('.filter-row .col-inp').value.toLowerCase().trim();
   const selAss=document.getElementById('fil-assoc').value;
   const selResp=document.getElementById('fil-resp').value;
+  const showRed=document.getElementById('cb-red').checked;
+  const showOra=document.getElementById('cb-ora').checked;
+  const showGrn=document.getElementById('cb-grn').checked;
+  const cliOnly=document.getElementById('cb-cli').checked;
   const colF=[...document.querySelectorAll('.filter-row .col-fsel')];
   const colMap=[null,null,null,'ass','resp',null,null,'rappro',null,'c472','flcr','cm1','csolde','ccoher','c455','sal','frns',null,null];
   const tfKeys=['rappro','c472','flcr','cm1','csolde','ccoher','c455','sal','frns'];
@@ -526,11 +569,11 @@ function applyFilters(){
     if(search&&!row.dataset.nom.includes(search))show=false;
     if(selAss&&row.dataset.ass!==selAss)show=false;
     if(selResp&&row.dataset.resp!==selResp)show=false;
-    if(activeKpi&&activeKpi!=='all'){
-      if(activeKpi==='cli'&&row.dataset.cli!=='1')show=false;
-      else if(activeKpi==='ora'&&row.dataset.score==='grn')show=false;
-      else if(activeKpi!=='ora'&&activeKpi!=='cli'&&row.dataset.score!==activeKpi)show=false;
-    }
+    const sc=row.dataset.score;
+    if(!showRed&&sc==='red')show=false;
+    if(!showOra&&sc==='ora')show=false;
+    if(!showGrn&&sc==='grn')show=false;
+    if(cliOnly&&row.dataset.cli!=='1')show=false;
     colF.forEach((f,i)=>{if(!f||!f.value)return;const a=colMap[i];if(a&&row.dataset[a]!==f.value)show=false;});
     row.classList.toggle('hidden',!show);
     if(show){vis++;tfKeys.forEach(k=>{if(row.dataset[k]==='r')tfC[k]++;});}
@@ -542,9 +585,30 @@ function applyFilters(){
 function quickFilter(k){
   activeKpi=activeKpi===k?null:k;
   ['all','red','ora','grn','cli'].forEach(x=>document.getElementById('kpi-'+x).classList.toggle('active',activeKpi===x));
-  const sel=document.getElementById('fil-alert');
-  sel.value=(!activeKpi||activeKpi==='all')?'':activeKpi;
-  markActive(sel);applyFilters();
+  // KPI → synchronise les checkboxes
+  const isActive=activeKpi===k;
+  if(k==='cli'){
+    document.getElementById('cb-cli').checked=isActive;
+  } else if(k==='red'){
+    document.getElementById('cb-red').checked=true;
+    document.getElementById('cb-ora').checked=!isActive;
+    document.getElementById('cb-grn').checked=!isActive;
+  } else if(k==='ora'){
+    document.getElementById('cb-red').checked=!isActive;
+    document.getElementById('cb-ora').checked=true;
+    document.getElementById('cb-grn').checked=!isActive;
+  } else if(k==='grn'){
+    document.getElementById('cb-red').checked=!isActive;
+    document.getElementById('cb-ora').checked=!isActive;
+    document.getElementById('cb-grn').checked=true;
+  } else {
+    // all ou reset
+    document.getElementById('cb-red').checked=true;
+    document.getElementById('cb-ora').checked=true;
+    document.getElementById('cb-grn').checked=true;
+    document.getElementById('cb-cli').checked=false;
+  }
+  applyFilters();
 }
 function quickFilterFromSel(sel){
   markActive(sel);activeKpi=sel.value||null;
@@ -554,13 +618,20 @@ function quickFilterFromSel(sel){
 function resetFilters(){
   document.getElementById('fil-assoc').value='';
   document.getElementById('fil-resp').value='';
-  document.getElementById('fil-alert').value='';
+  document.getElementById('cb-red').checked=true;
+  document.getElementById('cb-ora').checked=true;
+  document.getElementById('cb-grn').checked=true;
+  document.getElementById('cb-cli').checked=false;
   document.querySelector('.filter-row .col-inp').value='';
   document.querySelectorAll('.filter-row .col-fsel').forEach(s=>s.value='');
   document.querySelectorAll('.tb-sel').forEach(s=>s.classList.remove('active'));
   activeKpi=null;
   ['all','red','ora','grn','cli'].forEach(x=>document.getElementById('kpi-'+x).classList.remove('active'));
   applyFilters();
+}
+function sortBy(col){
+  if(sortCol===col){sortDir*=-1;}else{sortCol=col;sortDir=1;}
+  render();
 }
 function markActive(el){el.classList.toggle('active',!!el.value);}
 function setProfile(p){
