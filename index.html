@@ -3,22 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DashBoard — QUERCY&Associés</title>
+<title>Supervision — Cabinet QUERCY</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --q900:#001208;--q800:#001f10;--q700:#003018;--q600:#004220;--q500:#005a2c;
   --q400:#007a3c;--q300:#1a9e56;--q200:#5ec98a;--q100:#a8e8c0;--q50:#e4f7ec;
-  --red:#dc2626;--red-bg:#fef2f2;--red-bd:#fca5a5;
-  --ora:#d97706;--ora-bg:#fffbeb;--ora-bd:#fcd34d;
-  --em:#059669;--em-bg:#ecfdf5;--em-bd:#6ee7b7;
+  --red:#dc2626;--red-bg:#fef2f2;--ora:#d97706;--ora-bg:#fffbeb;
+  --em:#059669;--em-bg:#ecfdf5;
   --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;
-  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;
-  --g800:#1f2937;--g900:#111827;
+  --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g900:#111827;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--g100);color:var(--g900);font-size:13px;min-height:100vh;}
-
 .header{background:var(--q700);height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:300;box-shadow:0 2px 8px rgba(0,0,0,.3);}
 .logo{font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:white;display:flex;align-items:center;gap:8px;}
 .logo-mark{width:28px;height:28px;background:var(--q300);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;}
@@ -30,163 +27,75 @@ body{font-family:'IBM Plex Sans',sans-serif;background:var(--g100);color:var(--g
 .profile-btn{padding:4px 11px;border:none;background:transparent;color:rgba(255,255,255,.6);border-radius:4px;cursor:pointer;font-size:11px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;transition:all .15s;}
 .profile-btn:hover{color:rgba(255,255,255,.9);}
 .profile-btn.active{background:white;color:var(--q700);}
-
 .profile-banner{background:var(--q50);border-bottom:1px solid var(--q100);padding:5px 20px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--q600);}
 .profile-banner strong{font-weight:600;}
-
 .synthese{background:white;border-bottom:1px solid var(--g200);padding:12px 20px;display:flex;gap:10px;}
 .kpi{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px 16px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:all .15s;gap:2px;user-select:none;}
 .kpi:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08);}
 .kpi .kn{font-size:28px;font-weight:600;font-family:'IBM Plex Mono',monospace;line-height:1;}
 .kpi .kl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
 .kpi .ks{font-size:10px;opacity:.6;}
-.kpi-all{background:var(--g50);color:var(--g700);}         .kpi-all.active{border-color:var(--g500);}
-.kpi-red{background:var(--red-bg);color:var(--red);}       .kpi-red.active{border-color:var(--red);}
-.kpi-ora{background:var(--ora-bg);color:var(--ora);}       .kpi-ora.active{border-color:var(--ora);}
-.kpi-grn{background:var(--em-bg);color:var(--em);}         .kpi-grn.active{border-color:var(--em);}
-
+.kpi-all{background:var(--g50);color:var(--g700);}.kpi-all.active{border-color:var(--g500);}
+.kpi-red{background:var(--red-bg);color:var(--red);}.kpi-red.active{border-color:var(--red);}
+.kpi-ora{background:var(--ora-bg);color:var(--ora);}.kpi-ora.active{border-color:var(--ora);}
+.kpi-grn{background:var(--em-bg);color:var(--em);}.kpi-grn.active{border-color:var(--em);}
 .toolbar{background:white;border-bottom:1px solid var(--g200);padding:7px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .tb-sel{border:1px solid var(--g200);border-radius:6px;padding:5px 9px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--g600);background:var(--g50);cursor:pointer;outline:none;transition:border-color .15s;}
 .tb-sel:focus,.tb-sel.active{border-color:var(--q400);color:var(--q700);background:var(--q50);}
-.reset-btn{margin-left:auto;padding:5px 12px;border:1px solid var(--g200);border-radius:6px;background:white;font-size:11px;color:var(--g500);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .12s;}
+.reset-btn{margin-left:auto;padding:5px 12px;border:1px solid var(--g200);border-radius:6px;background:white;font-size:11px;color:var(--g500);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;}
 .reset-btn:hover{border-color:var(--g300);color:var(--g700);}
-
 .table-wrap{padding:12px 20px 20px;overflow-x:auto;}
 table{width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;border:1px solid var(--g200);box-shadow:0 1px 4px rgba(0,0,0,.06);}
-
-/* THEAD ANGLED */
-thead tr.thead-angled th{
-  background:var(--q800);padding:0;vertical-align:bottom;
-  border-right:1px solid rgba(255,255,255,.07);
-  white-space:nowrap;height:100px;
-}
-thead tr.thead-angled th.th-num{
-  position:sticky;left:0;z-index:20;background:var(--q800);
-  vertical-align:middle;text-align:center;
-  width:44px;min-width:44px;
-}
-thead tr.thead-angled th.th-score{
-  position:sticky;left:44px;z-index:20;background:var(--q800);
-  vertical-align:middle;text-align:center;
-  width:52px;min-width:52px;
-}
-thead tr.thead-angled th.th-name{
-  position:sticky;left:96px;z-index:20;background:var(--q800);
-  vertical-align:middle;padding:0 12px;
-  min-width:175px;
-}
+thead tr.thead-angled th{background:var(--q800);padding:0;vertical-align:bottom;border-right:1px solid rgba(255,255,255,.07);white-space:nowrap;height:100px;}
+thead tr.thead-angled th.th-fixed{position:sticky;left:0;z-index:20;background:var(--q800);vertical-align:middle;padding:0 12px;min-width:175px;height:100px;}
 .th-fixed-label{color:rgba(255,255,255,.8);font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;}
-.th-num-label{color:rgba(255,255,255,.7);font-size:9px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;}
-.th-score-label{color:rgba(255,255,255,.7);font-size:9px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;}
-
 .th-angle-wrap{display:block;height:100%;position:relative;}
-.th-angled-inner{
-  position:absolute;bottom:8px;left:4px;
-  display:block;transform-origin:bottom left;transform:rotate(-45deg);
-  color:rgba(255,255,255,.8);
-  font-size:9px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;
-  white-space:nowrap;cursor:help;
-}
+.th-angled-inner{position:absolute;bottom:8px;left:4px;display:block;transform-origin:bottom left;transform:rotate(-45deg);color:rgba(255,255,255,.8);font-size:9px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;cursor:help;}
+thead tr.thead-angled th.col-num  {width:44px;min-width:44px;}
+thead tr.thead-angled th.col-score{width:54px;min-width:54px;}
 thead tr.thead-angled th.col-init {width:32px;min-width:32px;}
 thead tr.thead-angled th.col-date {width:44px;min-width:44px;}
 thead tr.thead-angled th.col-feu  {width:32px;min-width:32px;}
 thead tr.thead-angled th.col-ged  {width:40px;min-width:40px;}
 thead tr.thead-angled th.col-comm {width:130px;min-width:130px;}
-
-/* FILTER ROW */
 thead tr.filter-row th{background:var(--q900);padding:4px 3px 5px;border-right:1px solid rgba(255,255,255,.06);}
-thead tr.filter-row th.fr-num{position:sticky;left:0;z-index:20;background:var(--q900);width:44px;}
-thead tr.filter-row th.fr-score{position:sticky;left:44px;z-index:20;background:var(--q900);width:52px;}
-thead tr.filter-row th.fr-name{position:sticky;left:96px;z-index:20;background:var(--q900);padding:4px 6px 5px;}
+thead tr.filter-row th.th-fixed{position:sticky;left:0;z-index:20;background:var(--q900);padding:4px 6px 5px;}
 .col-inp{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.75);font-size:9px;font-family:'IBM Plex Sans',sans-serif;padding:3px 5px;outline:none;}
 .col-inp:focus{border-color:var(--q300);}
 .col-fsel{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.75);font-size:9px;font-family:'IBM Plex Sans',sans-serif;padding:2px 3px;outline:none;cursor:pointer;}
 .col-fsel:focus{border-color:var(--q300);}
 .col-fsel option{background:#1a2e1c;color:white;}
-
-/* TBODY */
 tbody tr{border-bottom:1px solid var(--g100);transition:background .08s;cursor:pointer;}
 tbody tr:hover{background:var(--q50);}
-tbody td{padding:5px 4px;border-right:1px solid var(--g100);text-align:center;vertical-align:middle;}
-
-tbody td.td-num{
-  position:sticky;left:0;z-index:5;background:white;
-  font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--g500);
-  width:44px;border-right:1px solid var(--g200);
-}
-tbody td.td-score{
-  position:sticky;left:44px;z-index:5;background:white;
-  width:52px;border-right:1px solid var(--g200);
-  padding:4px 5px;
-}
-tbody td.td-name{
-  position:sticky;left:96px;z-index:5;background:white;
-  text-align:left;font-weight:500;font-size:11px;color:var(--q600);
-  min-width:175px;padding-left:8px;
-  border-left:3px solid transparent;
-}
 tbody tr.row-red  td.td-name{border-left:3px solid var(--red);}
 tbody tr.row-ora  td.td-name{border-left:3px solid var(--ora);}
 tbody tr.row-grn  td.td-name{border-left:3px solid transparent;}
-
-tbody tr:hover td.td-num,
-tbody tr:hover td.td-score,
+tbody td{padding:5px 4px;border-right:1px solid var(--g100);text-align:center;vertical-align:middle;}
+tbody td.td-name{text-align:left;font-weight:500;font-size:11px;color:var(--q600);position:sticky;left:0;z-index:5;background:white;min-width:175px;padding-left:8px;border-left:3px solid transparent;}
 tbody tr:hover td.td-name{background:var(--q50);}
-
+tbody td.td-num{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--g500);}
 tbody td.td-init{font-size:9px;color:var(--g500);font-weight:500;}
 tbody td.td-date{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--g400);}
-
-/* SCORE BADGE */
-.score-badge{
-  display:inline-flex;align-items:center;justify-content:center;
-  min-width:38px;height:18px;border-radius:4px;
-  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
-  padding:0 5px;
-}
+.score-badge{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:20px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;padding:0 5px;}
 .score-grn{background:var(--em-bg);color:var(--em);}
 .score-ora{background:var(--ora-bg);color:var(--ora);}
 .score-red{background:var(--red-bg);color:var(--red);}
-
-/* FEUX */
 .feu{width:10px;height:10px;border-radius:50%;display:inline-block;}
-.feu-g{background:var(--em);}
-.feu-o{background:var(--ora);}
-.feu-r{background:var(--red);}
-.feu-n{background:var(--g300);}
-
-/* GED */
+.feu-g{background:var(--em);}.feu-o{background:var(--ora);}.feu-r{background:var(--red);}.feu-n{background:var(--g300);}
 .ged{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:16px;border-radius:3px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:500;padding:0 4px;}
-.ged-0{background:var(--g100);color:var(--g400);}
-.ged-l{background:var(--em-bg);color:var(--em);}
-.ged-m{background:var(--ora-bg);color:var(--ora);}
-.ged-h{background:var(--red-bg);color:var(--red);}
-
-/* COMM */
+.ged-0{background:var(--g100);color:var(--g400);}.ged-l{background:var(--em-bg);color:var(--em);}
+.ged-m{background:var(--ora-bg);color:var(--ora);}.ged-h{background:var(--red-bg);color:var(--red);}
 .comm-txt{font-size:9px;color:var(--g400);font-style:italic;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;display:block;text-align:left;}
 .btn-comm{background:none;border:1px solid var(--g200);border-radius:3px;padding:2px 6px;font-size:9px;color:var(--g400);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .12s;white-space:nowrap;}
 .btn-comm:hover{border-color:var(--q300);color:var(--q600);background:var(--q50);}
-
-/* TOOLTIP */
 .tooltip{position:relative;}
-.tooltip .tt-box{
-  visibility:hidden;opacity:0;pointer-events:none;
-  position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
-  background:var(--g900);color:white;font-size:10px;line-height:1.6;
-  letter-spacing:0;text-transform:none;font-weight:400;
-  border-radius:6px;padding:8px 11px;white-space:normal;
-  box-shadow:0 4px 14px rgba(0,0,0,.35);z-index:999;
-  transition:opacity .15s;min-width:180px;max-width:240px;text-align:left;
-}
+.tooltip .tt-box{visibility:hidden;opacity:0;pointer-events:none;position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--g900);color:white;font-size:10px;line-height:1.6;letter-spacing:0;text-transform:none;font-weight:400;border-radius:6px;padding:8px 11px;white-space:normal;box-shadow:0 4px 14px rgba(0,0,0,.35);z-index:999;transition:opacity .15s;min-width:180px;max-width:240px;text-align:left;}
 .tooltip:hover .tt-box{visibility:visible;opacity:1;}
 .tt-arr{display:block;width:8px;height:8px;background:var(--g900);transform:rotate(45deg);position:absolute;bottom:-4px;left:50%;margin-left:-4px;}
-
-/* FOOTER */
 .footer{background:white;border-top:1px solid var(--g200);padding:8px 20px;display:flex;align-items:center;gap:18px;}
 .leg{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--g600);}
 .leg-dot{width:9px;height:9px;border-radius:50%;}
 .count{margin-left:auto;font-size:11px;color:var(--g400);font-family:'IBM Plex Mono',monospace;}
-
-/* MODAL */
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
 .overlay.open{opacity:1;pointer-events:all;}
 .modal{background:white;border-radius:10px;padding:24px;width:440px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.25);transform:translateY(8px);transition:transform .2s;}
@@ -199,14 +108,13 @@ tbody td.td-date{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(-
 .hist-meta{font-size:10px;color:var(--g400);margin-bottom:3px;}
 .hist-text{font-size:12px;color:var(--g700);}
 .hist-empty{font-size:11px;color:var(--g400);font-style:italic;text-align:center;padding:8px 0;}
-.modal textarea{width:100%;height:78px;resize:none;border:1px solid var(--g200);border-radius:6px;padding:8px 10px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--g800);outline:none;transition:border-color .15s;}
+.modal textarea{width:100%;height:78px;resize:none;border:1px solid var(--g200);border-radius:6px;padding:8px 10px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--g700);outline:none;transition:border-color .15s;}
 .modal textarea:focus{border-color:var(--q400);}
 .modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:10px;}
 .btn-cancel{padding:7px 14px;border:1px solid var(--g200);border-radius:5px;background:white;font-size:12px;cursor:pointer;color:var(--g600);font-family:'IBM Plex Sans',sans-serif;}
 .btn-cancel:hover{background:var(--g50);}
 .btn-save{padding:7px 16px;border:none;border-radius:5px;background:var(--q700);color:white;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500;}
 .btn-save:hover{background:var(--q600);}
-
 tr.hidden{display:none!important;}
 </style>
 </head>
@@ -235,25 +143,23 @@ tr.hidden{display:none!important;}
 
 <div class="synthese">
   <div class="kpi kpi-all" id="kpi-all" onclick="quickFilter('all')"><div class="kn" id="kn-all">—</div><div class="kl">Total</div><div class="ks">dossiers</div></div>
-  <div class="kpi kpi-red" id="kpi-red" onclick="quickFilter('red')"><div class="kn" id="kn-red">—</div><div class="kl">Alertes</div><div class="ks">au moins 1 rouge</div></div>
-  <div class="kpi kpi-ora" id="kpi-ora" onclick="quickFilter('ora')"><div class="kn" id="kn-ora">—</div><div class="kl">Attention</div><div class="ks">orange sans rouge</div></div>
-  <div class="kpi kpi-grn" id="kpi-grn" onclick="quickFilter('grn')"><div class="kn" id="kn-grn">—</div><div class="kl">OK</div><div class="ks">tous verts</div></div>
+  <div class="kpi kpi-red" id="kpi-red" onclick="quickFilter('red')"><div class="kn" id="kn-red">—</div><div class="kl">Alertes</div><div class="ks">score &lt; 50 %</div></div>
+  <div class="kpi kpi-ora" id="kpi-ora" onclick="quickFilter('ora')"><div class="kn" id="kn-ora">—</div><div class="kl">Attention</div><div class="ks">score 50–80 %</div></div>
+  <div class="kpi kpi-grn" id="kpi-grn" onclick="quickFilter('grn')"><div class="kn" id="kn-grn">—</div><div class="kl">OK</div><div class="ks">score &gt; 80 %</div></div>
 </div>
 
 <div class="toolbar">
   <select class="tb-sel" id="fil-assoc" onchange="applyFilters();markActive(this)">
-    <option value="">Tous les associés</option>
-    <option>MA</option><option>DU</option><option>LE</option>
+    <option value="">Tous les associés</option><option>MA</option><option>DU</option><option>LE</option>
   </select>
   <select class="tb-sel" id="fil-resp" onchange="applyFilters();markActive(this)">
-    <option value="">Tous les RM</option>
-    <option>MO</option><option>BE</option><option>PE</option><option>RI</option>
+    <option value="">Tous les RM</option><option>MO</option><option>BE</option><option>PE</option><option>RI</option>
   </select>
   <select class="tb-sel" id="fil-alert" onchange="quickFilterFromSel(this)">
     <option value="">Tous niveaux</option>
-    <option value="red">Alertes seulement</option>
-    <option value="ora">Attention + Alertes</option>
-    <option value="grn">OK seulement</option>
+    <option value="red">Alertes (score &lt; 50 %)</option>
+    <option value="ora">Attention (50–80 %)</option>
+    <option value="grn">OK (&gt; 80 %)</option>
   </select>
   <button class="reset-btn" onclick="resetFilters()">Réinitialiser</button>
 </div>
@@ -262,96 +168,29 @@ tr.hidden{display:none!important;}
 <table id="tbl">
   <thead>
     <tr class="thead-angled">
-
-      <!-- N° sticky col 1 -->
-      <th class="th-num">
-        <span class="th-num-label">N°</span>
-      </th>
-
-      <!-- Score sticky col 2 -->
-      <th class="th-score">
-        <div class="tooltip">
-          <span class="th-score-label">Score</span>
-          <div class="tt-box">
-            Score global du dossier<br>
-            (verts × 1 + oranges × 0,5) / 9 indicateurs<br>
-            🟢 &gt; 80 % — OK<br>
-            🟠 50–80 % — Attention<br>
-            🔴 &lt; 50 % — Alerte
-            <div class="tt-arr"></div>
-          </div>
-        </div>
-      </th>
-
-      <!-- Nom sticky col 3 -->
-      <th class="th-name"><span class="th-fixed-label">Dossier</span></th>
-
-      <th class="col-init">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Ass.</span></div>
-        <div class="tt-box">Associé référent (initiales)<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-init">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">RM</span></div>
-        <div class="tt-box">Responsable de mission (initiales)<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-date">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Clôture</span></div>
-        <div class="tt-box">Mois et année de clôture de l'exercice (MM/AA)<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-date">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Situation</span></div>
-        <div class="tt-box">Mois et année de la dernière situation comptable saisie (MM/AA)<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Rappro</span></div>
-        <div class="tt-box">Rapprochement bancaire<br>🟢 M-1 totalement rapproché<br>🟠 M-2 rapproché, M-1 non<br>🔴 M-2 non rapproché<br><em style="font-size:9px;opacity:.7">Avant le 15 : contrôle M-2/M-3</em><div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-ged">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">GED</span></div>
-        <div class="tt-box">Nb de pièces en attente de classement dans la GED au jour du contrôle<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">472</span></div>
-        <div class="tt-box">Compte 472 — Virements internes<br>🟢 Solde = 0<br>🟠 Solde ≠ 0<br>🔴 Montant &gt; 5 000 €<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">FLCR</span></div>
-        <div class="tt-box">Flux de liquidités caisse résiduelle<br>🟢 Solde = 0 sur M-1<br>🔴 Solde ≠ 0 sur M-1<br><em style="font-size:9px;opacity:.7">Avant le 15 : contrôle M-2</em><div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse M-1</span></div>
-        <div class="tt-box">Saisie caisse sur M-1<br>🟢 Caisse remplie sur M-1<br>🟠 Caisse remplie sur M-2<br>🔴 Non remplie sur M-2<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse solde</span></div>
-        <div class="tt-box">Contrôle solde caisse<br>🟢 Jamais créditrice<br>🔴 Au moins 1 jour créditrice<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse cohér.</span></div>
-        <div class="tt-box">Cohérence caisse vs N-1<br>🟢 Écart &lt; 5 %<br>🟠 Écart 5–10 %<br>🔴 Écart &gt; 10 %<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">455</span></div>
-        <div class="tt-box">Compte courant associé (455)<br>🟢 Jamais débiteur<br>🔴 Passé débiteur au moins 1 jour<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Salaires</span></div>
-        <div class="tt-box">Passage des salaires P47<br>🟢 P47 passé sur M-1<br>🟠 P47 passé sur M-2<br>🔴 P47 non passé sur M-2<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-feu">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Frns déb.</span></div>
-        <div class="tt-box">Fournisseurs débiteurs<br>🟢 Révision &gt; 90 %<br>🟠 Débiteurs &lt; 10 % total frns<br>🔴 Débiteurs &gt; 10 % total frns<div class="tt-arr"></div></div></div>
-      </th>
-      <th class="col-comm">
-        <div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Commentaire</span></div>
-        <div class="tt-box">Note de suivi — cliquer pour consulter ou ajouter<div class="tt-arr"></div></div></div>
-      </th>
+      <th class="th-fixed"><span class="th-fixed-label">Dossier</span></th>
+      <th class="col-num"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">N°</span></div><div class="tt-box">Numéro de dossier ACD (4 chiffres)<div class="tt-arr"></div></div></div></th>
+      <th class="col-score"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Score</span></div><div class="tt-box">Score global — 9 indicateurs<br>Vert = 1 pt · Orange = 0,5 pt · Rouge = 0 pt<br><br>&gt; 80 % — OK &nbsp; 50–80 % — Attention &nbsp; &lt; 50 % — Alerte<div class="tt-arr"></div></div></div></th>
+      <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Ass.</span></div><div class="tt-box">Associé référent (initiales)<div class="tt-arr"></div></div></div></th>
+      <th class="col-init"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">RM</span></div><div class="tt-box">Responsable de mission (initiales)<div class="tt-arr"></div></div></div></th>
+      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Clôture</span></div><div class="tt-box">Mois/année de clôture de l'exercice (MM/AA)<div class="tt-arr"></div></div></div></th>
+      <th class="col-date"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Situation</span></div><div class="tt-box">Mois/année de la dernière situation saisie (MM/AA)<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Rappro</span></div><div class="tt-box">Rapprochement bancaire<br>Vert : M-1 rapproché · Orange : M-2 rapproché, M-1 non · Rouge : M-2 non rapproché<div class="tt-arr"></div></div></div></th>
+      <th class="col-ged"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">GED</span></div><div class="tt-box">Nb pièces en attente de classement dans la GED<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">472</span></div><div class="tt-box">Compte 472 — Virements internes<br>Vert : solde = 0 · Orange : solde ≠ 0 · Rouge : montant &gt; 5 000 €<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">FLCR</span></div><div class="tt-box">Flux liquidités caisse résiduelle<br>Vert : solde = 0 sur M-1 · Rouge : solde ≠ 0 sur M-1<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse M-1</span></div><div class="tt-box">Saisie caisse sur M-1<br>Vert : remplie M-1 · Orange : remplie M-2 · Rouge : non remplie M-2<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse solde</span></div><div class="tt-box">Solde caisse<br>Vert : jamais créditrice · Rouge : au moins 1 jour créditrice<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Caisse cohér.</span></div><div class="tt-box">Cohérence caisse vs N-1<br>Vert : écart &lt; 5 % · Orange : 5–10 % · Rouge : &gt; 10 %<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">455</span></div><div class="tt-box">Compte courant associé (455)<br>Vert : jamais débiteur · Rouge : passé débiteur au moins 1 jour<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Salaires</span></div><div class="tt-box">Salaires P47<br>Vert : M-1 · Orange : M-2 · Rouge : non passé M-2<div class="tt-arr"></div></div></div></th>
+      <th class="col-feu"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Frns déb.</span></div><div class="tt-box">Fournisseurs débiteurs<br>Vert : révision &gt; 90 % · Orange : &lt; 10 % total · Rouge : &gt; 10 % total<div class="tt-arr"></div></div></div></th>
+      <th class="col-comm"><div class="tooltip"><div class="th-angle-wrap"><span class="th-angled-inner">Commentaire</span></div><div class="tt-box">Note de suivi — cliquer pour consulter ou ajouter<div class="tt-arr"></div></div></div></th>
     </tr>
-
     <tr class="filter-row">
-      <th class="fr-num"></th>
-      <th class="fr-score"></th>
-      <th class="fr-name"><input class="col-inp" type="text" placeholder="Filtrer par nom…" oninput="applyFilters()"></th>
+      <th class="th-fixed"><input class="col-inp" type="text" placeholder="Filtrer par nom…" oninput="applyFilters()"></th>
+      <th></th>
+      <th><select class="col-fsel" onchange="applyFilters()"><option value="">—</option><option value="grn">V</option><option value="ora">O</option><option value="red">R</option></select></th>
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">Ts</option><option>MA</option><option>DU</option><option>LE</option></select></th>
       <th><select class="col-fsel" onchange="applyFilters()"><option value="">Ts</option><option>MO</option><option>BE</option><option>PE</option><option>RI</option></select></th>
       <th></th><th></th>
@@ -373,20 +212,10 @@ tr.hidden{display:none!important;}
 </div>
 
 <div class="footer">
-  <span style="font-size:10px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Légende :</span>
-  <div class="leg"><div class="leg-dot" style="background:var(--em)"></div>OK</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--ora)"></div>Attention</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>Alerte</div>
-  <div class="leg"><div class="leg-dot" style="background:var(--g300)"></div>N/A</div>
-  <div class="leg" style="margin-left:16px;border-left:1px solid var(--g200);padding-left:16px;">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--em-bg);color:var(--em);padding:1px 5px;border-radius:3px;">85%</span> &gt; 80
-  </div>
-  <div class="leg">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--ora-bg);color:var(--ora);padding:1px 5px;border-radius:3px;">60%</span> 50–80
-  </div>
-  <div class="leg">
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;background:var(--red-bg);color:var(--red);padding:1px 5px;border-radius:3px;">30%</span> &lt; 50
-  </div>
+  <span style="font-size:10px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.06em;">Score :</span>
+  <div class="leg"><div class="leg-dot" style="background:var(--em)"></div>&gt; 80 % — OK</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--ora)"></div>50–80 % — Attention</div>
+  <div class="leg"><div class="leg-dot" style="background:var(--red)"></div>&lt; 50 % — Alerte</div>
   <span class="count" id="count-label"></span>
 </div>
 
@@ -405,210 +234,102 @@ tr.hidden{display:none!important;}
 
 <script>
 const DATA=[
-  {id:1, num:'0611',nom:'Pharmacie des Arcades',   ass:'MA',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:3, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
-  {id:2, num:'1245',nom:'Pharmacie du Marché',     ass:'MA',resp:'MO',clot:'12/25',sit:'01/26',rappro:'r',ged:47,c472:'r',flcr:'r',cm1:'o',csolde:'g',ccoher:'o',c455:'g',sal:'o',frns:'r',comms:[{d:'10/03/2026',u:'MO',t:'En attente des relevés de caisse — relancé le 10/03'}]},
-  {id:3, num:'0874',nom:'Pharmacie Saint-Jean',    ass:'DU',resp:'BE',clot:'12/25',sit:'02/26',rappro:'g',ged:0, c472:'o',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'o',comms:[]},
-  {id:4, num:'1387',nom:'Pharmacie de la Gare',    ass:'DU',resp:'BE',clot:'12/25',sit:'02/26',rappro:'o',ged:12,c472:'g',flcr:'g',cm1:'g',csolde:'r',ccoher:'g',c455:'r',sal:'g',frns:'g',comms:[{d:'15/03/2026',u:'BE',t:'CCA passé débiteur jan. — à investiguer avec le titulaire'}]},
-  {id:5, num:'0422',nom:'Pharmacie du Parc',       ass:'LE',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:5, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
-  {id:6, num:'2001',nom:'Pharmacie Centrale',      ass:'MA',resp:'RI',clot:'12/25',sit:'01/26',rappro:'r',ged:89,c472:'r',flcr:'r',cm1:'r',csolde:'g',ccoher:'r',c455:'g',sal:'r',frns:'r',comms:[{d:'18/03/2026',u:'RI',t:'Dossier très en retard — RDV prévu 22/03 avec le cabinet'},{d:'05/03/2026',u:'MA',t:'Point associé : priorité absolue ce mois'}]},
-  {id:7, num:'0955',nom:"Pharmacie de l'Église",   ass:'LE',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:8, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'o',c455:'g',sal:'g',frns:'o',comms:[]},
-  {id:8, num:'1102',nom:'Pharmacie des Halles',    ass:'DU',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:1, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
-  {id:9, num:'0731',nom:'Pharmacie du Château',    ass:'MA',resp:'BE',clot:'12/25',sit:'01/26',rappro:'o',ged:31,c472:'o',flcr:'o',cm1:'o',csolde:'o',ccoher:'o',c455:'g',sal:'o',frns:'o',comms:[{d:'12/03/2026',u:'BE',t:'Retard suite arrêt maladie du gérant — reprise prévue fin mars'}]},
-  {id:10,num:'1560',nom:'Pharmacie de la Fontaine',ass:'LE',resp:'RI',clot:'12/25',sit:'02/26',rappro:'g',ged:2, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
-  {id:11,num:'0318',nom:'Pharmacie du Bourg',      ass:'DU',resp:'PE',clot:'12/25',sit:'01/26',rappro:'r',ged:24,c472:'g',flcr:'r',cm1:'r',csolde:'g',ccoher:'g',c455:'g',sal:'r',frns:'o',comms:[]},
-  {id:12,num:'1893',nom:'Pharmacie des Fleurs',    ass:'MA',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:6, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
-  {id:13,num:'0647',nom:'Pharmacie de la Croix',   ass:'LE',resp:'RI',clot:'12/25',sit:'02/26',rappro:'g',ged:0, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
-  {id:14,num:'2145',nom:'Pharmacie du Port',       ass:'DU',resp:'BE',clot:'12/25',sit:'01/26',rappro:'r',ged:56,c472:'r',flcr:'r',cm1:'r',csolde:'r',ccoher:'r',c455:'r',sal:'r',frns:'r',comms:[{d:'19/03/2026',u:'BE',t:'Nouveau client — prise en charge difficile, formation en cours'}]},
-  {id:15,num:'0509',nom:'Pharmacie de la Place',   ass:'MA',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:4, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'o',comms:[]},
+  {id:1, num:'0611',nom:'Pharmacie des Arcades',    ass:'MA',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:3, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
+  {id:2, num:'1245',nom:'Pharmacie du Marché',      ass:'MA',resp:'MO',clot:'12/25',sit:'01/26',rappro:'r',ged:47,c472:'r',flcr:'r',cm1:'o',csolde:'g',ccoher:'o',c455:'g',sal:'o',frns:'r',comms:[{d:'10/03/2026',u:'MO',t:'En attente des relevés de caisse — relancé le 10/03'}]},
+  {id:3, num:'0874',nom:'Pharmacie Saint-Jean',     ass:'DU',resp:'BE',clot:'12/25',sit:'02/26',rappro:'g',ged:0, c472:'o',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'o',comms:[]},
+  {id:4, num:'1387',nom:'Pharmacie de la Gare',     ass:'DU',resp:'BE',clot:'12/25',sit:'02/26',rappro:'o',ged:12,c472:'g',flcr:'g',cm1:'g',csolde:'r',ccoher:'g',c455:'r',sal:'g',frns:'g',comms:[{d:'15/03/2026',u:'BE',t:'CCA passé débiteur jan. — à investiguer avec le titulaire'}]},
+  {id:5, num:'0422',nom:'Pharmacie du Parc',        ass:'LE',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:5, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
+  {id:6, num:'2001',nom:'Pharmacie Centrale',       ass:'MA',resp:'RI',clot:'12/25',sit:'01/26',rappro:'r',ged:89,c472:'r',flcr:'r',cm1:'r',csolde:'g',ccoher:'r',c455:'g',sal:'r',frns:'r',comms:[{d:'18/03/2026',u:'RI',t:'Dossier très en retard — RDV prévu 22/03'},{d:'05/03/2026',u:'MA',t:'Point associé : priorité absolue ce mois'}]},
+  {id:7, num:'0955',nom:"Pharmacie de l'Église",    ass:'LE',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:8, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'o',c455:'g',sal:'g',frns:'o',comms:[]},
+  {id:8, num:'1102',nom:'Pharmacie des Halles',     ass:'DU',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:1, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
+  {id:9, num:'0731',nom:'Pharmacie du Château',     ass:'MA',resp:'BE',clot:'12/25',sit:'01/26',rappro:'o',ged:31,c472:'o',flcr:'o',cm1:'o',csolde:'o',ccoher:'o',c455:'g',sal:'o',frns:'o',comms:[{d:'12/03/2026',u:'BE',t:'Retard suite arrêt maladie du gérant — reprise fin mars'}]},
+  {id:10,num:'1560',nom:'Pharmacie de la Fontaine', ass:'LE',resp:'RI',clot:'12/25',sit:'02/26',rappro:'g',ged:2, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
+  {id:11,num:'0318',nom:'Pharmacie du Bourg',       ass:'DU',resp:'PE',clot:'12/25',sit:'01/26',rappro:'r',ged:24,c472:'g',flcr:'r',cm1:'r',csolde:'g',ccoher:'g',c455:'g',sal:'r',frns:'o',comms:[]},
+  {id:12,num:'1893',nom:'Pharmacie des Fleurs',     ass:'MA',resp:'MO',clot:'12/25',sit:'02/26',rappro:'g',ged:6, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
+  {id:13,num:'0647',nom:'Pharmacie de la Croix',    ass:'LE',resp:'RI',clot:'12/25',sit:'02/26',rappro:'g',ged:0, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'g',comms:[]},
+  {id:14,num:'2145',nom:'Pharmacie du Port',        ass:'DU',resp:'BE',clot:'12/25',sit:'01/26',rappro:'r',ged:56,c472:'r',flcr:'r',cm1:'r',csolde:'r',ccoher:'r',c455:'r',sal:'r',frns:'r',comms:[{d:'19/03/2026',u:'BE',t:'Nouveau client — prise en charge difficile'}]},
+  {id:15,num:'0509',nom:'Pharmacie de la Place',    ass:'MA',resp:'PE',clot:'12/25',sit:'02/26',rappro:'g',ged:4, c472:'g',flcr:'g',cm1:'g',csolde:'g',ccoher:'g',c455:'g',sal:'g',frns:'o',comms:[]},
 ];
-
 const PROFILES={
   collab:{label:'Collaborateur — MOREAU',desc:'Dossiers visibles : responsable MO uniquement',filter:d=>d.resp==='MO',canComment:true},
-  resp:  {label:'Responsable — MOREAU',  desc:'Dossiers visibles : MO + PE (équipe)',       filter:d=>['MO','PE'].includes(d.resp),canComment:true},
-  assoc: {label:'Associé — MARTIN',      desc:'Accès à tous les dossiers du cabinet',        filter:()=>true,canComment:true},
+  resp:  {label:'Responsable — MOREAU',  desc:'Dossiers visibles : MO + PE (équipe)',        filter:d=>['MO','PE'].includes(d.resp),canComment:true},
+  assoc: {label:'Associé — MARTIN',      desc:'Accès à tous les dossiers du cabinet',         filter:()=>true,canComment:true},
 };
-
-let profile='resp', activeKpi=null, modalId=null;
-
-const FEUX_KEYS=['rappro','c472','flcr','cm1','csolde','ccoher','c455','sal','frns'];
-
-function calcScore(d){
-  const pts=FEUX_KEYS.reduce((acc,k)=>{
-    if(d[k]==='g') return acc+1;
-    if(d[k]==='o') return acc+0.5;
-    return acc;
-  },0);
-  return Math.round((pts/FEUX_KEYS.length)*100);
-}
-
-function scoreClass(pct){
-  if(pct>80) return 'score-grn';
-  if(pct>=50) return 'score-ora';
-  return 'score-red';
-}
-
-function globalScore(d){
-  const f=FEUX_KEYS.map(k=>d[k]);
-  if(f.includes('r')) return 'red';
-  if(f.includes('o')) return 'ora';
-  return 'grn';
-}
-
+let profile='resp',activeKpi=null,modalId=null;
+function calcScore(d){const f=[d.rappro,d.c472,d.flcr,d.cm1,d.csolde,d.ccoher,d.c455,d.sal,d.frns];return Math.round(f.reduce((s,v)=>s+(v==='g'?1:v==='o'?.5:0),0)/f.length*100);}
+function scoreClass(p){return p>80?'grn':p>=50?'ora':'red';}
 function feuH(v){return`<div class="feu feu-${v||'n'}"></div>`;}
 function gedH(n){const c=n===0?'ged-0':n<10?'ged-l':n<30?'ged-m':'ged-h';return`<span class="ged ${c}">${n}</span>`;}
-
 function render(){
   const prof=PROFILES[profile];
   document.getElementById('banner-text').innerHTML=`<strong>${prof.label}</strong> &nbsp;·&nbsp; ${prof.desc}`;
-
-  const rows=DATA.filter(prof.filter).sort((a,b)=>{
-    const s={red:2,ora:1,grn:0};
-    const sd=s[globalScore(b)]-s[globalScore(a)];
-    if(sd!==0) return sd;
-    return calcScore(a)-calcScore(b);
-  });
-
+  const rows=DATA.filter(prof.filter).sort((a,b)=>calcScore(a)-calcScore(b));
   const canC=prof.canComment;
   document.getElementById('tbody').innerHTML=rows.map(d=>{
-    const gs=globalScore(d);
-    const rc=gs==='red'?'row-red':gs==='ora'?'row-ora':'row-grn';
-    const pct=calcScore(d);
-    const sc=scoreClass(pct);
+    const pct=calcScore(d),sc=scoreClass(pct),rc=sc==='red'?'row-red':sc==='ora'?'row-ora':'row-grn';
     const last=d.comms.length?d.comms[d.comms.length-1].t:'';
-    const commCell=last
-      ?`<div style="display:flex;flex-direction:column;gap:2px;padding:0 4px;"><span class="comm-txt" title="${last.replace(/"/g,'&quot;')}">${last}</span>${canC?`<button class="btn-comm" onclick="event.stopPropagation();openModal(${d.id})">Modifier</button>`:''}</div>`
-      :(canC?`<button class="btn-comm" onclick="event.stopPropagation();openModal(${d.id})">+ Note</button>`:`<span style="color:var(--g300);font-size:10px">—</span>`);
-
-    return`<tr class="${rc}"
-      data-nom="${d.nom.toLowerCase()}" data-ass="${d.ass}" data-resp="${d.resp}"
-      data-score="${gs}" data-pct="${pct}"
-      data-rappro="${d.rappro}" data-c472="${d.c472}" data-flcr="${d.flcr}"
-      data-cm1="${d.cm1}" data-csolde="${d.csolde}" data-ccoher="${d.ccoher}"
-      data-c455="${d.c455}" data-sal="${d.sal}" data-frns="${d.frns}">
-      <td class="td-num">${d.num}</td>
-      <td class="td-score"><span class="score-badge ${sc}">${pct}%</span></td>
+    const cc=last?`<div style="display:flex;flex-direction:column;gap:2px;padding:0 4px;"><span class="comm-txt" title="${last.replace(/"/g,'&quot;')}">${last}</span>${canC?`<button class="btn-comm" onclick="event.stopPropagation();openModal(${d.id})">Modifier</button>`:''}</div>`:(canC?`<button class="btn-comm" onclick="event.stopPropagation();openModal(${d.id})">+ Note</button>`:`<span style="color:var(--g300);font-size:10px">—</span>`);
+    return`<tr class="${rc}" data-nom="${d.nom.toLowerCase()}" data-ass="${d.ass}" data-resp="${d.resp}" data-score-cat="${sc}" data-rappro="${d.rappro}" data-c472="${d.c472}" data-flcr="${d.flcr}" data-cm1="${d.cm1}" data-csolde="${d.csolde}" data-ccoher="${d.ccoher}" data-c455="${d.c455}" data-sal="${d.sal}" data-frns="${d.frns}">
       <td class="td-name">${d.nom}</td>
-      <td class="td-init">${d.ass}</td>
-      <td class="td-init">${d.resp}</td>
-      <td class="td-date">${d.clot}</td>
-      <td class="td-date">${d.sit}</td>
+      <td class="td-num">${d.num}</td>
+      <td style="text-align:center"><span class="score-badge score-${sc}">${pct}%</span></td>
+      <td class="td-init">${d.ass}</td><td class="td-init">${d.resp}</td>
+      <td class="td-date">${d.clot}</td><td class="td-date">${d.sit}</td>
       <td>${feuH(d.rappro)}</td><td>${gedH(d.ged)}</td>
       <td>${feuH(d.c472)}</td><td>${feuH(d.flcr)}</td>
       <td>${feuH(d.cm1)}</td><td>${feuH(d.csolde)}</td><td>${feuH(d.ccoher)}</td>
       <td>${feuH(d.c455)}</td><td>${feuH(d.sal)}</td><td>${feuH(d.frns)}</td>
-      <td>${commCell}</td>
+      <td>${cc}</td>
     </tr>`;
   }).join('');
-
-  const total=rows.length;
-  const reds=rows.filter(d=>globalScore(d)==='red').length;
-  const oras=rows.filter(d=>globalScore(d)==='ora').length;
-  const grns=rows.filter(d=>globalScore(d)==='grn').length;
-  document.getElementById('kn-all').textContent=total;
-  document.getElementById('kn-red').textContent=reds;
-  document.getElementById('kn-ora').textContent=oras;
-  document.getElementById('kn-grn').textContent=grns;
+  const total=rows.length,reds=rows.filter(d=>scoreClass(calcScore(d))==='red').length,oras=rows.filter(d=>scoreClass(calcScore(d))==='ora').length,grns=rows.filter(d=>scoreClass(calcScore(d))==='grn').length;
+  document.getElementById('kn-all').textContent=total;document.getElementById('kn-red').textContent=reds;document.getElementById('kn-ora').textContent=oras;document.getElementById('kn-grn').textContent=grns;
   applyFilters();
 }
-
 function quickFilter(k){
   activeKpi=activeKpi===k?null:k;
   ['all','red','ora','grn'].forEach(x=>document.getElementById('kpi-'+x).classList.toggle('active',activeKpi===x));
-  document.getElementById('fil-alert').value=(!activeKpi||activeKpi==='all')?'':activeKpi;
-  markActive(document.getElementById('fil-alert'));
-  applyFilters();
+  const s=document.getElementById('fil-alert');s.value=(!activeKpi||activeKpi==='all')?'':activeKpi;markActive(s);applyFilters();
 }
-
-function quickFilterFromSel(sel){
-  markActive(sel);
-  activeKpi=sel.value||null;
-  ['all','red','ora','grn'].forEach(x=>document.getElementById('kpi-'+x).classList.toggle('active',activeKpi===x));
-  applyFilters();
-}
-
+function quickFilterFromSel(sel){markActive(sel);activeKpi=sel.value||null;['all','red','ora','grn'].forEach(x=>document.getElementById('kpi-'+x).classList.toggle('active',activeKpi===x));applyFilters();}
 function applyFilters(){
   const search=document.querySelector('.filter-row .col-inp').value.toLowerCase().trim();
-  const selAss=document.getElementById('fil-assoc').value;
-  const selResp=document.getElementById('fil-resp').value;
+  const sA=document.getElementById('fil-assoc').value,sR=document.getElementById('fil-resp').value;
   const colF=[...document.querySelectorAll('.filter-row .col-fsel')];
-  const colMap=[null,null,null,'ass','resp',null,null,'rappro',null,'c472','flcr','cm1','csolde','ccoher','c455','sal','frns',null];
+  const colMap=[null,null,'scoreCat','ass','resp',null,null,'rappro',null,'c472','flcr','cm1','csolde','ccoher','c455','sal','frns',null];
   let vis=0;
   document.querySelectorAll('#tbody tr').forEach(row=>{
     let show=true;
-    if(search&&!row.dataset.nom.includes(search)) show=false;
-    if(selAss&&row.dataset.ass!==selAss) show=false;
-    if(selResp&&row.dataset.resp!==selResp) show=false;
-    if(activeKpi&&activeKpi!=='all'){
-      if(activeKpi==='ora'&&row.dataset.score==='grn') show=false;
-      else if(activeKpi!=='ora'&&row.dataset.score!==activeKpi) show=false;
-    }
-    colF.forEach((f,i)=>{if(!f||!f.value)return;const a=colMap[i];if(a&&row.dataset[a]!==f.value)show=false;});
-    row.classList.toggle('hidden',!show);
-    if(show) vis++;
+    if(search&&!row.dataset.nom.includes(search))show=false;
+    if(sA&&row.dataset.ass!==sA)show=false;
+    if(sR&&row.dataset.resp!==sR)show=false;
+    if(activeKpi&&activeKpi!=='all'&&row.dataset.scoreCat!==activeKpi)show=false;
+    colF.forEach((f,i)=>{if(!f||!f.value)return;const k=colMap[i];if(k&&row.dataset[k]!==f.value)show=false;});
+    row.classList.toggle('hidden',!show);if(show)vis++;
   });
   document.getElementById('count-label').textContent=`${vis} dossier${vis>1?'s':''} affiché${vis>1?'s':''}`;
 }
-
-function resetFilters(){
-  document.getElementById('fil-assoc').value='';
-  document.getElementById('fil-resp').value='';
-  document.getElementById('fil-alert').value='';
-  document.querySelector('.filter-row .col-inp').value='';
-  document.querySelectorAll('.filter-row .col-fsel').forEach(s=>s.value='');
-  document.querySelectorAll('.tb-sel').forEach(s=>s.classList.remove('active'));
-  activeKpi=null;
-  ['all','red','ora','grn'].forEach(x=>document.getElementById('kpi-'+x).classList.remove('active'));
-  applyFilters();
-}
-
+function resetFilters(){['fil-assoc','fil-resp','fil-alert'].forEach(id=>document.getElementById(id).value='');document.querySelector('.filter-row .col-inp').value='';document.querySelectorAll('.filter-row .col-fsel').forEach(s=>s.value='');document.querySelectorAll('.tb-sel').forEach(s=>s.classList.remove('active'));activeKpi=null;['all','red','ora','grn'].forEach(x=>document.getElementById('kpi-'+x).classList.remove('active'));applyFilters();}
 function markActive(el){el.classList.toggle('active',!!el.value);}
-
-function setProfile(p){
-  profile=p;
-  document.querySelectorAll('.profile-btn').forEach(b=>b.classList.toggle('active',b.dataset.p===p));
-  activeKpi=null;
-  ['all','red','ora','grn'].forEach(x=>document.getElementById('kpi-'+x).classList.remove('active'));
-  render();
-}
-
+function setProfile(p){profile=p;document.querySelectorAll('.profile-btn').forEach(b=>b.classList.toggle('active',b.dataset.p===p));activeKpi=null;['all','red','ora','grn'].forEach(x=>document.getElementById('kpi-'+x).classList.remove('active'));render();}
 function openModal(id){
-  const d=DATA.find(x=>x.id===id);
-  modalId=id;
+  const d=DATA.find(x=>x.id===id);modalId=id;
   document.getElementById('modal-nom').textContent=d.nom+' — '+d.num;
-  const hist=document.getElementById('modal-hist');
-  hist.innerHTML=d.comms.length===0
-    ?'<div class="hist-empty">Aucun commentaire pour le moment</div>'
-    :[...d.comms].reverse().map(c=>`<div class="hist-entry"><div class="hist-meta">${c.d} — ${c.u}</div><div class="hist-text">${c.t}</div></div>`).join('');
+  document.getElementById('modal-hist').innerHTML=d.comms.length===0?'<div class="hist-empty">Aucun commentaire pour le moment</div>':[...d.comms].reverse().map(c=>`<div class="hist-entry"><div class="hist-meta">${c.d} — ${c.u}</div><div class="hist-text">${c.t}</div></div>`).join('');
   document.getElementById('modal-ta').value='';
   document.getElementById('overlay').classList.add('open');
   setTimeout(()=>document.getElementById('modal-ta').focus(),50);
 }
-
 function closeModal(){document.getElementById('overlay').classList.remove('open');modalId=null;}
-
 function saveComm(){
-  if(modalId===null) return;
-  const txt=document.getElementById('modal-ta').value.trim();
-  if(!txt) return;
-  const d=DATA.find(x=>x.id===modalId);
-  const now=new Date();const pad=n=>String(n).padStart(2,'0');
-  d.comms.push({
-    d:`${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`,
-    u:PROFILES[profile].label.split('—')[1]?.trim().split(' ')[0]||profile,
-    t:txt
-  });
+  if(modalId===null)return;const txt=document.getElementById('modal-ta').value.trim();if(!txt)return;
+  const d=DATA.find(x=>x.id===modalId);const now=new Date();const pad=n=>String(n).padStart(2,'0');
+  d.comms.push({d:`${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()}`,u:PROFILES[profile].label.split('—')[1]?.trim().split(' ')[0]||profile,t:txt});
   closeModal();render();
 }
-
 function handleOverlayClick(e){if(e.target===document.getElementById('overlay'))closeModal();}
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-
-(function init(){
-  const now=new Date();const pad=n=>String(n).padStart(2,'0');
-  document.getElementById('update-info').textContent=
-    `Mis à jour le ${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} à ${pad(now.getHours())}h${pad(now.getMinutes())}`;
-  render();
-})();
+(function init(){const now=new Date();const pad=n=>String(n).padStart(2,'0');document.getElementById('update-info').textContent=`Mis à jour le ${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} à ${pad(now.getHours())}h${pad(now.getMinutes())}`;render();})();
 </script>
 </body>
 </html>
