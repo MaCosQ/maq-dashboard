@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supervision — Cabinet QUERCY</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--q900:#001208;--q800:#001f10;--q700:#003018;--q600:#004220;--q500:#005a2c;--q400:#007a3c;--q300:#1a9e56;--q200:#5ec98a;--q100:#a8e8c0;--q50:#e4f7ec;--red:#dc2626;--red-bg:#fef2f2;--red-border:#fca5a5;--orange:#d97706;--orange-bg:#fffbeb;--orange-border:#fcd34d;--em:#059669;--em-bg:#ecfdf5;--em-border:#6ee7b7;--g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;--g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'IBM Plex Sans',sans-serif;background:var(--g100);color:var(--g900);font-size:13px;min-height:100vh;}
+
+/* HEADER */
+.header{background:var(--q700);color:white;height:52px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.logo{font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:white;display:flex;align-items:center;gap:8px;}
+.logo-mark{width:28px;height:28px;background:var(--q300);border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;}
+.sep{width:1px;height:18px;background:rgba(255,255,255,.25);}
+.header-title{font-size:12px;color:rgba(255,255,255,.65);}
+.update-info{font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(255,255,255,.45);background:rgba(0,0,0,.2);padding:3px 8px;border-radius:4px;}
+.profile-switcher{display:flex;align-items:center;gap:2px;background:rgba(0,0,0,.2);border-radius:6px;padding:3px;}
+.profile-btn{padding:4px 11px;border:none;background:transparent;color:rgba(255,255,255,.6);border-radius:4px;cursor:pointer;font-size:11px;font-family:'IBM Plex Sans',sans-serif;font-weight:500;transition:all .15s;}
+.profile-btn:hover{color:rgba(255,255,255,.9);}
+.profile-btn.active{background:white;color:var(--q700);}
+.header-right{display:flex;align-items:center;gap:12px;}
+
+/* PROFILE BANNER */
+.profile-banner{background:var(--q50);border-bottom:1px solid var(--q100);padding:5px 20px;display:flex;align-items:center;gap:8px;font-size:11px;color:var(--q600);}
+.profile-banner strong{font-weight:600;}
+
+/* SYNTHESE */
+.synthese{background:white;border-bottom:1px solid var(--g200);padding:14px 20px;display:flex;align-items:stretch;gap:12px;}
+.synth-card{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 16px;border-radius:8px;border:2px solid transparent;cursor:pointer;transition:all .15s;gap:3px;user-select:none;}
+.synth-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1);}
+.synth-card .sc-num{font-size:30px;font-weight:600;font-family:'IBM Plex Mono',monospace;line-height:1;}
+.synth-card .sc-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;}
+.synth-card .sc-sub{font-size:10px;opacity:.65;}
+.sc-total{background:var(--g50);color:var(--g700);}
+.sc-total.active{border-color:var(--g500);background:var(--g100);}
+.sc-red{background:var(--red-bg);color:var(--red);}
+.sc-red.active{border-color:var(--red);}
+.sc-orange{background:var(--orange-bg);color:var(--orange);}
+.sc-orange.active{border-color:var(--orange);}
+.sc-green{background:var(--em-bg);color:var(--em);}
+.sc-green.active{border-color:var(--em);}
+.synth-hint{font-size:10px;color:var(--g400);display:flex;align-items:center;justify-content:center;padding-top:6px;gap:4px;}
+
+/* TOOLBAR */
+.toolbar{background:white;border-bottom:1px solid var(--g200);padding:8px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.search-wrap{display:flex;align-items:center;gap:7px;border:1px solid var(--g200);border-radius:6px;padding:5px 10px;background:var(--g50);width:220px;transition:border-color .15s;}
+.search-wrap:focus-within{border-color:var(--q400);background:white;}
+.search-wrap input{border:none;outline:none;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--g800);width:100%;background:transparent;}
+.search-wrap input::placeholder{color:var(--g400);}
+.filter-sel{border:1px solid var(--g200);border-radius:6px;padding:5px 9px;font-size:12px;font-family:'IBM Plex Sans',sans-serif;color:var(--g600);background:var(--g50);cursor:pointer;outline:none;transition:border-color .15s;}
+.filter-sel:focus,.filter-sel.active{border-color:var(--q400);color:var(--q700);background:var(--q50);}
+.reset-btn{margin-left:auto;border:1px solid var(--g200);border-radius:6px;padding:5px 12px;font-size:11px;font-family:'IBM Plex Sans',sans-serif;color:var(--g500);background:white;cursor:pointer;transition:all .15s;}
+.reset-btn:hover{border-color:var(--q300);color:var(--q600);}
+
+/* TABLE */
+.table-wrap{padding:12px 20px 20px;overflow-x:auto;}
+table{width:100%;min-width:1520px;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;border:1px solid var(--g200);box-shadow:0 1px 4px rgba(0,0,0,.06);}
+thead tr:first-child th{background:var(--q800);color:rgba(255,255,255,.85);font-size:10px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;padding:10px 10px 4px;text-align:left;white-space:nowrap;border-right:1px solid rgba(255,255,255,.06);cursor:pointer;user-select:none;transition:background .1s;position:relative;}
+thead tr:first-child th:hover{background:var(--q700);}
+thead tr:first-child th:first-child{position:sticky;left:0;z-index:20;min-width:210px;}
+thead tr.filter-row th{background:var(--q900);padding:4px 6px 8px;border-right:1px solid rgba(255,255,255,.06);}
+thead tr.filter-row th:first-child{position:sticky;left:0;z-index:20;}
+.col-filter{width:100%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.75);font-size:10px;font-family:'IBM Plex Sans',sans-serif;padding:3px 5px;outline:none;cursor:pointer;}
+.col-filter:focus{border-color:var(--q300);}
+.col-filter option{background:#1a2e1c;color:white;}
+tbody tr{border-bottom:1px solid var(--g100);transition:background .08s;}
+tbody tr:last-child{border-bottom:none;}
+tbody tr:hover{background:var(--q50);}
+tbody tr.row-red{border-left:3px solid var(--red);}
+tbody tr.row-orange{border-left:3px solid var(--orange);}
+tbody tr.row-green{border-left:3px solid transparent;}
+tbody td{padding:7px 10px;border-right:1px solid var(--g100);white-space:nowrap;vertical-align:middle;}
+tbody td:first-child{position:sticky;left:0;z-index:5;background:white;}
+tbody tr:hover td:first-child{background:var(--q50);}
+.dossier-link{font-weight:500;font-size:12px;color:var(--q600);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;}
+.dossier-link:hover{color:var(--q400);text-decoration:underline;}
+.dossier-link-arrow{font-size:10px;opacity:.5;}
+.feu-wrap{display:flex;justify-content:center;align-items:center;}
+.feu{width:20px;height:20px;border-radius:50%;display:inline-block;position:relative;}
+.feu::after{content:'';position:absolute;inset:3px;border-radius:50%;background:rgba(255,255,255,.25);}
+.feu-red{background:var(--red);box-shadow:0 0 0 2px rgba(220,38,38,.2);}
+.feu-orange{background:var(--orange);box-shadow:0 0 0 2px rgba(217,119,6,.2);}
+.feu-green{background:var(--em);box-shadow:0 0 0 2px rgba(5,150,105,.2);}
+.feu-gray{background:var(--g300);}
+.ged-badge{display:inline-flex;align-items:center;justify-content:center;min-width:30px;height:20px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:500;padding:0 6px;}
+.ged-0{background:var(--g100);color:var(--g400);}
+.ged-low{background:var(--em-bg);color:var(--em);}
+.ged-med{background:var(--orange-bg);color:var(--orange);}
+.ged-high{background:var(--red-bg);color:var(--red);}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--g500);}
+.tag{font-size:10px;font-weight:500;letter-spacing:.04em;padding:2px 7px;border-radius:3px;text-transform:uppercase;}
+.tag-assoc{background:var(--q50);color:var(--q600);}
+.tag-resp{background:var(--g100);color:var(--g600);}
+.comm-wrap{display:flex;flex-direction:column;gap:3px;max-width:160px;}
+.comm-text{font-size:11px;color:var(--g500);font-style:italic;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.btn-comm{background:none;border:1px solid var(--g200);border-radius:4px;padding:2px 7px;font-size:10px;color:var(--g400);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;transition:all .12s;align-self:flex-start;}
+.btn-comm:hover{border-color:var(--q300);color:var(--q600);background:var(--q50);}
+
+/* TOOLTIP */
+.th-wrap{display:flex;align-items:center;gap:5px;position:relative;}
+.sort-arrow{font-size:9px;color:rgba(255,255,255,.4);}
+.tip-icon{width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,.18);color:rgba(255,255,255,.8);font-size:9px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;cursor:help;flex-shrink:0;font-style:normal;line-height:1;}
+.tooltip{position:absolute;top:calc(100% + 8px);left:0;z-index:400;background:#1a1a1a;color:#f0f0f0;font-size:11px;font-weight:400;line-height:1.65;padding:11px 14px;border-radius:8px;white-space:normal;min-width:230px;max-width:290px;pointer-events:none;opacity:0;transition:opacity .15s;box-shadow:0 8px 28px rgba(0,0,0,.35);text-transform:none;letter-spacing:0;}
+.tooltip::before{content:'';position:absolute;top:-5px;left:14px;width:10px;height:10px;background:#1a1a1a;transform:rotate(45deg);border-radius:1px;}
+thead tr:first-child th:hover .tooltip{opacity:1;}
+
+/* FOOTER */
+.footer{background:white;border-top:1px solid var(--g200);padding:8px 20px;display:flex;align-items:center;gap:20px;}
+.legend-label{font-size:10px;color:var(--g400);font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--g600);}
+.legend-dot{width:10px;height:10px;border-radius:50%;}
+.visible-count{margin-left:auto;font-size:11px;color:var(--g400);font-family:'IBM Plex Mono',monospace;}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.overlay.open{opacity:1;pointer-events:all;}
+.modal{background:white;border-radius:10px;padding:24px;width:420px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.25);transform:translateY(8px);transition:transform .2s;}
+.overlay.open .modal{transform:translateY(0);}
+.modal-dossier{font-size:14px;font-weight:600;color:var(--q700);margin-bottom:3px;}
+.modal-sub{font-size:12px;color:var(--g500);margin-bottom:14px;}
+.modal textarea{width:100%;height:96px;resize:none;border:1px solid var(--g200);border-radius:6px;padding:10px;font-size:13px;font-family:'IBM Plex Sans',sans-serif;color:var(--g800);outline:none;transition:border-color .15s;}
+.modal textarea:focus{border-color:var(--q400);}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px;}
+.btn-cancel{padding:7px 14px;border:1px solid var(--g200);border-radius:5px;background:white;font-size:12px;cursor:pointer;color:var(--g600);font-family:'IBM Plex Sans',sans-serif;}
+.btn-cancel:hover{background:var(--g50);}
+.btn-save{padding:7px 16px;border:none;border-radius:5px;background:var(--q700);color:white;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500;}
+.btn-save:hover{background:var(--q600);}
+
+tr.hidden{display:none!important;}
+
+/* ═══ FICHE DOSSIER ═══ */
+#view-dossier{display:none;}
+.fd-header{background:var(--q700);color:white;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.fd-header-left{flex:1;}
+.fd-title{font-size:20px;font-weight:600;margin-bottom:5px;}
+.fd-badges{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.fd-back{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.75);font-size:12px;cursor:pointer;border:1px solid rgba(255,255,255,.25);border-radius:5px;padding:6px 14px;background:none;font-family:'IBM Plex Sans',sans-serif;transition:all .15s;white-space:nowrap;}
+.fd-back:hover{background:rgba(255,255,255,.12);color:white;}
+.fd-body{max-width:1100px;margin:0 auto;padding:24px 28px;display:flex;flex-direction:column;gap:20px;}
+.fd-section{background:white;border-radius:10px;border:1px solid var(--g200);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.fd-sec-head{background:var(--g50);border-bottom:1px solid var(--g200);padding:10px 18px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--g500);}
+.fd-sec-body{padding:20px;}
+.infos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+.info-item{display:flex;flex-direction:column;gap:4px;}
+.info-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--g400);font-weight:600;}
+.info-val{font-size:13px;color:var(--g900);font-weight:500;}
+.indics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;}
+.indic-card{border:1px solid var(--g200);border-radius:8px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;}
+.indic-card.ic-red{border-color:var(--red-border);background:var(--red-bg);}
+.indic-card.ic-orange{border-color:var(--orange-border);background:var(--orange-bg);}
+.indic-card.ic-green{border-color:var(--em-border);background:var(--em-bg);}
+.indic-card.ic-gray{border-color:var(--g200);background:var(--g50);}
+.ic-feu{width:22px;height:22px;border-radius:50%;flex-shrink:0;margin-top:2px;}
+.ic-feu.red{background:var(--red);}
+.ic-feu.orange{background:var(--orange);}
+.ic-feu.green{background:var(--em);}
+.ic-feu.gray{background:var(--g300);}
+.ic-name{font-size:12px;font-weight:600;color:var(--g800);margin-bottom:5px;}
+.ic-val{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;line-height:1.5;}
+.ic-val.red{color:var(--red);}
+.ic-val.orange{color:var(--orange);}
+.ic-val.green{color:var(--em);}
+.ic-val.gray{color:var(--g500);}
+.comm-list{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.comm-item{border:1px solid var(--g200);border-radius:7px;padding:13px 15px;}
+.comm-item-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;}
+.comm-author{font-size:11px;font-weight:600;color:var(--q600);}
+.comm-date{font-size:10px;color:var(--g400);font-family:'IBM Plex Mono',monospace;}
+.comm-body-text{font-size:13px;color:var(--g700);line-height:1.6;}
+.comm-edit-btn{font-size:10px;color:var(--g400);background:none;border:none;cursor:pointer;padding:0;font-family:'IBM Plex Sans',sans-serif;text-decoration:underline;}
+.comm-edit-btn:hover{color:var(--q600);}
+.new-comm-wrap{border:1px solid var(--g200);border-radius:8px;overflow:hidden;}
+.new-comm-wrap textarea{width:100%;height:80px;border:none;padding:13px;font-size:13px;font-family:'IBM Plex Sans',sans-serif;color:var(--g800);outline:none;resize:none;display:block;}
+.new-comm-footer{display:flex;align-items:center;justify-content:space-between;padding:8px 13px;background:var(--g50);border-top:1px solid var(--g200);}
+.new-comm-hint{font-size:10px;color:var(--g400);}
+.btn-add-comm{padding:6px 18px;border:none;border-radius:5px;background:var(--q700);color:white;font-size:12px;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;font-weight:500;}
+.btn-add-comm:hover{background:var(--q600);}
+.no-comm{font-size:12px;color:var(--g400);font-style:italic;padding:4px 0 14px;}
+.score-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.score-badge.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.score-badge.orange{background:var(--orange-bg);color:var(--orange);border:1px solid var(--orange-border);}
+.score-badge.green{background:var(--em-bg);color:var(--em);border:1px solid var(--em-border);}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ VUE DASHBOARD ═══════════ -->
+<div id="view-dashboard">
+
+<div class="header">
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div class="logo"><div class="logo-mark">Q</div>QUERCY</div>
+    <div class="sep"></div>
+    <span class="header-title">Tableau de bord — Avancement des dossiers</span>
+  </div>
+  <div class="header-right">
+    <span class="update-info" id="update-info">—</span>
+    <div class="profile-switcher">
+      <button class="profile-btn" data-p="collab" onclick="setProfile('collab')">Collaborateur</button>
+      <button class="profile-btn active" data-p="resp" onclick="setProfile('resp')">Responsable</button>
+      <button class="profile-btn" data-p="assoc" onclick="setProfile('assoc')">Associé</button>
+    </div>
+  </div>
+</div>
+
+<div class="profile-banner">
+  <span style="font-size:14px">👤</span>
+  <span id="banner-text"></span>
+</div>
+
+<!-- ZONE SYNTHÈSE -->
+<div class="synthese">
+  <div class="synth-card sc-total" id="sc-total" onclick="quickFilter('all')" title="Afficher tous les dossiers">
+    <span class="sc-num" id="sc-num-total">—</span>
+    <span class="sc-label">Dossiers</span>
+    <span class="sc-sub">Total visible</span>
+  </div>
+  <div class="synth-card sc-red" id="sc-red" onclick="quickFilter('red')" title="Filtrer les dossiers en alerte">
+    <span class="sc-num" id="sc-num-red">—</span>
+    <span class="sc-label">Alertes</span>
+    <span class="sc-sub">Au moins 1 feu rouge</span>
+  </div>
+  <div class="synth-card sc-orange" id="sc-orange" onclick="quickFilter('orange')" title="Filtrer les dossiers en attention">
+    <span class="sc-num" id="sc-num-orange">—</span>
+    <span class="sc-label">Attention</span>
+    <span class="sc-sub">Feux oranges uniquement</span>
+  </div>
+  <div class="synth-card sc-green" id="sc-green" onclick="quickFilter('green')" title="Filtrer les dossiers OK">
+    <span class="sc-num" id="sc-num-green">—</span>
+    <span class="sc-label">OK</span>
+    <span class="sc-sub">Tous indicateurs verts</span>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="search" placeholder="Rechercher un dossier…" oninput="applyFilters()">
+  </div>
+  <select class="filter-sel" id="fil-assoc" onchange="applyFilters();updateSelectState(this)">
+    <option value="">Tous les associés</option>
+    <option>MARTIN</option><option>DUPONT</option><option>LEFEBVRE</option>
+  </select>
+  <select class="filter-sel" id="fil-resp" onchange="applyFilters();updateSelectState(this)">
+    <option value="">Tous les responsables</option>
+    <option>MOREAU</option><option>BERNARD</option><option>PETIT</option><option>RICHARD</option>
+  </select>
+  <button class="reset-btn" onclick="resetFilters()">✕ Réinitialiser</button>
+</div>
+
+<div class="table-wrap">
+<table id="tbl">
+  <thead>
+    <tr id="thead-labels">
+      <th onclick="sortBy('nom')"><div class="th-wrap">Dossier <span class="sort-arrow">↕</span></div></th>
+      <th onclick="sortBy('assoc')"><div class="th-wrap">Ass. <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Associé référent du dossier.</span></i></div></th>
+      <th onclick="sortBy('resp')"><div class="th-wrap">Resp. Miss. <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Responsable de mission en charge du dossier.</span></i></div></th>
+      <th><div class="th-wrap">Clôture <i class="tip-icon">?<span class="tooltip">Date de clôture de l'exercice comptable.</span></i></div></th>
+      <th><div class="th-wrap">Situation <i class="tip-icon">?<span class="tooltip">Date à laquelle la situation comptable a été arrêtée.</span></i></div></th>
+      <th><div class="th-wrap">Dern. circu <i class="tip-icon">?<span class="tooltip">Date de la dernière circularisation effectuée sur ce dossier.</span></i></div></th>
+      <th onclick="sortBy('rappro')"><div class="th-wrap">Rappro M-1 <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Rapprochement bancaire de tous les comptes.<br><br>🟢 M-1 totalement rapproché<br>🟠 Seulement M-2 rapproché<br>🔴 M-2 non totalement rapproché<br><br>Avant le 15 du mois : contrôle sur M-2 et M-3.</span></i></div></th>
+      <th onclick="sortBy('ged')"><div class="th-wrap">GED pièces <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Nb de pièces en attente dans la GED au jour du contrôle.<br><br>🟢 0–9 pièces<br>🟠 10–29 pièces<br>🔴 30+ pièces</span></i></div></th>
+      <th onclick="sortBy('c472')"><div class="th-wrap">472 <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Compte 472 — Dépenses payées d'avance.<br><br>🟢 Solde = 0 €<br>🟠 Solde ≠ 0 mais ≤ 5 000 €<br>🔴 Un montant &gt; 5 000 €</span></i></div></th>
+      <th onclick="sortBy('flcr')"><div class="th-wrap">FLCR <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Flux de liquidités / créances clients.<br><br>À partir du 15 du mois, sur M-1 :<br>🟢 Solde = 0<br>🔴 Solde ≠ 0<br><br>Avant le 15 : contrôle sur M-2.</span></i></div></th>
+      <th onclick="sortBy('caisseM1')"><div class="th-wrap">Caisse M-1 <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Présence de la saisie de caisse sur M-1.<br><br>🟢 Caisse saisie sur M-1<br>🟠 Caisse saisie sur M-2 seulement<br>🔴 Caisse non saisie sur M-2<br><br>Contrôle actif à partir du 15 du mois.</span></i></div></th>
+      <th onclick="sortBy('caisseSolde')"><div class="th-wrap">Caisse solde <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Contrôle du solde de caisse sur les mois saisis.<br><br>🟢 Solde toujours débiteur ou nul<br>🔴 Au moins un jour avec un solde créditeur (anomalie)</span></i></div></th>
+      <th onclick="sortBy('caisseCoher')"><div class="th-wrap">Caisse cohér. <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Cohérence du solde de caisse vs N-1.<br><br>🟢 Écart ≤ 5 %<br>🟠 Écart entre 5 % et 10 %<br>🔴 Écart &gt; 10 %</span></i></div></th>
+      <th onclick="sortBy('c455')"><div class="th-wrap">455 <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Compte 455 — Compte courant d'associé (CCA).<br><br>🟢 CCA toujours créditeur (normal)<br>🔴 CCA passé débiteur au moins un jour (anomalie fiscale)</span></i></div></th>
+      <th onclick="sortBy('salaires')"><div class="th-wrap">Salaires M-1 <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Passage de l'écriture de salaires (P47) sur M-1.<br><br>🟢 P47 passé sur M-1<br>🟠 P47 passé sur M-2 seulement<br>🔴 P47 non passé sur M-2<br><br>Contrôle actif à partir du 15 du mois.</span></i></div></th>
+      <th onclick="sortBy('comptesFDeb')"><div class="th-wrap">Cptes F déb. <span class="sort-arrow">↕</span><i class="tip-icon">?<span class="tooltip">Comptes fournisseurs à solde débiteur anormal.<br><br>🟢 Révision &gt; 90 % (situation maîtrisée)<br>🟠 Débiteurs ≤ 10 % du total fournisseurs<br>🔴 Débiteurs &gt; 10 % du total fournisseurs</span></i></div></th>
+      <th><div class="th-wrap">Commentaire</div></th>
+    </tr>
+    <tr class="filter-row">
+      <th><input class="col-filter" type="text" placeholder="Filtrer…" oninput="applyFilters()"></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option>MARTIN</option><option>DUPONT</option><option>LEFEBVRE</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option>MOREAU</option><option>BERNARD</option><option>PETIT</option><option>RICHARD</option></select></th>
+      <th></th><th></th><th></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th><select class="col-filter" onchange="applyFilters()"><option value="">Tous</option><option value="green">Vert</option><option value="orange">Orange</option><option value="red">Rouge</option></select></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+</div>
+
+<div class="footer">
+  <span class="legend-label">Légende :</span>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--em)"></div> OK / À jour</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div> Attention</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div> Alerte</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--g300)"></div> N/A</div>
+  <span class="visible-count" id="visible-count"></span>
+</div>
+
+</div><!-- /view-dashboard -->
+
+<!-- MODAL COMMENTAIRE -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-dossier" id="modal-nom">—</div>
+    <div class="modal-sub">Note de suivi / Commentaire</div>
+    <textarea id="modal-ta" placeholder="Saisissez votre commentaire…"></textarea>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-save" onclick="saveComm()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ VUE FICHE DOSSIER ═══════════ -->
+<div id="view-dossier">
+  <div class="fd-header">
+    <div class="fd-header-left">
+      <div class="fd-title" id="fd-title">—</div>
+      <div class="fd-badges" id="fd-badges"></div>
+    </div>
+    <button class="fd-back" onclick="window.close()">✕ Fermer cet onglet</button>
+  </div>
+
+  <div class="fd-body">
+    <div class="fd-section">
+      <div class="fd-sec-head">Informations du dossier</div>
+      <div class="fd-sec-body"><div class="infos-grid" id="fd-infos"></div></div>
+    </div>
+    <div class="fd-section">
+      <div class="fd-sec-head">Détail des indicateurs</div>
+      <div class="fd-sec-body"><div class="indics-grid" id="fd-indics"></div></div>
+    </div>
+    <div class="fd-section">
+      <div class="fd-sec-head">Historique des commentaires</div>
+      <div class="fd-sec-body">
+        <div class="comm-list" id="fd-comm-list"></div>
+        <div class="new-comm-wrap">
+          <textarea id="fd-new-comm" placeholder="Ajouter une note de suivi…"></textarea>
+          <div class="new-comm-footer">
+            <span class="new-comm-hint" id="fd-edit-hint"></span>
+            <button class="btn-add-comm" onclick="addFdComm()">Ajouter la note</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════
+// DATA
+// ══════════════════════════════════
+const COMMENTAIRES={1:[],2:[{auteur:'MOREAU',date:'2026-03-10',texte:'En attente des relevés de caisse — relance envoyée au client.'}],3:[],4:[{auteur:'BERNARD',date:'2026-03-05',texte:'CCA passé débiteur en janvier — à investiguer avec le gérant.'}],5:[],6:[{auteur:'RICHARD',date:'2026-02-28',texte:'Dossier en retard suite à un changement de logiciel de caisse.'},{auteur:'MARTIN',date:'2026-03-14',texte:'RDV de revue planifié le 22/03 avec le responsable.'}],7:[],8:[],9:[{auteur:'BERNARD',date:'2026-03-01',texte:"Retard suite à l'arrêt maladie du gérant — reprise prévue semaine 12."}],10:[],11:[],12:[],13:[],14:[{auteur:'BERNARD',date:'2026-02-20',texte:'Nouveau client repris en cours d\'exercice — prise en charge complexe.'},{auteur:'DUPONT',date:'2026-03-10',texte:'Point fait avec BERNARD : plan de travail établi pour rattraper le retard.'}],15:[]};
+
+const DATA=[
+  {id:1, nom:"Pharmacie des Arcades",    assoc:"MARTIN",   resp:"MOREAU",   clot:"31/12/2025",situat:"28/02/2026",circu:"15/02/2026",rappro:"green", ged:3,  c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +2,1 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"green",  comptesFDebVal:"Révision > 90 %"},
+  {id:2, nom:"Pharmacie du Marché",      assoc:"MARTIN",   resp:"MOREAU",   clot:"31/12/2025",situat:"31/01/2026",circu:"10/01/2026",rappro:"red",   ged:47, c472:"red",   c472val:"Solde : 8 200 €",      flcr:"red",   flcrval:"Solde M-1 : 3 450 €",      caisseM1:"orange",caisseM1val:"Caisse saisie sur M-2 seulement",     caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"orange", caisseCoherVal:"Écart / N-1 : +7,3 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"orange", salairesVal:"P47 passé sur M-2 seulement",   comptesFDeb:"red",    comptesFDebVal:"Débiteurs : 14 % du total"},
+  {id:3, nom:"Pharmacie Saint-Jean",     assoc:"DUPONT",   resp:"BERNARD",  clot:"31/12/2025",situat:"28/02/2026",circu:"18/02/2026",rappro:"green", ged:0,  c472:"orange",c472val:"Solde : 1 800 €",      flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +1,5 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"orange", comptesFDebVal:"Débiteurs : 7 % — révision < 90 %"},
+  {id:4, nom:"Pharmacie de la Gare",     assoc:"DUPONT",   resp:"BERNARD",  clot:"31/12/2025",situat:"28/02/2026",circu:"01/03/2026",rappro:"orange",ged:12, c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"red",   caisseSoldeVal:"Solde créditeur le 14/02",     caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +3,0 %",  c455:"red",    c455val:"CCA débiteur le 21/01 : −2 300 €",salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"green",  comptesFDebVal:"Révision > 90 %"},
+  {id:5, nom:"Pharmacie du Parc",        assoc:"LEFEBVRE", resp:"PETIT",    clot:"31/12/2025",situat:"28/02/2026",circu:"20/02/2026",rappro:"green", ged:5,  c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +0,8 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"green",  comptesFDebVal:"Révision > 90 %"},
+  {id:6, nom:"Pharmacie Centrale",       assoc:"MARTIN",   resp:"RICHARD",  clot:"31/12/2025",situat:"31/01/2026",circu:"05/02/2026",rappro:"red",   ged:89, c472:"red",   c472val:"Solde : 12 400 €",     flcr:"red",   flcrval:"Solde M-1 : 6 700 €",      caisseM1:"red",   caisseM1val:"Caisse non saisie sur M-2",           caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"red",    caisseCoherVal:"Écart / N-1 : +18,2 %", c455:"green",  c455val:"CCA toujours créditeur",         salaires:"red",    salairesVal:"P47 non passé sur M-2",         comptesFDeb:"red",    comptesFDebVal:"Débiteurs : 22 % du total"},
+  {id:7, nom:"Pharmacie de l'Église",    assoc:"LEFEBVRE", resp:"PETIT",    clot:"31/12/2025",situat:"28/02/2026",circu:"10/03/2026",rappro:"green", ged:8,  c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"orange", caisseCoherVal:"Écart / N-1 : +6,4 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"orange", comptesFDebVal:"Débiteurs : 8 % du total"},
+  {id:8, nom:"Pharmacie des Halles",     assoc:"DUPONT",   resp:"MOREAU",   clot:"31/12/2025",situat:"28/02/2026",circu:"28/02/2026",rappro:"green", ged:1,  c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +1,2 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"green",  comptesFDebVal:"Révision > 90 %"},
+  {id:9, nom:"Pharmacie du Château",     assoc:"MARTIN",   resp:"BERNARD",  clot:"31/12/2025",situat:"31/01/2026",circu:"20/01/2026",rappro:"orange",ged:31, c472:"orange",c472val:"Solde : 2 100 €",      flcr:"orange",flcrval:"Solde M-2 : 1 200 €",     caisseM1:"orange",caisseM1val:"Caisse saisie sur M-2 seulement",     caisseSolde:"orange",caisseSoldeVal:"Solde créditeur le 03/01",     caisseCoher:"orange", caisseCoherVal:"Écart / N-1 : +8,9 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"orange", salairesVal:"P47 passé sur M-2 seulement",   comptesFDeb:"orange", comptesFDebVal:"Débiteurs : 9 % du total"},
+  {id:10,nom:"Pharmacie de la Fontaine", assoc:"LEFEBVRE", resp:"RICHARD",  clot:"31/12/2025",situat:"28/02/2026",circu:"05/03/2026",rappro:"green", ged:2,  c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +2,5 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"green",  comptesFDebVal:"Révision > 90 %"},
+  {id:11,nom:"Pharmacie du Bourg",       assoc:"DUPONT",   resp:"PETIT",    clot:"31/12/2025",situat:"31/01/2026",circu:"15/02/2026",rappro:"red",   ged:24, c472:"green", c472val:"Solde : 0 €",         flcr:"red",   flcrval:"Solde M-1 : 4 100 €",      caisseM1:"red",   caisseM1val:"Caisse non saisie sur M-2",           caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +4,1 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"red",    salairesVal:"P47 non passé sur M-2",         comptesFDeb:"orange", comptesFDebVal:"Débiteurs : 8 % du total"},
+  {id:12,nom:"Pharmacie des Fleurs",     assoc:"MARTIN",   resp:"MOREAU",   clot:"31/12/2025",situat:"28/02/2026",circu:"01/03/2026",rappro:"green", ged:6,  c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +1,9 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"green",  comptesFDebVal:"Révision > 90 %"},
+  {id:13,nom:"Pharmacie de la Croix",    assoc:"LEFEBVRE", resp:"RICHARD",  clot:"31/12/2025",situat:"28/02/2026",circu:"12/03/2026",rappro:"green", ged:0,  c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +0,3 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"green",  comptesFDebVal:"Révision > 90 %"},
+  {id:14,nom:"Pharmacie du Port",        assoc:"DUPONT",   resp:"BERNARD",  clot:"31/12/2025",situat:"31/01/2026",circu:"08/02/2026",rappro:"red",   ged:56, c472:"red",   c472val:"Solde : 9 800 €",      flcr:"red",   flcrval:"Solde M-1 : 5 200 €",      caisseM1:"red",   caisseM1val:"Caisse non saisie sur M-2",           caisseSolde:"red",   caisseSoldeVal:"Solde créditeur le 08/01 : −450 €",caisseCoher:"red", caisseCoherVal:"Écart / N-1 : +24,6 %", c455:"red",    c455val:"CCA débiteur le 15/01 : −5 100 €",salaires:"red",    salairesVal:"P47 non passé sur M-2",         comptesFDeb:"red",    comptesFDebVal:"Débiteurs : 31 % du total"},
+  {id:15,nom:"Pharmacie de la Place",    assoc:"MARTIN",   resp:"PETIT",    clot:"31/12/2025",situat:"28/02/2026",circu:"18/03/2026",rappro:"green", ged:4,  c472:"green", c472val:"Solde : 0 €",         flcr:"green", flcrval:"Solde M-1 : 0 €",         caisseM1:"green", caisseM1val:"Caisse saisie sur M-1",               caisseSolde:"green", caisseSoldeVal:"Aucun jour créditeur",          caisseCoher:"green",  caisseCoherVal:"Écart / N-1 : +2,7 %",  c455:"green",  c455val:"CCA toujours créditeur",         salaires:"green",  salairesVal:"P47 passé sur M-1",             comptesFDeb:"orange", comptesFDebVal:"Débiteurs : 6 % du total"},
+];
+
+const PROFILES={collab:{label:'Collaborateur — MOREAU',desc:'Vous voyez uniquement vos dossiers (resp. MOREAU)',filter:d=>d.resp==='MOREAU'},resp:{label:'Responsable — MOREAU',desc:'Vous voyez vos dossiers + équipe (MOREAU + PETIT)',filter:d=>['MOREAU','PETIT'].includes(d.resp)},assoc:{label:'Associé — MARTIN',desc:'Accès à tous les dossiers du cabinet',filter:()=>true}};
+
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+let profile='resp', sortCol=null, sortDir=1, modalId=null, activeQF='all';
+
+// ══════════════════════════════════
+// HELPERS
+// ══════════════════════════════════
+const feuScore=v=>({red:2,orange:1,green:0}[v]??-1);
+function dossierScore(d){const f=[d.rappro,d.c472,d.flcr,d.caisseM1,d.caisseSolde,d.caisseCoher,d.c455,d.salaires,d.comptesFDeb];if(f.includes('red'))return 2;if(f.includes('orange'))return 1;return 0;}
+function feuHTML(v){const cls={green:'feu-green',orange:'feu-orange',red:'feu-red',gray:'feu-gray'}[v]||'feu-gray';return`<div class="feu-wrap"><div class="feu ${cls}"></div></div>`;}
+function gedHTML(n){const cls=n===0?'ged-0':n<10?'ged-low':n<30?'ged-med':'ged-high';return`<div style="text-align:center"><span class="ged-badge ${cls}">${n}</span></div>`;}
+function pad(n){return String(n).padStart(2,'0');}
+
+// ══════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════
+function render(){
+  const prof=PROFILES[profile];
+  document.getElementById('banner-text').innerHTML=`<strong>${prof.label}</strong> &nbsp;·&nbsp; ${prof.desc}`;
+  let rows=DATA.filter(prof.filter);
+  if(sortCol){rows=[...rows].sort((a,b)=>{let va=a[sortCol],vb=b[sortCol];if(['green','orange','red','gray'].includes(va)){va=feuScore(va);vb=feuScore(vb);}return va<vb?-sortDir:va>vb?sortDir:0;});}
+  else{rows=[...rows].sort((a,b)=>dossierScore(b)-dossierScore(a));}
+  document.getElementById('tbody').innerHTML=rows.map(d=>{
+    const score=dossierScore(d);
+    const rowCls=score===2?'row-red':score===1?'row-orange':'row-green';
+    const comms=COMMENTAIRES[d.id]||[];
+    const lastComm=comms.slice(-1)[0];
+    const commCell=lastComm
+      ?`<div class="comm-wrap"><span class="comm-text" title="${lastComm.texte}">${lastComm.texte}</span><button class="btn-comm" onclick="openModal(${d.id})">Modifier</button></div>`
+      :`<button class="btn-comm" onclick="openModal(${d.id})">+ Note</button>`;
+    return`<tr class="${rowCls}" data-nom="${d.nom.toLowerCase()}" data-assoc="${d.assoc}" data-resp="${d.resp}" data-score="${score}" data-rappro="${d.rappro}" data-c472="${d.c472}" data-flcr="${d.flcr}" data-caissem1="${d.caisseM1}" data-caissesolde="${d.caisseSolde}" data-caissecoher="${d.caisseCoher}" data-c455="${d.c455}" data-salaires="${d.salaires}" data-comptesfDeb="${d.comptesFDeb}">
+      <td><a class="dossier-link" onclick="openDossier(${d.id})" href="javascript:void(0)">${d.nom}<span class="dossier-link-arrow">↗</span></a></td>
+      <td><span class="tag tag-assoc">${d.assoc}</span></td>
+      <td><span class="tag tag-resp">${d.resp}</span></td>
+      <td><span class="mono">${d.clot}</span></td>
+      <td><span class="mono">${d.situat}</span></td>
+      <td><span class="mono">${d.circu}</span></td>
+      <td>${feuHTML(d.rappro)}</td>
+      <td>${gedHTML(d.ged)}</td>
+      <td>${feuHTML(d.c472)}</td>
+      <td>${feuHTML(d.flcr)}</td>
+      <td>${feuHTML(d.caisseM1)}</td>
+      <td>${feuHTML(d.caisseSolde)}</td>
+      <td>${feuHTML(d.caisseCoher)}</td>
+      <td>${feuHTML(d.c455)}</td>
+      <td>${feuHTML(d.salaires)}</td>
+      <td>${feuHTML(d.comptesFDeb)}</td>
+      <td>${commCell}</td>
+    </tr>`;
+  }).join('');
+  updateSynthese(rows);
+  applyFilters();
+}
+
+function updateSynthese(rows){
+  const r=rows.filter(d=>dossierScore(d)===2).length;
+  const o=rows.filter(d=>dossierScore(d)===1).length;
+  const g=rows.filter(d=>dossierScore(d)===0).length;
+  document.getElementById('sc-num-total').textContent=rows.length;
+  document.getElementById('sc-num-red').textContent=r;
+  document.getElementById('sc-num-orange').textContent=o;
+  document.getElementById('sc-num-green').textContent=g;
+  ['total','red','orange','green'].forEach(k=>document.getElementById('sc-'+k).classList.toggle('active',activeQF===k));
+}
+
+function applyFilters(){
+  const search=document.getElementById('search').value.toLowerCase().trim();
+  const selAssoc=document.getElementById('fil-assoc').value;
+  const selResp=document.getElementById('fil-resp').value;
+  const colFilters=[...document.querySelectorAll('.filter-row .col-filter')];
+  const colMap=[null,null,null,null,null,null,'rappro',null,'c472','flcr','caissem1','caissesolde','caissecoher','c455','salaires','comptesfDeb',null];
+  let visible=0;
+  document.querySelectorAll('#tbody tr').forEach(row=>{
+    const score=parseInt(row.dataset.score);
+    let show=true;
+    if(search&&!row.dataset.nom.includes(search))show=false;
+    if(selAssoc&&row.dataset.assoc!==selAssoc)show=false;
+    if(selResp&&row.dataset.resp!==selResp)show=false;
+    if(activeQF==='red'&&score!==2)show=false;
+    if(activeQF==='orange'&&score!==1)show=false;
+    if(activeQF==='green'&&score!==0)show=false;
+    colFilters.forEach((f,i)=>{if(!f||!f.value)return;const attr=colMap[i];if(attr&&row.dataset[attr]!==f.value)show=false;});
+    row.classList.toggle('hidden',!show);
+    if(show)visible++;
+  });
+  document.getElementById('visible-count').textContent=`${visible} dossier${visible>1?'s':''} affiché${visible>1?'s':''}`;
+}
+
+function quickFilter(level){
+  activeQF=(activeQF===level&&level!=='all')?'all':level;
+  ['total','red','orange','green'].forEach(k=>document.getElementById('sc-'+k).classList.toggle('active',activeQF===k));
+  applyFilters();
+}
+
+function resetFilters(){
+  document.getElementById('search').value='';
+  document.getElementById('fil-assoc').value='';
+  document.getElementById('fil-resp').value='';
+  document.querySelectorAll('.filter-row .col-filter').forEach(f=>{f.value='';});
+  document.querySelectorAll('.filter-sel').forEach(f=>f.classList.remove('active'));
+  activeQF='all';
+  ['total','red','orange','green'].forEach(k=>document.getElementById('sc-'+k).classList.remove('active'));
+  applyFilters();
+}
+
+function updateSelectState(el){el.classList.toggle('active',!!el.value);}
+function sortBy(col){sortDir=(sortCol===col)?sortDir*-1:-1;sortCol=col;render();}
+function setProfile(p){profile=p;document.querySelectorAll('.profile-btn').forEach(b=>b.classList.toggle('active',b.dataset.p===p));render();}
+
+// Modal
+function openModal(id){const d=DATA.find(x=>x.id===id);modalId=id;document.getElementById('modal-nom').textContent=d.nom;const last=(COMMENTAIRES[id]||[]).slice(-1)[0];document.getElementById('modal-ta').value=last?last.texte:'';document.getElementById('overlay').classList.add('open');setTimeout(()=>document.getElementById('modal-ta').focus(),50);}
+function closeModal(){document.getElementById('overlay').classList.remove('open');modalId=null;}
+function saveComm(){if(modalId===null)return;const val=document.getElementById('modal-ta').value.trim();if(val){if(!COMMENTAIRES[modalId])COMMENTAIRES[modalId]=[];COMMENTAIRES[modalId].push({auteur:PROFILES[profile].label.split(' — ')[1]||'UTILISATEUR',date:new Date().toISOString().slice(0,10),texte:val});}closeModal();render();}
+function handleOverlayClick(e){if(e.target===document.getElementById('overlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+
+// ══════════════════════════════════
+// FICHE DOSSIER
+// ══════════════════════════════════
+function openDossier(id){window.open(window.location.href.split('?')[0]+'?dossier='+id,'_blank');}
+
+function renderDossier(id){
+  const d=DATA.find(x=>x.id===id);
+  if(!d){document.body.innerHTML='<p style="padding:40px;color:red">Dossier introuvable.</p>';return;}
+  document.title=d.nom+' — QUERCY';
+  const score=dossierScore(d);
+  const scoreBadge=score===2?'<span class="score-badge red">🔴 Alerte</span>':score===1?'<span class="score-badge orange">🟠 Attention</span>':'<span class="score-badge green">🟢 OK</span>';
+
+  document.getElementById('fd-title').textContent=d.nom;
+  document.getElementById('fd-badges').innerHTML=`<span class="tag tag-assoc">${d.assoc}</span><span class="tag tag-resp">${d.resp}</span>${scoreBadge}`;
+
+  // Infos
+  document.getElementById('fd-infos').innerHTML=`
+    <div class="info-item"><span class="info-lbl">Associé</span><span class="info-val"><span class="tag tag-assoc">${d.assoc}</span></span></div>
+    <div class="info-item"><span class="info-lbl">Responsable de mission</span><span class="info-val"><span class="tag tag-resp">${d.resp}</span></span></div>
+    <div class="info-item"><span class="info-lbl">Date de clôture</span><span class="info-val mono">${d.clot}</span></div>
+    <div class="info-item"><span class="info-lbl">Date de situation</span><span class="info-val mono">${d.situat}</span></div>
+    <div class="info-item"><span class="info-lbl">Dernière circularisation</span><span class="info-val mono">${d.circu}</span></div>
+    <div class="info-item"><span class="info-lbl">Pièces GED en attente</span><span class="info-val">${d.ged} pièce${d.ged>1?'s':d.ged===0?'':''}${d.ged===0?' (aucune)':''}</span></div>
+  `;
+
+  // Indicateurs
+  const indics=[
+    {key:'rappro',      label:'Rapprochement bancaire',        valKey:null,             val:d.rappro==='green'?'M-1 totalement rapproché':d.rappro==='orange'?'M-2 rapproché — M-1 en cours':'Rapprochement incomplet sur M-2'},
+    {key:'c472',        label:'Compte 472',                    valKey:'c472val'},
+    {key:'flcr',        label:'FLCR',                          valKey:'flcrval'},
+    {key:'caisseM1',    label:'Caisse — Présence M-1',         valKey:'caisseM1val'},
+    {key:'caisseSolde', label:'Caisse — Solde',                valKey:'caisseSoldeVal'},
+    {key:'caisseCoher', label:'Caisse — Cohérence',            valKey:'caisseCoherVal'},
+    {key:'c455',        label:'Compte 455 (CCA)',               valKey:'c455val'},
+    {key:'salaires',    label:'Salaires M-1 (P47)',            valKey:'salairesVal'},
+    {key:'comptesFDeb', label:'Comptes fournisseurs débiteurs',valKey:'comptesFDebVal'},
+  ];
+  document.getElementById('fd-indics').innerHTML=indics.map(i=>{
+    const status=d[i.key];
+    const val=i.valKey?d[i.valKey]:i.val;
+    return`<div class="indic-card ic-${status}">
+      <div class="ic-feu ${status}"></div>
+      <div>
+        <div class="ic-name">${i.label}</div>
+        <div class="ic-val ${status}">${val}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  renderFdComments(id);
+}
+
+function renderFdComments(id){
+  const list=COMMENTAIRES[id]||[];
+  const el=document.getElementById('fd-comm-list');
+  el.innerHTML=list.length===0
+    ?'<p class="no-comm">Aucun commentaire pour ce dossier.</p>'
+    :list.map((c,i)=>`<div class="comm-item">
+      <div class="comm-item-head">
+        <span class="comm-author">${c.auteur}</span>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="comm-date">${c.date}</span>
+          <button class="comm-edit-btn" onclick="editFdComm(${id},${i})">Modifier</button>
+        </div>
+      </div>
+      <div class="comm-body-text">${c.texte}</div>
+    </div>`).join('');
+}
+
+function editFdComm(id,idx){
+  const ta=document.getElementById('fd-new-comm');
+  ta.value=COMMENTAIRES[id][idx].texte;
+  ta.dataset.editIdx=idx;
+  ta.dataset.editId=id;
+  document.getElementById('fd-edit-hint').textContent='Mode modification — ';
+  ta.focus();
+}
+
+function addFdComm(){
+  const ta=document.getElementById('fd-new-comm');
+  const val=ta.value.trim();
+  if(!val)return;
+  const params=new URLSearchParams(window.location.search);
+  const id=parseInt(params.get('dossier'));
+  if(!COMMENTAIRES[id])COMMENTAIRES[id]=[];
+  const editIdx=ta.dataset.editIdx;
+  if(editIdx!==undefined&&editIdx!==''){
+    COMMENTAIRES[id][parseInt(editIdx)].texte=val;
+    delete ta.dataset.editIdx;delete ta.dataset.editId;
+  }else{
+    COMMENTAIRES[id].push({auteur:'UTILISATEUR',date:new Date().toISOString().slice(0,10),texte:val});
+  }
+  ta.value='';
+  document.getElementById('fd-edit-hint').textContent='';
+  renderFdComments(id);
+}
+
+// ══════════════════════════════════
+// ROUTER
+// ══════════════════════════════════
+function route(){
+  const now=new Date();
+  document.getElementById('update-info').textContent=`Mis à jour le ${pad(now.getDate())}/${pad(now.getMonth()+1)}/${now.getFullYear()} à ${pad(now.getHours())}h${pad(now.getMinutes())}`;
+  const params=new URLSearchParams(window.location.search);
+  const dossierId=params.get('dossier');
+  if(dossierId){
+    document.getElementById('view-dashboard').style.display='none';
+    document.getElementById('view-dossier').style.display='block';
+    renderDossier(parseInt(dossierId));
+  }else{
+    document.getElementById('view-dashboard').style.display='block';
+    document.getElementById('view-dossier').style.display='none';
+    render();
+  }
+}
+route();
+</script>
+</body>
+</html>
