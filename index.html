@@ -14,17 +14,18 @@
   --em:#059669;--em-bg:#ecfdf5;--em-bd:#6ee7b7;
   --g50:#f9fafb;--g100:#f3f4f6;--g200:#e5e7eb;--g300:#d1d5db;
   --g400:#9ca3af;--g500:#6b7280;--g600:#4b5563;--g700:#374151;--g800:#1f2937;--g900:#111827;
-  --sw:220px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 
 /* ── LAYOUT ── */
-html, body { height: 100%; overflow: hidden; }
+html { height: 100%; }
 body{
   font-family:'IBM Plex Sans',sans-serif;color:var(--g900);font-size:13px;
   display:grid;
   grid-template-columns:220px 1fr;
   grid-template-rows:48px 1fr;
+  height:100vh; overflow:hidden;
+  transition:grid-template-columns .2s ease;
 }
 body.sb-collapsed{
   grid-template-columns:48px 1fr;
@@ -56,7 +57,6 @@ aside.sidebar{
   overflow:hidden;
   border-right:1px solid rgba(255,255,255,.07);
   overflow-y:auto;
-  transition:width .2s ease;
 }
 aside.sidebar::-webkit-scrollbar{width:3px;}
 aside.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.15);}
