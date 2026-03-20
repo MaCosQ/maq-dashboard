@@ -40,18 +40,19 @@
 /* ── Reset ───────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 14px; }
-body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); }
 
 /* ── Layout ──────────────────────────────────────────────────── */
-:root-layout-patch { --sw: 220px; }
 .layout {
   display: grid;
-  grid-template-columns: var(--sw, 220px) 1fr;
+  grid-template-columns: 220px 1fr;
   grid-template-rows: 52px 1fr;
   height: 100vh; overflow: hidden;
-  transition: grid-template-columns .2s ease;
 }
-.layout.sb-collapsed { --sw: 48px; }
+.layout.sb-collapsed {
+  grid-template-columns: 48px 1fr;
+}
 
 /* ── Header ──────────────────────────────────────────────────── */
 header {
@@ -108,7 +109,7 @@ aside::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); }
 .layout.sb-collapsed .nav-item.active { border-right: 2px solid var(--q400); }
 .layout.sb-collapsed .nav-item::after {
   content: attr(data-label);
-  position: absolute; left: calc(var(--sw, 48px) + 8px); top: 50%; transform: translateY(-50%);
+  position: absolute; left: 56px; top: 50%; transform: translateY(-50%);
   background: var(--q800); color: #fff; font-size: .75rem;
   padding: 4px 9px; border-radius: 4px; white-space: nowrap;
   pointer-events: none; opacity: 0; transition: opacity .15s;
