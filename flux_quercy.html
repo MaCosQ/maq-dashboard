@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexions flux — QUERCY & Associés</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── Variables ───────────────────────────────────────────────── */
+:root {
+  --q700: #003018;
+  --q600: #004d26;
+  --q500: #006b35;
+  --q400: #2e8b57;
+  --q200: #c8e6d4;
+  --q100: #e8f5ee;
+  --q050: #f4faf7;
+  --bg:   #f7f9f8;
+  --surface: #ffffff;
+  --border: #dde8e2;
+  --border-strong: #b8cfc2;
+  --text: #0d1f16;
+  --text-2: #3a5244;
+  --text-3: #6b8c7a;
+  --text-4: #9ab5a5;
+  --red:    #c0392b; --red-bg:    #fdf1f0; --red-border: #f5c6c2;
+  --orange: #d35400; --orange-bg: #fef6f0; --orange-border: #f5d5b8;
+  --green:  #1a7a42; --green-bg:  #f0faf4; --green-border: #a8dab8;
+  --grey:   #6b7280; --grey-bg:   #f3f4f6; --grey-border:  #d1d5db;
+  --purple: #6d28d9; --purple-bg: #f5f3ff; --purple-border:#c4b5fd;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+  --radius: 4px;
+  --radius-lg: 8px;
+  --shadow: 0 1px 4px rgba(0,48,24,.08);
+  --shadow-lg: 0 4px 20px rgba(0,48,24,.12);
+}
+
+/* ── Reset ───────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 14px; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ── Layout ──────────────────────────────────────────────────── */
+:root-layout-patch { --sw: 220px; }
+.layout {
+  display: grid;
+  grid-template-columns: var(--sw, 220px) 1fr;
+  grid-template-rows: 52px 1fr;
+  height: 100vh; overflow: hidden;
+  transition: grid-template-columns .2s ease;
+}
+.layout.sb-collapsed { --sw: 48px; }
+
+/* ── Header ──────────────────────────────────────────────────── */
+header {
+  grid-column: 1/-1;
+  background: var(--q700);
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  z-index: 100;
+}
+header img.logo { height: 28px; }
+header .sep { width: 1px; height: 24px; background: rgba(255,255,255,.2); }
+header .title { color: #fff; font-size: .875rem; font-weight: 500; letter-spacing: .02em; }
+header .role-select {
+  margin-left: auto;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff; font-family: var(--sans); font-size: .8rem;
+  padding: 5px 10px; border-radius: var(--radius); cursor: pointer;
+}
+header .role-select option { background: var(--q700); }
+
+/* ── Sidebar ─────────────────────────────────────────────────── */
+aside {
+  background: var(--q700);
+  padding: 20px 0 0;
+  border-right: 1px solid rgba(255,255,255,.08);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  overflow-y: auto;
+}
+aside::-webkit-scrollbar { width: 3px; }
+aside::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  color: rgba(255,255,255,.6);
+  font-size: .8rem; font-weight: 400;
+  cursor: pointer; transition: all .15s;
+  border-left: 2px solid transparent;
+  text-decoration: none;
+  white-space: nowrap; overflow: hidden;
+  position: relative;
+}
+.nav-item:hover { color: rgba(255,255,255,.9); background: rgba(255,255,255,.06); }
+.nav-item.active { color: #fff; background: rgba(255,255,255,.1); border-left-color: var(--q400); }
+.nav-item .icon { font-size: .9rem; width: 18px; text-align: center; flex-shrink: 0; }
+.nav-label { transition: opacity .15s; }
+.nav-section { padding: 14px 14px 6px; font-size: .68rem; color: rgba(255,255,255,.3); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; transition: opacity .15s; }
+/* Collapsed state */
+.layout.sb-collapsed .nav-label { opacity: 0; pointer-events: none; }
+.layout.sb-collapsed .nav-section { opacity: 0; height: 0; padding: 4px 0; overflow: hidden; }
+.layout.sb-collapsed .nav-item { padding: 9px 0; justify-content: center; border-left-color: transparent !important; }
+.layout.sb-collapsed .nav-item.active { border-right: 2px solid var(--q400); }
+.layout.sb-collapsed .nav-item::after {
+  content: attr(data-label);
+  position: absolute; left: calc(var(--sw, 48px) + 8px); top: 50%; transform: translateY(-50%);
+  background: var(--q800); color: #fff; font-size: .75rem;
+  padding: 4px 9px; border-radius: 4px; white-space: nowrap;
+  pointer-events: none; opacity: 0; transition: opacity .15s;
+  z-index: 400; box-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+.layout.sb-collapsed .nav-item:hover::after { opacity: 1; }
+.nav-disabled { opacity: .4; pointer-events: none; }
+/* Toggle button */
+.sb-toggle {
+  margin-top: auto;
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px; border: none; background: none;
+  color: rgba(255,255,255,.35); cursor: pointer;
+  border-top: 1px solid rgba(255,255,255,.08);
+  transition: color .15s; font-size: .85rem;
+  flex-shrink: 0;
+}
+.sb-toggle:hover { color: rgba(255,255,255,.7); background: rgba(255,255,255,.05); }
+
+/* ── Main ────────────────────────────────────────────────────── */
+main { overflow-y: auto; display: flex; flex-direction: column; }
+/* ── Page header ─────────────────────────────────────────────── */
+.page-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 24px 0;
+}
+.page-header-top { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.page-header-top h1 { font-size: 1rem; font-weight: 600; color: var(--q700); }
+.page-header-top .subtitle { font-size: .8rem; color: var(--text-3); }
+.btn-config {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 12px; border-radius: var(--radius);
+  background: var(--q050); border: 1px solid var(--border);
+  color: var(--text-2); font-family: var(--sans); font-size: .78rem;
+  cursor: pointer; transition: all .15s;
+}
+.btn-config:hover { background: var(--q100); border-color: var(--q400); }
+.btn-config.hidden { display: none; }
+
+/* ── KPI strip ───────────────────────────────────────────────── */
+.kpi-strip {
+  display: flex; gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+.kpi {
+  flex: 1; background: var(--surface);
+  padding: 10px 18px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.kpi .val { font-family: var(--mono); font-size: 1.4rem; font-weight: 500; line-height: 1; }
+.kpi .lbl { font-size: .72rem; color: var(--text-3); }
+.kpi.red   .val { color: var(--red); }
+.kpi.orange .val { color: var(--orange); }
+.kpi.green  .val { color: var(--green); }
+.kpi.grey   .val { color: var(--grey); }
+
+/* ── Toolbar ─────────────────────────────────────────────────── */
+.toolbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 12px 24px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.toolbar select, .toolbar input {
+  font-family: var(--sans); font-size: .78rem;
+  padding: 5px 8px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text); cursor: pointer;
+}
+.toolbar select:focus, .toolbar input:focus { outline: none; border-color: var(--q400); }
+.filter-group { display: flex; gap: 4px; }
+.btn-filter {
+  padding: 4px 10px; border-radius: var(--radius);
+  border: 1px solid var(--border); background: var(--surface);
+  font-family: var(--sans); font-size: .75rem; color: var(--text-2);
+  cursor: pointer; transition: all .12s;
+}
+.btn-filter:hover { border-color: var(--q400); background: var(--q050); }
+.btn-filter.active-red    { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+.btn-filter.active-orange { background: var(--orange-bg); border-color: var(--orange); color: var(--orange); }
+.btn-filter.active-green  { background: var(--green-bg); border-color: var(--green); color: var(--green); }
+.btn-reset {
+  margin-left: auto;
+  padding: 4px 10px; border-radius: var(--radius);
+  border: 1px solid var(--border-strong); background: transparent;
+  font-family: var(--sans); font-size: .75rem; color: var(--text-3);
+  cursor: pointer;
+}
+.btn-reset:hover { background: var(--border); }
+.search-box { position: relative; }
+.search-box input { padding-left: 26px; min-width: 180px; }
+.search-box::before { content: '⌕'; position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: var(--text-3); font-size: .9rem; pointer-events: none; }
+
+/* ── Table ───────────────────────────────────────────────────── */
+.table-wrap { flex: 1; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+thead th {
+  background: var(--q700); color: rgba(255,255,255,.85);
+  font-size: .7rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase;
+  padding: 8px 10px; text-align: left;
+  border-right: 1px solid rgba(255,255,255,.08);
+  white-space: nowrap; position: sticky; top: 0; z-index: 10;
+  user-select: none;
+}
+thead th:last-child { border-right: none; }
+thead th.sortable { cursor: pointer; }
+thead th.sortable:hover { background: var(--q600); }
+tbody tr.client-row {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: background .1s;
+}
+tbody tr.client-row:hover { background: var(--q050); }
+tbody tr.client-row.expanded { background: var(--q050); }
+tbody td { padding: 7px 10px; vertical-align: middle; }
+td.num { font-family: var(--mono); font-size: .72rem; color: var(--text-4); text-align: right; }
+td.dossier { font-weight: 500; color: var(--q700); }
+td.type-badge span {
+  font-size: .65rem; font-weight: 600; font-family: var(--mono);
+  padding: 2px 5px; border-radius: 2px;
+  background: var(--q100); color: var(--q600);
+}
+td.comptes { font-family: var(--mono); font-size: .75rem; color: var(--text-2); }
+td.last-sync { font-family: var(--mono); font-size: .72rem; color: var(--text-3); }
+td.expand-btn { text-align: center; width: 28px; }
+.chevron { display: inline-block; transition: transform .2s; font-size: .7rem; color: var(--text-3); }
+.expanded .chevron { transform: rotate(90deg); }
+
+/* Detail rows */
+tr.detail-row { background: #f0faf4; border-bottom: 1px solid var(--border); }
+tr.detail-row td { padding: 0; }
+.detail-inner { padding: 10px 24px 14px 56px; }
+.detail-grid { display: flex; gap: 16px; flex-wrap: wrap; }
+.account-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 10px 14px; min-width: 260px;
+  flex: 1;
+}
+.account-card .acc-header {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px; padding-bottom: 7px;
+  border-bottom: 1px solid var(--border);
+}
+.acc-bank { font-size: .75rem; font-weight: 600; color: var(--q700); }
+.acc-iban { font-family: var(--mono); font-size: .68rem; color: var(--text-3); }
+.flux-list { display: flex; flex-direction: column; gap: 5px; }
+.flux-row { display: flex; align-items: center; gap: 8px; font-size: .75rem; }
+.flux-tag {
+  font-family: var(--mono); font-size: .65rem; font-weight: 500;
+  padding: 1px 5px; border-radius: 2px; min-width: 28px; text-align: center;
+}
+.flux-tag.ob { background: #e0f0ff; color: #1a5fa8; }
+.flux-tag.da { background: #fff0e0; color: #a85a1a; }
+.flux-label { color: var(--text-2); flex: 1; }
+.flux-sync { font-family: var(--mono); font-size: .68rem; color: var(--text-3); margin-left: auto; }
+.flux-err { font-size: .68rem; color: var(--red); font-style: italic; }
+
+/* FE Card */
+.fe-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 10px 14px;
+  min-width: 200px;
+}
+.fe-card .acc-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px solid var(--border); }
+.fe-title { font-size: .75rem; font-weight: 600; color: var(--q700); }
+.fe-platform {
+  font-family: var(--mono); font-size: .72rem;
+  padding: 2px 6px; border-radius: 2px;
+  background: var(--q100); color: var(--q600);
+}
+
+/* ── Feux ────────────────────────────────────────────────────── */
+.feu {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%; font-size: .65rem;
+  flex-shrink: 0;
+}
+.feu.red    { background: var(--red);    color: #fff; }
+.feu.orange { background: var(--orange); color: #fff; }
+.feu.green  { background: var(--green);  color: #fff; }
+.feu.grey   { background: var(--grey-border); color: var(--grey); }
+
+/* Global status pill */
+.status-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 8px; border-radius: 10px; font-size: .72rem; font-weight: 500;
+  white-space: nowrap;
+}
+.status-pill.red    { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+.status-pill.orange { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.status-pill.green  { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+.status-pill.grey   { background: var(--grey-bg);   color: var(--grey);   border: 1px solid var(--grey-border); }
+
+/* FE pill with platform name */
+.fe-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: .72rem; font-weight: 500;
+  padding: 3px 8px; border-radius: 10px; white-space: nowrap;
+}
+.fe-pill .plat { font-family: var(--mono); font-size: .65rem; opacity: .8; }
+.fe-pill.red    { background: var(--red-bg);    color: var(--red);    border: 1px solid var(--red-border); }
+.fe-pill.orange { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
+.fe-pill.green  { background: var(--green-bg);  color: var(--green);  border: 1px solid var(--green-border); }
+.fe-pill.grey   { background: var(--grey-bg);   color: var(--grey);   border: 1px solid var(--grey-border); }
+.fe-pill.na     { background: var(--grey-bg);   color: var(--text-4); border: 1px solid var(--grey-border); font-style: italic; }
+
+/* ── Config panel ────────────────────────────────────────────── */
+.overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; }
+.overlay.open { display: block; }
+.config-panel {
+  position: fixed; top: 0; right: -480px; width: 460px; height: 100vh;
+  background: var(--surface); z-index: 201;
+  display: flex; flex-direction: column;
+  box-shadow: -4px 0 24px rgba(0,0,0,.2);
+  transition: right .25s ease;
+}
+.config-panel.open { right: 0; }
+.config-head {
+  background: var(--q700); padding: 16px 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.config-head h2 { color: #fff; font-size: .9rem; font-weight: 500; }
+.config-head .close-btn {
+  margin-left: auto; background: none; border: none;
+  color: rgba(255,255,255,.7); font-size: 1.1rem; cursor: pointer;
+}
+.config-head .close-btn:hover { color: #fff; }
+.config-body { flex: 1; overflow-y: auto; padding: 20px; }
+.config-section { margin-bottom: 24px; }
+.config-section h3 {
+  font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-3); margin-bottom: 12px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.config-table { width: 100%; border-collapse: collapse; }
+.config-table th {
+  font-size: .7rem; color: var(--text-3); font-weight: 500;
+  padding: 5px 8px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.config-table td { padding: 5px 8px; border-bottom: 1px solid var(--border); font-size: .78rem; }
+.config-table td:first-child { font-weight: 500; }
+.threshold-input {
+  font-family: var(--mono); font-size: .78rem;
+  width: 52px; padding: 3px 6px; text-align: center;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg); color: var(--text);
+}
+.threshold-input:focus { outline: none; border-color: var(--q400); }
+.config-footer {
+  padding: 14px 20px; border-top: 1px solid var(--border);
+  display: flex; gap: 8px; justify-content: flex-end;
+}
+.btn-save {
+  padding: 7px 18px; border-radius: var(--radius);
+  background: var(--q700); color: #fff; border: none;
+  font-family: var(--sans); font-size: .8rem; font-weight: 500;
+  cursor: pointer; transition: background .15s;
+}
+.btn-save:hover { background: var(--q600); }
+.btn-cancel {
+  padding: 7px 14px; border-radius: var(--radius);
+  background: transparent; color: var(--text-2);
+  border: 1px solid var(--border); font-family: var(--sans); font-size: .8rem;
+  cursor: pointer;
+}
+.na-cell { color: var(--text-4); font-style: italic; font-size: .72rem; }
+
+/* ── Keyboard hint ───────────────────────────────────────────── */
+.kbd-hint {
+  font-size: .7rem; color: var(--text-4); padding: 6px 24px;
+  border-top: 1px solid var(--border); background: var(--bg);
+}
+.kbd-hint kbd {
+  font-family: var(--mono); font-size: .65rem;
+  background: var(--border); padding: 1px 4px; border-radius: 2px;
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+.empty-row td { text-align: center; padding: 32px; color: var(--text-3); font-style: italic; }
+
+/* ── Scrollbar ───────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+<!-- Header -->
+<header>
+  <img class="logo" src="https://macosq.github.io/maq-dashboard/assets/logo.png" alt="QUERCY" onerror="this.style.display='none'; document.getElementById('logo-text').style.display='flex'">
+  <div id="logo-text" style="display:none; align-items:center; justify-content:center; width:28px; height:28px; background:rgba(255,255,255,.15); border-radius:4px; color:#fff; font-weight:600; font-size:.85rem;">Q</div>
+  <div class="sep"></div>
+  <div class="title">Dashboard — QUERCY &amp; Associés</div>
+  <select class="role-select" id="roleSelect" onchange="onRoleChange()">
+    <option value="collab">Collaborateur</option>
+    <option value="rm">Responsable</option>
+    <option value="associe">Associé</option>
+    <option value="admin">Administrateur</option>
+  </select>
+</header>
+
+<!-- Sidebar -->
+<aside>
+  <div class="nav-section">Tableau de bord</div>
+  <a class="nav-item" href="index.html" data-label="Supervision dossiers">
+    <span class="icon">◫</span>
+    <span class="nav-label">Supervision dossiers</span>
+  </a>
+  <a class="nav-item active" href="flux_quercy.html" data-label="Connexions flux">
+    <span class="icon">⇄</span>
+    <span class="nav-label">Connexions flux</span>
+  </a>
+  <div class="nav-section" style="margin-top:8px;">À venir</div>
+  <a class="nav-item nav-disabled" href="#" data-label="Échéances fiscales">
+    <span class="icon">📅</span>
+    <span class="nav-label">Échéances fiscales</span>
+  </a>
+  <a class="nav-item nav-disabled" href="#" data-label="Paramétrage">
+    <span class="icon">⚙</span>
+    <span class="nav-label">Paramétrage</span>
+  </a>
+  <button class="sb-toggle" id="sbToggle" onclick="toggleSidebar()">
+    <span id="sbToggleIcon">◀</span>
+  </button>
+</aside>
+
+<!-- Main -->
+<main>
+  <div class="page-header">
+    <div class="page-header-top">
+      <div>
+        <h1>Suivi des connexions flux</h1>
+        <div class="subtitle">Powens (Open Banking &amp; Accès Direct) · Facture électronique</div>
+      </div>
+      <button class="btn-config hidden" id="btnConfig" onclick="openConfig()">
+        ⚙ Paramétrer les seuils
+      </button>
+    </div>
+    <div class="kpi-strip" id="kpiStrip"></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Rechercher un dossier…" oninput="applyFilters()">
+    </div>
+    <select id="filterType" onchange="applyFilters()">
+      <option value="">Tous types</option>
+      <option value="PS">PS – Pharmacie</option>
+      <option value="SPFPL">SPFPL</option>
+      <option value="CI">CI</option>
+      <option value="PL">PL</option>
+      <option value="ST">ST</option>
+    </select>
+    <select id="filterBanque" onchange="applyFilters()">
+      <option value="">Toutes banques</option>
+    </select>
+    <select id="filterFE" onchange="applyFilters()">
+      <option value="">Toutes plateformes FE</option>
+      <option value="ACD">ACD</option>
+      <option value="Digi Pharmacie">Digi Pharmacie</option>
+      <option value="nc">Non configuré</option>
+    </select>
+    <div class="filter-group" id="stateFilters">
+      <button class="btn-filter" data-state="red"    onclick="toggleStateFilter(this)">🔴 Alertes</button>
+      <button class="btn-filter" data-state="orange" onclick="toggleStateFilter(this)">🟠 Attention</button>
+      <button class="btn-filter" data-state="green"  onclick="toggleStateFilter(this)">🟢 OK</button>
+    </div>
+    <button class="btn-reset" onclick="resetFilters()">↺ Réinit.</button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table id="fluxTable">
+      <thead>
+        <tr>
+          <th style="width:28px"></th>
+          <th style="width:36px">N°</th>
+          <th>Dossier</th>
+          <th style="width:52px">Type</th>
+          <th style="width:90px">Comptes</th>
+          <th style="min-width:160px">Bancaire global</th>
+          <th style="min-width:180px">Facture électronique</th>
+          <th style="width:130px">Dernière synchro</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="kbd-hint">
+    <kbd>↑↓</kbd> naviguer &nbsp;·&nbsp;
+    <kbd>Entrée</kbd> déplier/replier &nbsp;·&nbsp;
+    <kbd>Esc</kbd> fermer panneau
+  </div>
+</main>
+</div>
+
+<!-- Config overlay -->
+<div class="overlay" id="overlay" onclick="closeConfig()"></div>
+<div class="config-panel" id="configPanel">
+  <div class="config-head">
+    <span>⚙</span>
+    <h2>Paramétrage des seuils d'alerte</h2>
+    <button class="close-btn" onclick="closeConfig()">✕</button>
+  </div>
+  <div class="config-body">
+    <p style="font-size:.78rem; color:var(--text-3); margin-bottom:16px;">Nombre de jours sans synchronisation avant passage en <span style="color:var(--orange);font-weight:600">orange</span>. Au-delà, passage en <span style="color:var(--red);font-weight:600">rouge</span> = erreur technique ou token expiré.</p>
+    <div class="config-section">
+      <h3>Seuils warning (jours)</h3>
+      <table class="config-table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>OB Lignes</th>
+            <th>DA Relevés</th>
+            <th>DA LCR</th>
+            <th>FE</th>
+          </tr>
+        </thead>
+        <tbody id="configBody"></tbody>
+      </table>
+    </div>
+    <div class="config-section">
+      <h3>Règles spéciales</h3>
+      <div style="font-size:.78rem; color:var(--text-2); background:var(--q050); padding:10px 12px; border-radius:var(--radius); border:1px solid var(--border);">
+        <b>LCR non configuré</b> : alerte <span style="color:var(--orange)">🟠</span> uniquement pour les dossiers de type <b>PS (Pharmacie)</b>. Pour tous les autres types, affiché comme <span style="color:var(--text-4)">N/A</span>.
+      </div>
+    </div>
+  </div>
+  <div class="config-footer">
+    <button class="btn-cancel" onclick="closeConfig()">Annuler</button>
+    <button class="btn-save" onclick="saveConfig()">Enregistrer</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════════════════ */
+const TYPES = ['PS','SPFPL','CI','PL','ST'];
+const TYPE_LABELS = { PS:'PS', SPFPL:'SPFPL', CI:'CI', PL:'PL', ST:'ST' };
+const FE_PLATFORMS = ['ACD','Digi Pharmacie','Chorus Pro'];
+
+// Thresholds (days) per type — warning level
+let thresholds = {
+  PS:    { ob:3,  da_rel:3,  da_lcr:3,  fe:3  },
+  SPFPL: { ob:30, da_rel:30, da_lcr:null, fe:null },
+  CI:    { ob:7,  da_rel:7,  da_lcr:null, fe:7  },
+  PL:    { ob:7,  da_rel:7,  da_lcr:null, fe:7  },
+  ST:    { ob:7,  da_rel:7,  da_lcr:null, fe:7  },
+};
+// LCR applicable only for PS
+function lcrApplicable(type) { return type === 'PS'; }
+
+// Mock data — today = reference date
+const TODAY = new Date('2025-03-19');
+function daysAgo(d) { return new Date(TODAY - d*86400000); }
+function fmtDate(d) { if(!d) return '—'; return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+function fmtDateShort(d) { if(!d) return '—'; return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}); }
+
+const BANKS = ['BNP Paribas','Crédit Agricole','Société Générale','CIC','Banque Populaire','Caisse d\'Épargne','LCL','Crédit Mutuel'];
+
+const raw = [
+  { id:1,  nom:'Pharmacie du Centre',     type:'PS',    fe:'ACD',           comptes:[
+    { bank:'BNP Paribas',      iban:'FR76 3000 4000 0100 0000 0000 111', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(2),err:null}, lcr:{sync:daysAgo(2),err:null} },
+    { bank:'Crédit Agricole',  iban:'FR76 1820 6000 2200 0000 0000 222', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(1),err:null}, lcr:{sync:daysAgo(1),err:null} },
+  ]},
+  { id:2,  nom:'Pharmacie Saint-Pierre',  type:'PS',    fe:'ACD',           comptes:[
+    { bank:'CIC',              iban:'FR76 3006 6100 0100 0000 0000 333', ob:{sync:daysAgo(1),err:null}, rel:{sync:null,    err:'Token expiré le 10/03'}, lcr:{sync:null,err:'Token expiré le 10/03'} },
+  ]},
+  { id:3,  nom:'Pharmacie des Arcades',   type:'PS',    fe:'Digi Pharmacie',comptes:[
+    { bank:'Société Générale', iban:'FR76 3000 3000 0500 0000 0000 444', ob:{sync:daysAgo(2),err:null}, rel:{sync:daysAgo(8),err:null}, lcr:{sync:null,err:null} },
+    { bank:'Banque Populaire', iban:'FR76 1320 7000 0100 0000 0000 555', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(3),err:null}, lcr:{sync:daysAgo(4),err:null} },
+  ]},
+  { id:4,  nom:'Pharmacie de la Mairie',  type:'PS',    fe:'ACD',           comptes:[
+    { bank:'LCL',              iban:'FR76 3002 7000 0100 0000 0000 666', ob:{sync:null,err:'Accès révoqué'}, rel:{sync:null,err:'Accès révoqué'}, lcr:{sync:null,err:'Accès révoqué'} },
+  ]},
+  { id:5,  nom:'Pharmacie du Marché',     type:'PS',    fe:'ACD',           comptes:[
+    { bank:'Crédit Mutuel',    iban:'FR76 1027 8000 0100 0000 0000 777', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(1),err:null}, lcr:{sync:daysAgo(2),err:null} },
+    { bank:'Caisse d\'Épargne',iban:'FR76 1751 5900 0100 0000 0000 888', ob:{sync:daysAgo(2),err:null}, rel:{sync:daysAgo(4),err:null}, lcr:{sync:daysAgo(3),err:null} },
+  ]},
+  { id:6,  nom:'SPFPL Santé Garonne',     type:'SPFPL', fe:null,            comptes:[
+    { bank:'BNP Paribas',      iban:'FR76 3000 4000 0100 0000 0000 901', ob:{sync:daysAgo(5),err:null}, rel:{sync:daysAgo(12),err:null}, lcr:null },
+  ]},
+  { id:7,  nom:'Pharmacie Gambetta',      type:'PS',    fe:'ACD',           comptes:[
+    { bank:'Crédit Agricole',  iban:'FR76 1820 6000 2200 0000 0000 902', ob:{sync:daysAgo(4),err:null}, rel:{sync:daysAgo(5),err:null}, lcr:{sync:daysAgo(5),err:null} },
+  ]},
+  { id:8,  nom:'Pharmacie Victor Hugo',   type:'PS',    fe:'Digi Pharmacie',comptes:[
+    { bank:'CIC',              iban:'FR76 3006 6100 0100 0000 0000 903', ob:{sync:daysAgo(1),err:null}, rel:{sync:null, err:'Token expiré le 14/03'}, lcr:{sync:null,err:'Token expiré le 14/03'} },
+    { bank:'LCL',              iban:'FR76 3002 7000 0100 0000 0000 904', ob:{sync:daysAgo(2),err:null}, rel:{sync:daysAgo(3),err:null}, lcr:{sync:daysAgo(3),err:null} },
+  ]},
+  { id:9,  nom:'Pharmacie des Carmes',    type:'PS',    fe:'ACD',           comptes:[
+    { bank:'Société Générale', iban:'FR76 3000 3000 0500 0000 0000 905', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(2),err:null}, lcr:{sync:daysAgo(2),err:null} },
+  ]},
+  { id:10, nom:'Pharmacie Pasteur',       type:'PS',    fe:'ACD',           comptes:[
+    { bank:'Banque Populaire', iban:'FR76 1320 7000 0100 0000 0000 906', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(1),err:null}, lcr:{sync:null,err:null} },
+  ]},
+  { id:11, nom:'SPFPL Quercy Santé',      type:'SPFPL', fe:null,            comptes:[
+    { bank:'BNP Paribas',      iban:'FR76 3000 4000 0100 0000 0000 907', ob:{sync:daysAgo(8),err:null}, rel:{sync:daysAgo(15),err:null}, lcr:null },
+    { bank:'Crédit Mutuel',    iban:'FR76 1027 8000 0100 0000 0000 908', ob:{sync:daysAgo(3),err:null}, rel:{sync:daysAgo(20),err:null}, lcr:null },
+  ]},
+  { id:12, nom:'Pharmacie de la Gare',    type:'PS',    fe:'ACD',           comptes:[
+    { bank:'LCL',              iban:'FR76 3002 7000 0100 0000 0000 909', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(2),err:null}, lcr:{sync:daysAgo(2),err:null} },
+  ]},
+  { id:13, nom:'Pharmacie Saint-Louis',   type:'PS',    fe:'Digi Pharmacie',comptes:[
+    { bank:'Caisse d\'Épargne',iban:'FR76 1751 5900 0100 0000 0000 910', ob:{sync:null,err:'Identifiants incorrects'}, rel:{sync:null,err:'Identifiants incorrects'}, lcr:{sync:null,err:'Identifiants incorrects'} },
+  ]},
+  { id:14, nom:'Pharmacie du Pont',       type:'PS',    fe:'ACD',           comptes:[
+    { bank:'Crédit Agricole',  iban:'FR76 1820 6000 2200 0000 0000 911', ob:{sync:daysAgo(2),err:null}, rel:{sync:daysAgo(2),err:null}, lcr:{sync:daysAgo(3),err:null} },
+    { bank:'CIC',              iban:'FR76 3006 6100 0100 0000 0000 912', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(4),err:null}, lcr:{sync:daysAgo(4),err:null} },
+  ]},
+  { id:15, nom:'SCI Pharma Lot',          type:'CI',    fe:null,            comptes:[
+    { bank:'BNP Paribas',      iban:'FR76 3000 4000 0100 0000 0000 913', ob:{sync:daysAgo(3),err:null}, rel:{sync:daysAgo(6),err:null}, lcr:null },
+  ]},
+  { id:16, nom:'Pharmacie Beaulieu',      type:'PS',    fe:'ACD',           comptes:[
+    { bank:'Société Générale', iban:'FR76 3000 3000 0500 0000 0000 914', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(2),err:null}, lcr:{sync:daysAgo(2),err:null} },
+  ]},
+  { id:17, nom:'Pharmacie de l\'Église',  type:'PS',    fe:'ACD',           comptes:[
+    { bank:'Banque Populaire', iban:'FR76 1320 7000 0100 0000 0000 915', ob:{sync:daysAgo(5),err:null}, rel:{sync:daysAgo(6),err:null}, lcr:{sync:daysAgo(7),err:null} },
+  ]},
+  { id:18, nom:'SPFPL Lot Pharma Group',  type:'SPFPL', fe:null,            comptes:[
+    { bank:'Crédit Mutuel',    iban:'FR76 1027 8000 0100 0000 0000 916', ob:{sync:daysAgo(14),err:null}, rel:{sync:daysAgo(28),err:null}, lcr:null },
+  ]},
+  { id:19, nom:'Pharmacie Saint-Jean',    type:'PS',    fe:null,            comptes:[
+    { bank:'LCL',              iban:'FR76 3002 7000 0100 0000 0000 917', ob:{sync:daysAgo(2),err:null}, rel:{sync:daysAgo(3),err:null}, lcr:{sync:daysAgo(3),err:null} },
+  ]},
+  { id:20, nom:'Pharmacie Voltaire',      type:'PS',    fe:'Chorus Pro',    comptes:[
+    { bank:'Caisse d\'Épargne',iban:'FR76 1751 5900 0100 0000 0000 918', ob:{sync:daysAgo(1),err:null}, rel:{sync:daysAgo(2),err:null}, lcr:{sync:daysAgo(2),err:null} },
+  ]},
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   LOGIC
+═══════════════════════════════════════════════════════════════ */
+function fluxState(flux, thresholdDays, isLcr, type) {
+  // Not applicable
+  if(flux === null) return 'na';
+  if(isLcr && !lcrApplicable(type)) return 'na';
+  if(thresholdDays === null) return 'na';
+  // Not configured
+  if(!flux.err && !flux.sync) return 'nc';
+  // Error
+  if(flux.err) return 'red';
+  // Check age
+  if(flux.sync) {
+    const days = (TODAY - flux.sync) / 86400000;
+    if(days > thresholdDays * 3) return 'red'; // very old = red
+    if(days > thresholdDays)     return 'orange';
+    return 'green';
+  }
+  return 'nc';
+}
+
+function worstState(states) {
+  if(states.includes('red'))    return 'red';
+  if(states.includes('orange')) return 'orange';
+  if(states.includes('nc'))     return 'orange'; // nc that counts = orange
+  if(states.includes('green'))  return 'green';
+  return 'grey';
+}
+
+function clientState(client) {
+  const t = thresholds[client.type] || thresholds.CI;
+  const states = [];
+  for(const c of client.comptes) {
+    states.push(fluxState(c.ob,  t.ob,      false, client.type));
+    states.push(fluxState(c.rel, t.da_rel,  false, client.type));
+    const lcrS = fluxState(c.lcr, t.da_lcr, true,  client.type);
+    if(lcrS !== 'na') states.push(lcrS);
+  }
+  // FE
+  const feS = feState(client);
+  if(feS !== 'na') states.push(feS);
+  return worstState(states);
+}
+
+function feState(client) {
+  const t = thresholds[client.type] || thresholds.CI;
+  if(t.fe === null) return 'na';
+  if(!client.fe) return 'nc';
+  // For mock, derive from comptes worst sync
+  const lastSyncs = client.comptes.map(c=>c.ob.sync).filter(Boolean);
+  if(!lastSyncs.length) return 'red';
+  const latest = new Date(Math.max(...lastSyncs));
+  const days = (TODAY - latest)/86400000;
+  if(days > t.fe * 3) return 'red';
+  if(days > t.fe)     return 'orange';
+  return 'green';
+}
+
+function latestSync(client) {
+  const all = client.comptes.flatMap(c=>[c.ob?.sync,c.rel?.sync,c.lcr?.sync]).filter(Boolean);
+  if(!all.length) return null;
+  return new Date(Math.max(...all));
+}
+
+function globalBankaireState(client) {
+  const t = thresholds[client.type] || thresholds.CI;
+  const states = [];
+  for(const c of client.comptes) {
+    states.push(fluxState(c.ob,  t.ob,     false, client.type));
+    states.push(fluxState(c.rel, t.da_rel, false, client.type));
+    const lcrS = fluxState(c.lcr, t.da_lcr, true, client.type);
+    if(lcrS !== 'na') states.push(lcrS);
+  }
+  return worstState(states);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════════════════════ */
+const STATE_LABELS = { red:'KO', orange:'Warning', green:'OK', grey:'—', nc:'Non conf.', na:'N/A' };
+const STATE_DOT    = { red:'🔴', orange:'🟠', green:'🟢', grey:'○', nc:'⚪', na:'—' };
+
+function feuHTML(state) {
+  const map = { red:'red', orange:'orange', green:'green', grey:'grey', nc:'grey', na:'grey' };
+  const sym = { red:'●', orange:'●', green:'●', grey:'○', nc:'○', na:'—' };
+  if(state === 'na') return '<span style="color:var(--text-4);font-size:.7rem">N/A</span>';
+  return `<span class="feu ${map[state]||'grey'}">${sym[state]}</span>`;
+}
+
+function statusPillHTML(state, label) {
+  const cls = {red:'red',orange:'orange',green:'green',grey:'grey',nc:'grey'}[state]||'grey';
+  const dot = {red:'●',orange:'●',green:'●',grey:'○',nc:'○'}[state]||'○';
+  const lbl = label || STATE_LABELS[state] || state;
+  return `<span class="status-pill ${cls}">${dot} ${lbl}</span>`;
+}
+
+function fePillHTML(client) {
+  const s = feState(client);
+  if(s === 'na') return '<span class="fe-pill na">—</span>';
+  const plat = client.fe || 'Non conf.';
+  const dot = {green:'●',orange:'●',red:'●',nc:'○',grey:'○'}[s]||'○';
+  const cls = s === 'nc' ? 'grey' : s;
+  return `<span class="fe-pill ${cls}">${dot} <span class="plat">${plat}</span></span>`;
+}
+
+function fluxRowHTML(label, tag, tagClass, flux, state, type) {
+  if(state === 'na') return `
+    <div class="flux-row">
+      <span class="flux-tag ${tagClass}">${tag}</span>
+      <span class="flux-label">${label}</span>
+      <span style="color:var(--text-4);font-size:.68rem;margin-left:auto">N/A</span>
+    </div>`;
+  const dot = feuHTML(state);
+  const syncTxt = flux?.sync ? fmtDate(flux.sync) : '';
+  const errTxt  = flux?.err  ? `<span class="flux-err"> — ${flux.err}</span>` : '';
+  return `
+    <div class="flux-row">
+      ${dot}
+      <span class="flux-tag ${tagClass}">${tag}</span>
+      <span class="flux-label">${label}</span>
+      <span class="flux-sync">${syncTxt}${errTxt}</span>
+    </div>`;
+}
+
+function detailHTML(client) {
+  const t = thresholds[client.type] || thresholds.CI;
+  let cards = '';
+  for(const c of client.comptes) {
+    const obS   = fluxState(c.ob,  t.ob,     false, client.type);
+    const relS  = fluxState(c.rel, t.da_rel, false, client.type);
+    const lcrS  = fluxState(c.lcr, t.da_lcr, true,  client.type);
+    const ibanShort = c.iban.replace(/\s/g,'').slice(-8);
+    cards += `<div class="account-card">
+      <div class="acc-header">
+        <span class="acc-bank">${c.bank}</span>
+        <span class="acc-iban">…${ibanShort}</span>
+      </div>
+      <div class="flux-list">
+        ${fluxRowHTML('Lignes de compte', 'OB', 'ob', c.ob,  obS,  client.type)}
+        ${fluxRowHTML('Relevés',          'DA', 'da', c.rel, relS, client.type)}
+        ${fluxRowHTML('LCR',              'DA', 'da', c.lcr, lcrS, client.type)}
+      </div>
+    </div>`;
+  }
+  // FE card
+  const feS = feState(client);
+  const feDot = feuHTML(feS);
+  const lastSyncs = client.comptes.map(c=>c.ob?.sync).filter(Boolean);
+  const latestFE = lastSyncs.length ? new Date(Math.max(...lastSyncs)) : null;
+  const feCard = `<div class="fe-card">
+    <div class="acc-header">
+      <span class="fe-title">Facture électronique</span>
+      ${client.fe ? `<span class="fe-platform">${client.fe}</span>` : ''}
+    </div>
+    <div class="flux-list">
+      <div class="flux-row">
+        ${feS === 'na' ? '<span style="color:var(--text-4);font-size:.72rem">Non applicable pour ce type de dossier</span>'
+          : feS === 'nc' ? `<span class="feu grey">○</span><span class="flux-label">Plateforme non configurée</span>`
+          : `${feDot}<span class="flux-label">Connexion active</span><span class="flux-sync">${latestFE ? fmtDate(latestFE) : ''}</span>`}
+      </div>
+    </div>
+  </div>`;
+
+  return `<tr class="detail-row" id="detail-${client.id}">
+    <td colspan="8">
+      <div class="detail-inner">
+        <div class="detail-grid">${cards}${feCard}</div>
+      </div>
+    </td>
+  </tr>`;
+}
+
+let expandedIds = new Set();
+let filteredData = [...raw];
+let activeStateFilters = new Set();
+
+function renderTable(data) {
+  const tbody = document.getElementById('tbody');
+  if(!data.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="8">Aucun dossier ne correspond aux filtres sélectionnés.</td></tr>';
+    return;
+  }
+  let html = '';
+  data.forEach((c, idx) => {
+    const cState = clientState(c);
+    const bState = globalBankaireState(c);
+    const ls = latestSync(c);
+    const expanded = expandedIds.has(c.id);
+    const chevron = expanded ? '▶' : '▶';
+    html += `<tr class="client-row ${expanded?'expanded':''}" id="row-${c.id}" onclick="toggleExpand(${c.id})" data-idx="${idx}">
+      <td class="expand-btn"><span class="chevron" style="${expanded?'transform:rotate(90deg)':''}" id="chev-${c.id}">▶</span></td>
+      <td class="num">${c.id}</td>
+      <td class="dossier">${c.nom}</td>
+      <td class="type-badge"><span>${c.type}</span></td>
+      <td class="comptes">${c.comptes.length} compte${c.comptes.length>1?'s':''}</td>
+      <td>${statusPillHTML(bState, bState==='green'?'Tout OK': bState==='red'?'KO': bState==='orange'?'Warning': '—')}</td>
+      <td>${fePillHTML(c)}</td>
+      <td class="last-sync">${ls ? fmtDateShort(ls) : '<span style="color:var(--text-4)">—</span>'}</td>
+    </tr>`;
+    if(expanded) html += detailHTML(c);
+  });
+  tbody.innerHTML = html;
+}
+
+function toggleExpand(id) {
+  if(expandedIds.has(id)) expandedIds.delete(id);
+  else expandedIds.add(id);
+  renderTable(filteredData);
+}
+
+/* KPIs */
+function renderKPIs(data) {
+  const total = data.length;
+  let red=0, orange=0, green=0, grey=0;
+  data.forEach(c => {
+    const s = clientState(c);
+    if(s==='red') red++;
+    else if(s==='orange') orange++;
+    else if(s==='green') green++;
+    else grey++;
+  });
+  document.getElementById('kpiStrip').innerHTML = `
+    <div class="kpi grey"><div class="val">${total}</div><div class="lbl">Total dossiers</div></div>
+    <div class="kpi red"><div class="val">${red}</div><div class="lbl">Alertes KO</div></div>
+    <div class="kpi orange"><div class="val">${orange}</div><div class="lbl">Warning</div></div>
+    <div class="kpi green"><div class="val">${green}</div><div class="lbl">OK — tout nominal</div></div>
+  `;
+}
+
+/* Filters */
+function applyFilters() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const type   = document.getElementById('filterType').value;
+  const banque = document.getElementById('filterBanque').value;
+  const fePlat = document.getElementById('filterFE').value;
+
+  filteredData = raw.filter(c => {
+    if(search && !c.nom.toLowerCase().includes(search)) return false;
+    if(type && c.type !== type) return false;
+    if(banque && !c.comptes.some(cp=>cp.bank===banque)) return false;
+    if(fePlat) {
+      if(fePlat === 'nc' && c.fe) return false;
+      if(fePlat !== 'nc' && c.fe !== fePlat) return false;
+    }
+    if(activeStateFilters.size > 0) {
+      const s = clientState(c);
+      const mapped = s === 'orange' ? 'orange' : s === 'green' ? 'green' : s === 'red' ? 'red' : null;
+      if(!mapped || !activeStateFilters.has(mapped)) return false;
+    }
+    return true;
+  });
+  renderTable(filteredData);
+  renderKPIs(filteredData);
+}
+
+function toggleStateFilter(btn) {
+  const state = btn.dataset.state;
+  if(activeStateFilters.has(state)) {
+    activeStateFilters.delete(state);
+    btn.className = 'btn-filter';
+  } else {
+    activeStateFilters.add(state);
+    btn.className = `btn-filter active-${state}`;
+  }
+  applyFilters();
+}
+
+function resetFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterType').value = '';
+  document.getElementById('filterBanque').value = '';
+  document.getElementById('filterFE').value = '';
+  activeStateFilters.clear();
+  document.querySelectorAll('#stateFilters .btn-filter').forEach(b => b.className='btn-filter');
+  filteredData = [...raw];
+  renderTable(filteredData);
+  renderKPIs(filteredData);
+}
+
+/* Populate banque filter */
+function populateBanqueFilter() {
+  const banks = [...new Set(raw.flatMap(c=>c.comptes.map(cp=>cp.bank)))].sort();
+  const sel = document.getElementById('filterBanque');
+  banks.forEach(b => { const o=document.createElement('option'); o.value=b; o.textContent=b; sel.appendChild(o); });
+}
+
+/* Config panel */
+function onRoleChange() {
+  const role = document.getElementById('roleSelect').value;
+  const btn = document.getElementById('btnConfig');
+  btn.classList.toggle('hidden', role !== 'admin');
+}
+
+function renderConfigTable() {
+  const tbody = document.getElementById('configBody');
+  const rows = TYPES.map(t => {
+    const th = thresholds[t];
+    return `<tr>
+      <td>${t}</td>
+      <td><input class="threshold-input" type="number" min="1" data-type="${t}" data-key="ob" value="${th.ob??''}"></td>
+      <td><input class="threshold-input" type="number" min="1" data-type="${t}" data-key="da_rel" value="${th.da_rel??''}"></td>
+      <td>${th.da_lcr !== null ? `<input class="threshold-input" type="number" min="1" data-type="${t}" data-key="da_lcr" value="${th.da_lcr??''}">` : `<span class="na-cell">N/A</span>`}</td>
+      <td>${th.fe !== null ? `<input class="threshold-input" type="number" min="1" data-type="${t}" data-key="fe" value="${th.fe??''}">` : `<span class="na-cell">N/A</span>`}</td>
+    </tr>`;
+  });
+  tbody.innerHTML = rows.join('');
+}
+
+function openConfig() {
+  renderConfigTable();
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('configPanel').classList.add('open');
+}
+function closeConfig() {
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('configPanel').classList.remove('open');
+}
+function saveConfig() {
+  document.querySelectorAll('.threshold-input').forEach(inp => {
+    const t = inp.dataset.type;
+    const k = inp.dataset.key;
+    const v = parseInt(inp.value);
+    if(!isNaN(v) && v > 0) thresholds[t][k] = v;
+  });
+  closeConfig();
+  applyFilters();
+}
+
+/* Keyboard nav */
+let focusIdx = -1;
+document.addEventListener('keydown', e => {
+  const rows = filteredData;
+  if(e.key === 'Escape') { closeConfig(); return; }
+  if(!['ArrowUp','ArrowDown','Enter'].includes(e.key)) return;
+  if(document.activeElement.tagName === 'INPUT') return;
+  e.preventDefault();
+  if(e.key==='ArrowDown') focusIdx = Math.min(focusIdx+1, rows.length-1);
+  if(e.key==='ArrowUp')   focusIdx = Math.max(focusIdx-1, 0);
+  if(e.key==='Enter' && focusIdx>=0) toggleExpand(rows[focusIdx].id);
+  if(focusIdx>=0) {
+    const row = document.getElementById(`row-${rows[focusIdx].id}`);
+    if(row) row.scrollIntoView({block:'nearest'});
+  }
+});
+
+/* Init */
+populateBanqueFilter();
+filteredData = [...raw];
+renderTable(filteredData);
+renderKPIs(filteredData);
+
+/* Sidebar toggle */
+function toggleSidebar(){
+  const layout = document.querySelector('.layout');
+  const collapsed = layout.classList.toggle('sb-collapsed');
+  document.getElementById('sbToggleIcon').textContent = collapsed ? '▶' : '◀';
+  localStorage.setItem('qSidebarCollapsed', collapsed ? '1' : '0');
+}
+(function initSidebar(){
+  if(localStorage.getItem('qSidebarCollapsed') === '1'){
+    document.querySelector('.layout').classList.add('sb-collapsed');
+    document.getElementById('sbToggleIcon').textContent = '▶';
+  }
+})();
+</script>
+</body>
+</html>
