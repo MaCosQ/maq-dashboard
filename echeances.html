@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QUERCY — Échéances</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --g900: #0F2E24;
+  --g800: #1B4D3E;
+  --g700: #246050;
+  --g600: #2D7362;
+  --g200: #C8DDD8;
+  --g100: #E8F0EE;
+  --g50:  #F2F7F5;
+  --white: #FFFFFF;
+  --text: #1A2820;
+  --text2: #4A6359;
+  --text3: #8AA099;
+  --border: #D1DDD9;
+  --shadow: 0 1px 4px rgba(15,46,36,.10);
+
+  --na-bg: #EAEDEC;
+  --na-text: #A0B0AB;
+
+  --orange: #D4620A;
+  --orange-bg: #FEF0E7;
+  --red: #A92D2D;
+  --red-dark: #8B1F1F;
+  --red-bg: #FCEEEE;
+
+  --check1: #1A2820;
+  --check2: #1A7A48;
+  --cross: #A92D2D;
+  --dot: #A92D2D;
+
+  --row-hover: #F7FBFA;
+  --col-date: #F9F5EC;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--g50);
+  color: var(--text);
+  font-size: 13px;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR stub ── */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 56px;
+  background: var(--g900);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.sidebar-logo {
+  font-family: 'Cormorant Garamond', serif;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  margin-bottom: 16px;
+  opacity: .9;
+}
+.nav-item {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--g200);
+  font-size: 16px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.nav-item:hover { background: var(--g700); color: white; }
+.nav-item.active { background: var(--g700); color: white; }
+
+/* ── MAIN ── */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 52px;
+  flex-shrink: 0;
+}
+.topbar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--g800);
+  letter-spacing: .3px;
+  margin-right: 4px;
+}
+.topbar-sep { width: 1px; height: 20px; background: var(--border); }
+
+/* tab group */
+.tab-group {
+  display: flex;
+  gap: 2px;
+  background: var(--g50);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 3px;
+}
+.tab-btn {
+  padding: 4px 14px;
+  border-radius: 5px;
+  border: none;
+  background: transparent;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  background: var(--white);
+  color: var(--g800);
+  box-shadow: var(--shadow);
+}
+
+.topbar-spacer { flex: 1; }
+
+/* view toggle */
+.view-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.view-btn {
+  padding: 5px 12px;
+  border: none;
+  background: var(--white);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .15s;
+  display: flex; align-items: center; gap: 5px;
+}
+.view-btn + .view-btn { border-left: 1px solid var(--border); }
+.view-btn.active { background: var(--g800); color: white; }
+
+/* ── FILTER BAR ── */
+.filterbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.period-nav {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.period-nav button {
+  width: 28px; height: 28px;
+  border: none;
+  background: var(--white);
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 12px;
+  transition: background .1s;
+}
+.period-nav button:hover { background: var(--g50); }
+.period-nav .period-label {
+  padding: 0 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  height: 28px;
+  display: flex; align-items: center;
+  white-space: nowrap;
+  min-width: 110px;
+  justify-content: center;
+}
+
+.filter-select {
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0 8px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  background: var(--white);
+  cursor: pointer;
+  outline: none;
+}
+.filter-select:focus { border-color: var(--g600); }
+
+.search-wrap {
+  position: relative;
+  margin-left: auto;
+}
+.search-wrap input {
+  height: 28px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0 8px 0 28px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  width: 180px;
+  outline: none;
+  transition: border-color .15s;
+}
+.search-wrap input:focus { border-color: var(--g600); }
+.search-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text3);
+  font-size: 11px;
+}
+
+/* ── KPI BAR ── */
+.kpibar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-shrink: 0;
+}
+.kpi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.kpi-val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--g800);
+  line-height: 1;
+}
+.kpi-label {
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.3;
+  max-width: 80px;
+}
+.kpi-sep { width: 1px; height: 28px; background: var(--border); }
+.kpi.danger .kpi-val { color: var(--red); }
+.kpi.warn .kpi-val { color: var(--orange); }
+
+/* ── CONTENT ── */
+.content { flex: 1; overflow: auto; padding: 16px 20px; }
+
+/* ── TABLE VIEW ── */
+.table-wrap {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.echeance-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+/* date group header */
+.th-date-group {
+  background: var(--col-date);
+  text-align: center;
+  padding: 5px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  border-bottom: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  white-space: nowrap;
+  letter-spacing: .3px;
+}
+.th-date-group.sticky-header { background: var(--g50); border-left: none; }
+
+/* col headers */
+.th-col {
+  background: var(--g50);
+  padding: 7px 10px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  border-bottom: 2px solid var(--border);
+  border-left: 1px solid var(--border);
+  white-space: nowrap;
+  letter-spacing: .2px;
+  text-transform: uppercase;
+}
+.th-col.sticky { border-left: none; text-align: left; }
+.th-col.th-type { width: 36px; }
+.th-col.th-name { width: 190px; text-align: left; }
+
+/* rows */
+.echeance-table tbody tr {
+  border-bottom: 1px solid #EEF2F0;
+  transition: background .1s;
+}
+.echeance-table tbody tr:hover { background: var(--row-hover); }
+.echeance-table tbody tr:last-child { border-bottom: none; }
+
+/* sticky left cells */
+.td-type {
+  position: sticky;
+  left: 0;
+  background: var(--white);
+  z-index: 2;
+  padding: 7px 8px;
+  text-align: center;
+  font-size: 14px;
+  border-right: 1px solid var(--border);
+  width: 36px;
+}
+.td-name {
+  position: sticky;
+  left: 36px;
+  background: var(--white);
+  z-index: 2;
+  padding: 7px 12px;
+  font-weight: 500;
+  color: var(--text);
+  border-right: 2px solid var(--g200);
+  white-space: nowrap;
+  width: 190px;
+  cursor: pointer;
+}
+.td-name:hover { color: var(--g800); text-decoration: underline; }
+.td-name .client-sub {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--text3);
+  margin-top: 1px;
+}
+
+/* status cells */
+.td-status {
+  padding: 5px 8px;
+  text-align: center;
+  border-left: 1px solid #EEF2F0;
+  min-width: 90px;
+  vertical-align: middle;
+  position: relative;
+}
+
+/* Cell states */
+.cell-na {
+  background: var(--na-bg);
+  color: var(--na-text);
+  font-size: 13px;
+}
+.cell-ok { background: var(--white); }
+.cell-warn { background: var(--orange-bg); }
+.cell-late { background: var(--red-bg); }
+.cell-overdue { background: var(--red-bg); }
+
+.cell-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 22px;
+  border-radius: 4px;
+  font-size: 13px;
+  position: relative;
+}
+.icon-deposé { color: var(--check1); font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; }
+.icon-validé { color: var(--check2); font-size: 13px; }
+.icon-refusé { color: var(--cross); font-size: 14px; font-weight: 600; }
+.icon-overdue { color: var(--red-dark); font-size: 14px; }
+
+.dot-refus {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 7px;
+  height: 7px;
+  background: var(--dot);
+  border-radius: 50%;
+  border: 1.5px solid white;
+}
+
+.days-badge {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.badge-warn { background: rgba(212,98,10,.12); color: var(--orange); }
+.badge-overdue { background: rgba(169,45,45,.12); color: var(--red); }
+
+/* ── CALENDAR VIEW ── */
+.cal-wrap { display: none; }
+.cal-wrap.active { display: block; }
+.table-wrap.table-active { display: block; }
+.table-wrap.table-hidden { display: none; }
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.cal-dow {
+  background: var(--g50);
+  text-align: center;
+  padding: 8px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  border-bottom: 1px solid var(--border);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.cal-day {
+  border: 1px solid #EFF3F1;
+  border-top: none;
+  border-left: none;
+  min-height: 90px;
+  padding: 6px;
+  position: relative;
+  cursor: pointer;
+  transition: background .1s;
+}
+.cal-day:hover { background: var(--g50); }
+.cal-day.empty { background: #FAFCFB; cursor: default; }
+.cal-day.today { background: #EAF4F0; }
+.cal-day .day-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 4px;
+}
+.cal-day.today .day-num {
+  color: var(--g800);
+  font-weight: 600;
+}
+.cal-day.today .day-num::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background: var(--g800);
+  border-radius: 50%;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.cal-deadline {
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin-bottom: 2px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-deadline.fiscal { background: rgba(27,77,62,.1); color: var(--g800); }
+.cal-deadline.social { background: rgba(41,80,140,.1); color: #1E4A8E; }
+.cal-deadline.overdue { background: var(--red-bg); color: var(--red); }
+
+/* donut summary */
+.cal-summary {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.summary-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+  flex: 1;
+  min-width: 200px;
+}
+.summary-card h4 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 12px;
+}
+.donut-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.donut {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+}
+.donut svg { transform: rotate(-90deg); }
+.donut-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.donut-pct { font-size: 14px; font-weight: 500; color: var(--text); }
+.donut-sub { font-size: 9px; color: var(--text3); }
+.donut-legend { font-size: 11px; }
+.donut-legend .leg { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* popover */
+.popover {
+  display: none;
+  position: fixed;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 16px rgba(15,46,36,.15);
+  z-index: 100;
+  min-width: 200px;
+  font-size: 12px;
+}
+.popover.visible { display: block; }
+.popover h5 { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 8px; }
+.pop-row { display: flex; justify-content: space-between; gap: 12px; padding: 3px 0; border-bottom: 1px solid var(--g100); }
+.pop-row:last-child { border-bottom: none; }
+.pop-status { font-weight: 500; }
+.pop-ok { color: var(--check2); }
+.pop-warn { color: var(--orange); }
+.pop-late { color: var(--red); }
+
+/* legend */
+.legend-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 8px 0 0 0;
+  font-size: 11px;
+  color: var(--text2);
+}
+.leg-item { display: flex; align-items: center; gap: 5px; }
+.leg-cell {
+  width: 22px; height: 16px;
+  border-radius: 3px;
+  border: 1px solid rgba(0,0,0,.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+}
+.leg-cell.na { background: var(--na-bg); }
+.leg-cell.ok { background: var(--white); }
+.leg-cell.warn { background: var(--orange-bg); }
+.leg-cell.late { background: var(--red-bg); }
+
+/* ── SECTION HEADER row ── */
+.tr-section td {
+  background: var(--g50);
+  padding: 4px 12px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text2);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-bottom: 1px solid var(--border);
+}
+.tr-section td:first-child { position: sticky; left: 0; z-index: 3; }
+
+/* scrollable wrapper for table */
+.table-scroll { overflow-x: auto; }
+
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <div class="sidebar-logo">QUERCY</div>
+  <div class="nav-item" title="Supervision">📊</div>
+  <div class="nav-item" title="Dossiers">📁</div>
+  <div class="nav-item active" title="Échéances">📅</div>
+</div>
+
+<!-- Main -->
+<div class="main">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-title">Échéances</div>
+    <div class="topbar-sep"></div>
+    <div class="tab-group" id="mainTabs">
+      <button class="tab-btn active" data-tab="fiscal">📋 Fiscal</button>
+      <button class="tab-btn" data-tab="social">👥 Social</button>
+    </div>
+    <div class="topbar-sep"></div>
+    <div class="tab-group" id="viewTabs">
+      <button class="tab-btn active" data-view="tableau">Tableau</button>
+      <button class="tab-btn" data-view="calendrier">Calendrier</button>
+    </div>
+    <div class="topbar-spacer"></div>
+  </div>
+
+  <!-- Filterbar -->
+  <div class="filterbar">
+    <div class="period-nav">
+      <button onclick="navigatePeriod(-1)">&#8249;</button>
+      <div class="period-label" id="periodLabel">Mars 2026</div>
+      <button onclick="navigatePeriod(1)">&#8250;</button>
+    </div>
+
+    <select class="filter-select" id="typeFilter" onchange="renderAll()">
+      <option value="pharmacie">💊 Pharmacies</option>
+      <option value="satellite">🏢 Satellites</option>
+      <option value="all">Tous les dossiers</option>
+    </select>
+
+    <select class="filter-select" id="statutFilter" onchange="renderAll()">
+      <option value="all">Tous statuts</option>
+      <option value="retard">En retard ⚠️</option>
+      <option value="afaire">À faire</option>
+      <option value="depose">Déposé ✓</option>
+      <option value="valide">Validé ✓✓</option>
+    </select>
+
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Rechercher un client..." oninput="renderAll()">
+    </div>
+  </div>
+
+  <!-- KPI bar -->
+  <div class="kpibar" id="kpibar">
+    <!-- filled by JS -->
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="table-wrap table-active" id="tableWrap">
+      <div class="table-scroll">
+        <table class="echeance-table" id="mainTable">
+          <!-- filled by JS -->
+        </table>
+      </div>
+      <div style="padding: 10px 16px; border-top: 1px solid var(--border);">
+        <div class="legend-bar">
+          <span style="font-size:11px;font-weight:600;color:var(--text2);margin-right:4px;">Légende :</span>
+          <div class="leg-item"><div class="leg-cell na">—</div><span>Non applicable</span></div>
+          <div class="leg-item"><div class="leg-cell ok"></div><span>Applicable (délai &gt; J+5)</span></div>
+          <div class="leg-item"><div class="leg-cell warn"></div><span>Échéance ≤ J+5</span></div>
+          <div class="leg-item"><div class="leg-cell late"></div><span>En retard</span></div>
+          <div class="leg-item"><span class="icon-deposé" style="font-size:12px;">✓</span><span>Déposé</span></div>
+          <div class="leg-item"><span class="icon-validé" style="font-size:13px;">✓✓</span><span>Validé</span></div>
+          <div class="leg-item"><span class="icon-refusé" style="font-size:13px;">✕</span><span>Refusé</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cal-wrap" id="calWrap">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- Popover -->
+<div class="popover" id="popover"></div>
+
+<script>
+// ─────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────
+const TODAY = new Date(2026, 2, 20); // March 20 2026
+
+const PHARMACIES = [
+  { id:'ph1',  nom:'Pharmacie Martin',   type:'pharmacie', cloture:'1231', eff:67, dsnDay:5,  tva:'mensuelle',     tascom:true,  c3s:true,  indexHF:true,  opco:true },
+  { id:'ph2',  nom:'Pharmacie Dupont',   type:'pharmacie', cloture:'1231', eff:44, dsnDay:15, tva:'mensuelle',     tascom:true,  c3s:false, indexHF:false, opco:true },
+  { id:'ph3',  nom:'Pharmacie Bernard',  type:'pharmacie', cloture:'1231', eff:29, dsnDay:15, tva:'mensuelle',     tascom:false, c3s:false, indexHF:false, opco:true },
+  { id:'ph4',  nom:'Pharmacie Moreau',   type:'pharmacie', cloture:'1231', eff:74, dsnDay:5,  tva:'mensuelle',     tascom:true,  c3s:true,  indexHF:true,  opco:true },
+  { id:'ph5',  nom:'Pharmacie Petit',    type:'pharmacie', cloture:'1231', eff:36, dsnDay:15, tva:'trimestrielle', tascom:false, c3s:false, indexHF:false, opco:true },
+  { id:'ph6',  nom:'Pharmacie Simon',    type:'pharmacie', cloture:'0331', eff:58, dsnDay:5,  tva:'mensuelle',     tascom:true,  c3s:true,  indexHF:true,  opco:true },
+  { id:'ph7',  nom:'Pharmacie Laurent',  type:'pharmacie', cloture:'0331', eff:31, dsnDay:15, tva:'mensuelle',     tascom:false, c3s:false, indexHF:false, opco:true },
+  { id:'ph8',  nom:'Pharmacie Michel',   type:'pharmacie', cloture:'0331', eff:17, dsnDay:15, tva:'trimestrielle', tascom:false, c3s:false, indexHF:false, opco:true },
+  { id:'ph9',  nom:'Pharmacie Leroy',    type:'pharmacie', cloture:'0930', eff:63, dsnDay:5,  tva:'mensuelle',     tascom:true,  c3s:false, indexHF:true,  opco:true },
+  { id:'ph10', nom:'Pharmacie Roux',     type:'pharmacie', cloture:'0930', eff:42, dsnDay:15, tva:'mensuelle',     tascom:true,  c3s:false, indexHF:false, opco:true },
+  { id:'ph11', nom:'Pharmacie David',    type:'pharmacie', cloture:'0930', eff:24, dsnDay:15, tva:'mensuelle',     tascom:false, c3s:false, indexHF:false, opco:true },
+  { id:'ph12', nom:'Pharmacie Garcia',   type:'pharmacie', cloture:'1231', eff:85, dsnDay:5,  tva:'mensuelle',     tascom:true,  c3s:true,  indexHF:true,  opco:true },
+  { id:'ph13', nom:'Pharmacie Robert',   type:'pharmacie', cloture:'1231', eff:14, dsnDay:15, tva:'trimestrielle', tascom:false, c3s:false, indexHF:false, opco:true },
+  { id:'ph14', nom:'Pharmacie Thomas',   type:'pharmacie', cloture:'0331', eff:48, dsnDay:15, tva:'mensuelle',     tascom:true,  c3s:false, indexHF:false, opco:true },
+  { id:'ph15', nom:'Pharmacie Blanc',    type:'pharmacie', cloture:'0930', eff:33, dsnDay:15, tva:'mensuelle',     tascom:false, c3s:false, indexHF:false, opco:true },
+];
+
+const SATELLITES = [
+  { id:'s1', nom:'SPFPL Martin',       type:'satellite', stype:'SPFPL', cloture:'1231', eff:3,  dsnDay:15, tva:'mensuelle', isIS:true,  opco:true  },
+  { id:'s2', nom:'SPFPL Moreau-Garcia',type:'satellite', stype:'SPFPL', cloture:'1231', eff:0,  dsnDay:null, tva:'aucune', isIS:true,  opco:false },
+  { id:'s3', nom:'SPFPL Simon',        type:'satellite', stype:'SPFPL', cloture:'0331', eff:0,  dsnDay:null, tva:'aucune', isIS:true,  opco:false },
+  { id:'s4', nom:'SCI du Parc',        type:'satellite', stype:'SCI',   cloture:'1231', eff:0,  dsnDay:null, tva:'aucune', isIS:false, opco:false },
+  { id:'s5', nom:'SCI Les Acacias',    type:'satellite', stype:'SCI',   cloture:'0930', eff:0,  dsnDay:null, tva:'mensuelle', isIS:true, opco:false },
+  { id:'s6', nom:'SCI Provence',       type:'satellite', stype:'SCI',   cloture:'1231', eff:0,  dsnDay:null, tva:'aucune', isIS:false, opco:false },
+  { id:'s7', nom:'SASU Pharma Invest', type:'satellite', stype:'SASU',  cloture:'1231', eff:0,  dsnDay:null, tva:'mensuelle', isIS:true, opco:false },
+];
+
+const ALL_CLIENTS = [...PHARMACIES, ...SATELLITES];
+
+// ─────────────────────────────────────────
+// MOCK STATUSES
+// key = `${clientId}_${echeanceKey}_${yyyymm}`
+// { deposé: date|null, validé: date|null, refusé: date|null, historicRefus: bool }
+// ─────────────────────────────────────────
+const STATUSES = {
+  // IS Acompte Mars 2026 (deadline 2026-03-15) — J+5 today
+  'ph1_is_acompte_202603':  { d:'2026-03-14', v:'2026-03-15', r:null, hr:false },
+  'ph2_is_acompte_202603':  { d:'2026-03-15', v:null,         r:null, hr:false },
+  'ph3_is_acompte_202603':  { d:null,         v:null,         r:null, hr:false },
+  'ph4_is_acompte_202603':  { d:'2026-03-12', v:'2026-03-13', r:null, hr:false },
+  'ph5_is_acompte_202603':  { d:null,         v:null,         r:null, hr:false },
+  'ph6_is_acompte_202603':  { d:'2026-03-14', v:'2026-03-16', r:null, hr:true  },
+  'ph7_is_acompte_202603':  { d:'2026-03-15', v:null,         r:null, hr:false },
+  'ph8_is_acompte_202603':  { d:null,         v:null,         r:null, hr:false },
+  'ph9_is_acompte_202603':  { d:'2026-03-10', v:'2026-03-11', r:null, hr:false },
+  'ph10_is_acompte_202603': { d:'2026-03-15', v:null,         r:null, hr:false },
+  'ph11_is_acompte_202603': { d:null,         v:null,         r:null, hr:false },
+  'ph12_is_acompte_202603': { d:'2026-03-13', v:'2026-03-14', r:null, hr:false },
+  'ph13_is_acompte_202603': { d:null,         v:null,         r:null, hr:false },
+  'ph14_is_acompte_202603': { d:'2026-03-14', v:'2026-03-15', r:null, hr:false },
+  'ph15_is_acompte_202603': { d:'2026-03-15', v:null,         r:null, hr:false },
+  's1_is_acompte_202603':   { d:'2026-03-14', v:'2026-03-15', r:null, hr:false },
+  's2_is_acompte_202603':   { d:null,         v:null,         r:null, hr:false },
+  's3_is_acompte_202603':   { d:'2026-03-13', v:'2026-03-14', r:null, hr:false },
+  's5_is_acompte_202603':   { d:null,         v:null,         r:null, hr:false },
+  's7_is_acompte_202603':   { d:'2026-03-14', v:'2026-03-15', r:null, hr:false },
+
+  // TVA CA3 Mars 2026 (deadline 2026-03-24) — J-4 today → ORANGE
+  'ph1_tva_ca3_202603':  { d:'2026-03-18', v:'2026-03-19', r:null, hr:false },
+  'ph2_tva_ca3_202603':  { d:'2026-03-19', v:null,         r:null, hr:false },
+  'ph3_tva_ca3_202603':  { d:null,         v:null,         r:null, hr:false },
+  'ph4_tva_ca3_202603':  { d:'2026-03-17', v:'2026-03-18', r:null, hr:false },
+  'ph6_tva_ca3_202603':  { d:null,         v:null,         r:'2026-03-16', hr:true },
+  'ph7_tva_ca3_202603':  { d:null,         v:null,         r:null, hr:false },
+  'ph9_tva_ca3_202603':  { d:'2026-03-18', v:'2026-03-20', r:null, hr:false },
+  'ph10_tva_ca3_202603': { d:null,         v:null,         r:null, hr:false },
+  'ph11_tva_ca3_202603': { d:null,         v:null,         r:null, hr:false },
+  'ph12_tva_ca3_202603': { d:'2026-03-19', v:null,         r:null, hr:false },
+  'ph14_tva_ca3_202603': { d:null,         v:null,         r:null, hr:false },
+  'ph15_tva_ca3_202603': { d:'2026-03-18', v:'2026-03-19', r:null, hr:false },
+  's1_tva_ca3_202603':   { d:null,         v:null,         r:null, hr:false },
+  's5_tva_ca3_202603':   { d:'2026-03-18', v:'2026-03-19', r:null, hr:false },
+  's7_tva_ca3_202603':   { d:null,         v:null,         r:null, hr:false },
+
+  // Social - Index H/F Mars 2026 (deadline 2026-03-01) — J+19 → RED ⚠️
+  'ph1_index_hf_202603':  { d:'2026-02-28', v:'2026-03-01', r:null, hr:false },
+  'ph4_index_hf_202603':  { d:'2026-03-01', v:null,         r:null, hr:false },
+  'ph6_index_hf_202603':  { d:null,         v:null,         r:null, hr:false },
+  'ph9_index_hf_202603':  { d:'2026-02-26', v:'2026-02-27', r:null, hr:false },
+  'ph12_index_hf_202603': { d:'2026-03-01', v:'2026-03-02', r:null, hr:false },
+
+  // Social - DSN Fév 2026 (deadline varies: 5 or 15 mars) — all past
+  'ph1_dsn_202602':  { d:'2026-03-04', v:'2026-03-05', r:null, hr:false },
+  'ph2_dsn_202602':  { d:'2026-03-13', v:'2026-03-14', r:null, hr:false },
+  'ph3_dsn_202602':  { d:'2026-03-14', v:null,         r:null, hr:false },
+  'ph4_dsn_202602':  { d:'2026-03-04', v:'2026-03-05', r:null, hr:false },
+  'ph5_dsn_202602':  { d:null,         v:null,         r:null, hr:false },
+  'ph6_dsn_202602':  { d:'2026-03-04', v:'2026-03-05', r:null, hr:false },
+  'ph7_dsn_202602':  { d:'2026-03-14', v:null,         r:null, hr:false },
+  'ph8_dsn_202602':  { d:'2026-03-14', v:'2026-03-16', r:null, hr:false },
+  'ph9_dsn_202602':  { d:'2026-03-04', v:'2026-03-05', r:null, hr:false },
+  'ph10_dsn_202602': { d:null,         v:null,         r:'2026-03-12', hr:true  },
+  'ph11_dsn_202602': { d:'2026-03-14', v:null,         r:null, hr:false },
+  'ph12_dsn_202602': { d:'2026-03-04', v:'2026-03-05', r:null, hr:false },
+  'ph13_dsn_202602': { d:null,         v:null,         r:null, hr:false },
+  'ph14_dsn_202602': { d:'2026-03-14', v:null,         r:null, hr:false },
+  'ph15_dsn_202602': { d:null,         v:null,         r:null, hr:false },
+  's1_dsn_202602':   { d:'2026-03-14', v:'2026-03-15', r:null, hr:false },
+};
+
+// ─────────────────────────────────────────
+// DEADLINE DEFINITIONS
+// ─────────────────────────────────────────
+
+// Returns the IS acompte number for a given cloture and month
+function getIsAcompteNum(cloture, year, month) {
+  // cloture = 'MMDD', exercise starts month after cloture
+  const mm = parseInt(cloture.slice(0,2));
+  const startMonth = (mm % 12) + 1; // month after cloture
+  // acompte months: +3, +6, +9, +12 from start
+  for (let n = 1; n <= 4; n++) {
+    const am = ((startMonth - 1 + n*3 - 1) % 12) + 1;
+    const ay = year + Math.floor((startMonth - 1 + n*3 - 1) / 12);
+    if (am === month && ay === year) return n;
+  }
+  return null;
+}
+
+// Build columns for a given year/month and tab
+function getColumns(year, month, tab) {
+  const cols = [];
+  const yyyymm = `${year}${String(month).padStart(2,'0')}`;
+
+  if (tab === 'fiscal') {
+    // IS Acompte
+    cols.push({
+      key: 'is_acompte',
+      label: 'Acompte IS',
+      deadlineDay: 15,
+      dateGroup: `15/${String(month).padStart(2,'0')}`,
+      applicable: (c) => {
+        const isIS = c.type === 'pharmacie' || (c.isIS === true);
+        if (!isIS) return false;
+        // SCI IR not IS
+        if (c.stype === 'SCI' && c.isIS === false) return false;
+        const n = getIsAcompteNum(c.cloture, year, month);
+        return n !== null;
+      },
+      yyyymm,
+    });
+
+    // TVA CA3 (mensuelle only)
+    cols.push({
+      key: 'tva_ca3',
+      label: 'TVA CA3',
+      deadlineDay: 24,
+      dateGroup: `19-24/${String(month).padStart(2,'0')}`,
+      applicable: (c) => {
+        const tva = c.tva || (c.type === 'pharmacie' ? c.tva : null);
+        return tva === 'mensuelle';
+      },
+      yyyymm,
+    });
+
+    // May-specific
+    if (month === 5) {
+      cols.push({ key:'liasse', label:'Liasse fiscale', deadlineDay:4, dateGroup:`04/${String(month).padStart(2,'0')}`,
+        applicable: (c) => c.cloture === '1231',
+        yyyymm });
+      cols.push({ key:'das2', label:'DAS2', deadlineDay:4, dateGroup:`04/${String(month).padStart(2,'0')}`,
+        applicable: (c) => c.cloture === '1231',
+        yyyymm });
+      cols.push({ key:'c3s', label:'C3S', deadlineDay:15, dateGroup:`15/${String(month).padStart(2,'0')}`,
+        applicable: (c) => c.type === 'pharmacie' && c.c3s === true,
+        yyyymm });
+      cols.push({ key:'cvae_solde', label:'CVAE Solde', deadlineDay:5, dateGroup:`05/${String(month).padStart(2,'0')}`,
+        applicable: (c) => c.type === 'pharmacie' && c.eff >= 50,
+        yyyymm });
+    }
+
+    // June
+    if (month === 6) {
+      cols.push({ key:'tascom', label:'TASCOM', deadlineDay:15, dateGroup:`15/${String(month).padStart(2,'0')}`,
+        applicable: (c) => c.type === 'pharmacie' && c.tascom === true,
+        yyyymm });
+      cols.push({ key:'cfe_acompte', label:'CFE Acompte', deadlineDay:15, dateGroup:`15/${String(month).padStart(2,'0')}`,
+        applicable: (c) => true,
+        yyyymm });
+    }
+
+    // Feb
+    if (month === 2) {
+      cols.push({ key:'ifu', label:'IFU (2561)', deadlineDay:15, dateGroup:`15/${String(month).padStart(2,'0')}`,
+        applicable: (c) => c.type === 'pharmacie',
+        yyyymm });
+      cols.push({ key:'tsb', label:'Taxe Bureaux', deadlineDay:28, dateGroup:`28/${String(month).padStart(2,'0')}`,
+        applicable: (c) => true,
+        yyyymm });
+    }
+
+    // Dec
+    if (month === 12) {
+      cols.push({ key:'cfe_solde', label:'CFE Solde', deadlineDay:15, dateGroup:`15/${String(month).padStart(2,'0')}`,
+        applicable: (c) => true,
+        yyyymm });
+    }
+  }
+
+  if (tab === 'social') {
+    // DSN previous month
+    const prevMonth = month === 1 ? 12 : month - 1;
+    const prevYear = month === 1 ? year - 1 : year;
+    const prevYYYYMM = `${prevYear}${String(prevMonth).padStart(2,'0')}`;
+    const mLabel = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'][prevMonth-1];
+    cols.push({
+      key: 'dsn',
+      label: `DSN ${mLabel}.`,
+      deadlineDay: 15, // simplified (5 or 15 per client)
+      dateGroup: `05-15/${String(month).padStart(2,'0')}`,
+      applicable: (c) => (c.eff > 0 || c.dsnDay != null),
+      yyyymm: prevYYYYMM,
+      dsnMonth: true,
+    });
+
+    // Index H/F (1er mars)
+    if (month === 3) {
+      cols.push({ key:'index_hf', label:'Index H/F', deadlineDay:1, dateGroup:`01/${String(month).padStart(2,'0')}`,
+        applicable: (c) => (c.eff || 0) >= 50,
+        yyyymm });
+    }
+
+    // OPCO Feb
+    if (month === 2) {
+      cols.push({ key:'opco', label:'OPCO Santé', deadlineDay:28, dateGroup:`28/${String(month).padStart(2,'0')}`,
+        applicable: (c) => c.opco === true || c.type === 'pharmacie',
+        yyyymm });
+    }
+
+    // Solde TA (May)
+    if (month === 5) {
+      cols.push({ key:'solde_ta', label:'Solde TA', deadlineDay:15, dateGroup:`15/${String(month).padStart(2,'0')}`,
+        applicable: (c) => (c.eff > 0 || c.dsnDay != null),
+        yyyymm });
+      cols.push({ key:'doeth', label:'DOETH', deadlineDay:15, dateGroup:`15/${String(month).padStart(2,'0')}`,
+        applicable: (c) => (c.eff || 0) >= 20,
+        yyyymm });
+    }
+  }
+
+  return cols;
+}
+
+// ─────────────────────────────────────────
+// CELL RENDERING
+// ─────────────────────────────────────────
+function getCellState(client, col) {
+  if (!col.applicable(client)) return { type:'na' };
+
+  const key = `${client.id}_${col.key}_${col.yyyymm}`;
+  const st = STATUSES[key];
+  const deadline = new Date(
+    parseInt(col.yyyymm.slice(0,4)),
+    parseInt(col.yyyymm.slice(4,6)) - 1,
+    col.deadlineDay
+  );
+  const diffDays = Math.floor((TODAY - deadline) / 86400000);
+
+  if (st) {
+    if (st.r && !st.d) return { type:'refused', hr: st.hr, date: st.r };
+    if (st.v) return { type:'validated', hr: st.hr };
+    if (st.d) return { type:'deposited', hr: st.hr };
+  }
+
+  // Not filed
+  if (diffDays > 0) return { type:'overdue', days: diffDays };
+  if (diffDays >= -5) return { type:'warn', days: -diffDays };
+  return { type:'ok' };
+}
+
+function renderCell(state) {
+  switch(state.type) {
+    case 'na':
+      return `<td class="td-status cell-na">—</td>`;
+    case 'validated':
+      return `<td class="td-status cell-ok"><span class="cell-icon icon-validé">✓✓${state.hr ? '<span class="dot-refus"></span>':''}</span></td>`;
+    case 'deposited':
+      return `<td class="td-status cell-ok"><span class="cell-icon icon-deposé">✓${state.hr ? '<span class="dot-refus"></span>':''}</span></td>`;
+    case 'refused':
+      return `<td class="td-status cell-ok"><span class="cell-icon icon-refusé">✕</span></td>`;
+    case 'overdue':
+      return `<td class="td-status cell-overdue"><span class="icon-overdue">⚠</span></td>`;
+    case 'warn':
+      return `<td class="td-status cell-warn"><span class="days-badge badge-warn">J-${state.days}</span></td>`;
+    case 'ok':
+    default:
+      return `<td class="td-status cell-ok"></td>`;
+  }
+}
+
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let currentYear = 2026;
+let currentMonth = 3;
+let activeTab = 'fiscal';
+let activeView = 'tableau';
+
+function navigatePeriod(dir) {
+  currentMonth += dir;
+  if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+  if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+  renderAll();
+}
+
+function renderAll() {
+  updatePeriodLabel();
+  updateKPIs();
+  if (activeView === 'tableau') renderTable();
+  else renderCalendar();
+}
+
+function updatePeriodLabel() {
+  const months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  document.getElementById('periodLabel').textContent = `${months[currentMonth-1]} ${currentYear}`;
+}
+
+function getFilteredClients() {
+  const typeFilter = document.getElementById('typeFilter').value;
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const statutFilter = document.getElementById('statutFilter').value;
+  const cols = getColumns(currentYear, currentMonth, activeTab);
+
+  let clients = ALL_CLIENTS.filter(c => {
+    if (typeFilter === 'pharmacie' && c.type !== 'pharmacie') return false;
+    if (typeFilter === 'satellite' && c.type !== 'satellite') return false;
+    if (search && !c.nom.toLowerCase().includes(search)) return false;
+    return true;
+  });
+
+  if (statutFilter !== 'all') {
+    clients = clients.filter(c => {
+      return cols.some(col => {
+        const state = getCellState(c, col);
+        if (statutFilter === 'retard' && state.type === 'overdue') return true;
+        if (statutFilter === 'afaire' && (state.type === 'ok' || state.type === 'warn')) return true;
+        if (statutFilter === 'depose' && state.type === 'deposited') return true;
+        if (statutFilter === 'valide' && state.type === 'validated') return true;
+        return false;
+      });
+    });
+  }
+
+  return clients;
+}
+
+function updateKPIs() {
+  const clients = getFilteredClients();
+  const cols = getColumns(currentYear, currentMonth, activeTab);
+  let total = 0, retard = 0, proche = 0, valide = 0;
+  clients.forEach(c => {
+    cols.forEach(col => {
+      const st = getCellState(c, col);
+      if (st.type === 'na') return;
+      total++;
+      if (st.type === 'overdue') retard++;
+      if (st.type === 'warn') proche++;
+      if (st.type === 'validated') valide++;
+    });
+  });
+  document.getElementById('kpibar').innerHTML = `
+    <div class="kpi"><div class="kpi-val">${total}</div><div class="kpi-label">Échéances ce mois</div></div>
+    <div class="kpi-sep"></div>
+    <div class="kpi danger"><div class="kpi-val">${retard}</div><div class="kpi-label">En retard</div></div>
+    <div class="kpi-sep"></div>
+    <div class="kpi warn"><div class="kpi-val">${proche}</div><div class="kpi-label">Échéance ≤ J+5</div></div>
+    <div class="kpi-sep"></div>
+    <div class="kpi"><div class="kpi-val">${valide}</div><div class="kpi-label">Validées</div></div>
+    <div class="kpi-sep"></div>
+    <div class="kpi"><div class="kpi-val">${clients.length}</div><div class="kpi-label">Dossiers affichés</div></div>
+  `;
+}
+
+function renderTable() {
+  const clients = getFilteredClients();
+  const cols = getColumns(currentYear, currentMonth, activeTab);
+
+  if (!cols.length) {
+    document.getElementById('mainTable').innerHTML = `<tr><td colspan="10" style="padding:40px;text-align:center;color:var(--text3);">Aucune échéance ce mois pour cet onglet.</td></tr>`;
+    return;
+  }
+
+  // Group date headers
+  const dateGroups = [];
+  cols.forEach(col => {
+    const last = dateGroups[dateGroups.length - 1];
+    if (last && last.label === col.dateGroup) last.span++;
+    else dateGroups.push({ label: col.dateGroup, span: 1 });
+  });
+
+  let html = '<thead>';
+  // Row 1: date groups
+  html += '<tr>';
+  html += `<th class="th-date-group sticky-header th-type" rowspan="2"></th>`;
+  html += `<th class="th-date-group sticky-header th-name" rowspan="2" style="text-align:left;padding-left:12px;">Client</th>`;
+  dateGroups.forEach(g => {
+    html += `<th class="th-date-group" colspan="${g.span}">▸ ${g.label}</th>`;
+  });
+  html += '</tr>';
+  // Row 2: col labels
+  html += '<tr>';
+  cols.forEach(col => {
+    html += `<th class="th-col">${col.label}</th>`;
+  });
+  html += '</tr></thead><tbody>';
+
+  // Separate pharmacies from satellites
+  const pharmas = clients.filter(c => c.type === 'pharmacie');
+  const sats = clients.filter(c => c.type === 'satellite');
+
+  function renderSection(list, label) {
+    if (!list.length) return '';
+    let s = `<tr class="tr-section"><td colspan="${2 + cols.length}">${label} (${list.length})</td></tr>`;
+    list.forEach(c => {
+      s += '<tr>';
+      s += `<td class="td-type">${c.type === 'pharmacie' ? '💊' : (c.stype === 'SPFPL' ? '🏛' : '🏢')}</td>`;
+      s += `<td class="td-name" onclick="openDossier('${c.id}')">${c.nom}<div class="client-sub">${c.type === 'pharmacie' ? `${c.eff} sal. · Clôt. ${formatCloture(c.cloture)}` : `${c.stype} · Clôt. ${formatCloture(c.cloture)}`}</div></td>`;
+      cols.forEach(col => { s += renderCell(getCellState(c, col)); });
+      s += '</tr>';
+    });
+    return s;
+  }
+
+  const label1 = activeTab === 'fiscal' ? '📋 Fiscal' : '👥 Social';
+  html += renderSection(pharmas, '💊 Pharmacies');
+  html += renderSection(sats, '🏢 Satellites');
+  html += '</tbody>';
+
+  document.getElementById('mainTable').innerHTML = html;
+}
+
+function formatCloture(c) {
+  const map = { '1231':'31/12', '0331':'31/03', '0930':'30/09' };
+  return map[c] || c;
+}
+
+// ─────────────────────────────────────────
+// CALENDAR VIEW
+// ─────────────────────────────────────────
+function renderCalendar() {
+  const cols = getColumns(currentYear, currentMonth, activeTab);
+  const clients = getFilteredClients();
+
+  // Build deadline map per day
+  const byDay = {};
+  cols.forEach(col => {
+    const d = col.deadlineDay;
+    if (!byDay[d]) byDay[d] = [];
+    let total = 0, done = 0, late = 0;
+    clients.forEach(c => {
+      const st = getCellState(c, col);
+      if (st.type === 'na') return;
+      total++;
+      if (st.type === 'validated' || st.type === 'deposited') done++;
+      if (st.type === 'overdue') late++;
+    });
+    byDay[d].push({ label: col.label, total, done, late, key: col.key });
+  });
+
+  const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+  const firstDay = (new Date(currentYear, currentMonth - 1, 1).getDay() + 6) % 7; // Mon=0
+
+  const dows = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+  let html = '<div class="cal-grid">';
+  dows.forEach(d => html += `<div class="cal-dow">${d}</div>`);
+
+  // empty cells
+  for (let i = 0; i < firstDay; i++) html += `<div class="cal-day empty"></div>`;
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const isToday = day === TODAY.getDate() && currentMonth === TODAY.getMonth()+1 && currentYear === TODAY.getFullYear();
+    html += `<div class="cal-day${isToday ? ' today' : ''}">`;
+    html += `<div class="day-num">${day}</div>`;
+    if (byDay[day]) {
+      byDay[day].forEach(dl => {
+        const cls = dl.late > 0 ? 'overdue' : activeTab;
+        html += `<div class="cal-deadline ${cls}" title="${dl.label}: ${dl.done}/${dl.total} déposées">${dl.label}</div>`;
+      });
+    }
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Summary donuts
+  let totalAll = 0, doneAll = 0, lateAll = 0;
+  clients.forEach(c => {
+    cols.forEach(col => {
+      const st = getCellState(c, col);
+      if (st.type === 'na') return;
+      totalAll++;
+      if (st.type === 'validated' || st.type === 'deposited') doneAll++;
+      if (st.type === 'overdue') lateAll++;
+    });
+  });
+  const todoAll = totalAll - doneAll;
+  const pct = totalAll ? Math.round(doneAll / totalAll * 100) : 0;
+
+  const r = 28, circ = 2 * Math.PI * r;
+  const doneArc = (doneAll / (totalAll || 1)) * circ;
+  const lateArc = (lateAll / (totalAll || 1)) * circ;
+
+  html += `<div class="cal-summary">
+    <div class="summary-card">
+      <h4>Avancement global — ${cols.map(c=>c.label).join(', ')}</h4>
+      <div class="donut-wrap">
+        <div class="donut">
+          <svg width="72" height="72" viewBox="0 0 72 72">
+            <circle cx="36" cy="36" r="${r}" fill="none" stroke="#EEF2F0" stroke-width="8"/>
+            <circle cx="36" cy="36" r="${r}" fill="none" stroke="#A92D2D" stroke-width="8"
+              stroke-dasharray="${lateArc} ${circ}" stroke-dashoffset="0" stroke-linecap="round"/>
+            <circle cx="36" cy="36" r="${r}" fill="none" stroke="#1A7A48" stroke-width="8"
+              stroke-dasharray="${doneArc} ${circ}" stroke-dashoffset="${-lateArc}" stroke-linecap="round"/>
+          </svg>
+          <div class="donut-label"><div class="donut-pct">${pct}%</div><div class="donut-sub">faites</div></div>
+        </div>
+        <div class="donut-legend">
+          <div class="leg"><div class="leg-dot" style="background:#1A7A48"></div><span><b>${doneAll}</b> Déposées / Validées</span></div>
+          <div class="leg"><div class="leg-dot" style="background:#A92D2D"></div><span><b>${lateAll}</b> En retard</span></div>
+          <div class="leg"><div class="leg-dot" style="background:#EEF2F0;border:1px solid #ccc"></div><span><b>${todoAll - lateAll}</b> À faire</span></div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('calWrap').innerHTML = html;
+}
+
+function openDossier(id) {
+  const c = ALL_CLIENTS.find(x => x.id === id);
+  alert(`Fiche dossier : ${c.nom}\n\nCette vue sera implémentée dans la phase 2 du projet.\n(Drawer avec toutes les échéances du dossier)`);
+}
+
+// ─────────────────────────────────────────
+// EVENT LISTENERS
+// ─────────────────────────────────────────
+document.getElementById('mainTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  activeTab = btn.dataset.tab;
+  document.querySelectorAll('#mainTabs .tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+  renderAll();
+});
+
+document.getElementById('viewTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.tab-btn');
+  if (!btn) return;
+  activeView = btn.dataset.view;
+  document.querySelectorAll('#viewTabs .tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+  const tableWrap = document.getElementById('tableWrap');
+  const calWrap = document.getElementById('calWrap');
+  if (activeView === 'tableau') {
+    tableWrap.className = 'table-wrap table-active';
+    calWrap.className = 'cal-wrap';
+  } else {
+    tableWrap.className = 'table-wrap table-hidden';
+    calWrap.className = 'cal-wrap active';
+  }
+  renderAll();
+});
+
+// ─────────────────────────────────────────
+// INIT
+// ─────────────────────────────────────────
+renderAll();
+</script>
+</body>
+</html>
