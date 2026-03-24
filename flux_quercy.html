@@ -46,11 +46,11 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); heig
 .layout {
   display: grid;
   grid-template-columns: 220px 1fr;
-  grid-template-rows: 52px 1fr;
+  grid-template-rows: 48px 1fr;
   height: 100vh; overflow: hidden;
   transition: grid-template-columns .2s ease;
 }
-.layout.sb-collapsed {
+body.sb-collapsed {
   grid-template-columns: 48px 1fr;
 }
 
@@ -103,11 +103,11 @@ aside::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); }
 .nav-label { transition: opacity .15s; }
 .nav-section { padding: 14px 14px 6px; font-size: .68rem; color: rgba(255,255,255,.3); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; transition: opacity .15s; }
 /* Collapsed state */
-.layout.sb-collapsed .nav-label { opacity: 0; pointer-events: none; }
-.layout.sb-collapsed .nav-section { opacity: 0; height: 0; padding: 4px 0; overflow: hidden; }
-.layout.sb-collapsed .nav-item { padding: 9px 0; justify-content: center; border-left-color: transparent !important; }
-.layout.sb-collapsed .nav-item.active { border-right: 2px solid var(--q400); }
-.layout.sb-collapsed .nav-item::after {
+body.sb-collapsed .nav-label { opacity: 0; pointer-events: none; }
+body.sb-collapsed .nav-section { opacity: 0; height: 0; padding: 4px 0; overflow: hidden; }
+body.sb-collapsed .nav-item { padding: 9px 0; justify-content: center; border-left-color: transparent !important; }
+body.sb-collapsed .nav-item.active { border-right: 2px solid var(--q400); }
+body.sb-collapsed .nav-item::after {
   content: attr(data-label);
   position: absolute; left: 56px; top: 50%; transform: translateY(-50%);
   background: var(--q800); color: #fff; font-size: .75rem;
@@ -115,7 +115,7 @@ aside::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); }
   pointer-events: none; opacity: 0; transition: opacity .15s;
   z-index: 400; box-shadow: 0 2px 8px rgba(0,0,0,.3);
 }
-.layout.sb-collapsed .nav-item:hover::after { opacity: 1; }
+body.sb-collapsed .nav-item:hover::after { opacity: 1; }
 .nav-disabled { opacity: .4; pointer-events: none; }
 /* Toggle button */
 .sb-toggle {
@@ -1003,7 +1003,7 @@ renderKPIs(filteredData);
 /* Sidebar toggle */
 function toggleSidebar(){
   const layout = document.querySelector('.layout');
-  const collapsed = layout.classList.toggle('sb-collapsed');
+  const collapsed = document.body.classList.toggle('sb-collapsed');
   document.getElementById('sbToggleIcon').textContent = collapsed ? '▶' : '◀';
   localStorage.setItem('qSidebarCollapsed', collapsed ? '1' : '0');
 }
