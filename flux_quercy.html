@@ -64,6 +64,22 @@
   --g50:#F8F8F8;--g100:#F2F3F3;--g200:#E4E4E4;--g300:#ccc;
   --g400:#939291;--g500:#5E5E5D;--g600:#3a3a3a;--g700:#222;
   --g800:#1a1a1a;--g900:#111;
+  /* Variables propres à flux */
+  --surface: #FFFFFF;
+  --bg: #F2F3F3;
+  --text-2: #5E5E5D;
+  --text-3: #939291;
+  --text-4: #B6B6B6;
+  --orange: #C76502;
+  --orange-bg: #FBEFDE;
+  --green-bg: #E1FBDC;
+  --q050: #EDF4ED;
+  --q400: #25542B;
+  --q600: #25542B;
+  --sans: var(--f);
+  --mono: 'IBM Plex Mono', monospace;
+  --radius: 4px;
+  --radius-lg: 8px;
 }
 
 /* ── LAYOUT ── */
@@ -71,13 +87,10 @@ html{height:100%;}
 body{
   font-family:var(--f);color:var(--g700);font-size:13px;
   background:var(--pageBg);
-  display:grid;
-  grid-template-columns:248px 1fr;
-  grid-template-rows:64px 1fr;
   height:100vh;overflow:hidden;
-  transition:grid-template-columns .32s cubic-bezier(.4,0,.2,1);
+  margin:0;padding:0;
 }
-body.sb-collapsed{grid-template-columns:62px 1fr;}
+/* flux utilise .layout comme conteneur grid, pas body */
 
 /* ── HEADER ── */
 .header{
@@ -91,6 +104,8 @@ body.sb-collapsed{grid-template-columns:62px 1fr;}
 .logo img{height:30px;width:auto;object-fit:contain;}
 .logo-fallback{font-weight:700;font-size:14px;letter-spacing:.12em;text-transform:uppercase;display:none;align-items:center;gap:8px;}
 .logo-mark{width:28px;height:28px;background:var(--lime);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--green);}
+/* Flux: logo img direct dans header */
+header img.logo{height:30px;width:auto;object-fit:contain;display:block;flex:none;}
 .sep{width:1px;height:20px;background:rgba(255,255,255,.2);}
 .header-title{font-size:12px;font-weight:400;color:rgba(255,255,255,.55);letter-spacing:.04em;}
 .header-right{display:flex;align-items:center;gap:10px;}
@@ -135,15 +150,18 @@ body.sb-collapsed .nav-section{opacity:0;padding:6px 0;height:0;overflow:hidden;
 }
 .nav-item:hover{color:rgba(255,255,255,.95);background:rgba(255,255,255,.06);}
 .nav-item.active{color:var(--lime);background:rgba(255,255,255,.08);}
-.nav-item .nav-icon{
+.nav-item .nav-icon,
+.nav-item .icon{
   width:32px;height:32px;border-radius:8px;
   display:flex;align-items:center;justify-content:center;
   font-size:13px;flex-shrink:0;
   transition:all .12s;
   background:rgba(255,255,255,.07);
 }
-.nav-item.active .nav-icon{background:var(--lime);color:var(--green);font-size:14px;}
-.nav-item:hover:not(.active) .nav-icon{background:rgba(255,255,255,.1);}
+.nav-item.active .nav-icon,
+.nav-item.active .icon{background:var(--lime);color:var(--green);font-size:14px;}
+.nav-item:hover:not(.active) .nav-icon,
+.nav-item:hover:not(.active) .icon{background:rgba(255,255,255,.1);}
 .nav-label{transition:opacity .2s;font-size:12px;font-weight:500;letter-spacing:.02em;}
 body.sb-collapsed .nav-label{opacity:0;pointer-events:none;}
 body.sb-collapsed .nav-item{padding:10px 0;justify-content:center;}
@@ -241,6 +259,8 @@ main.main-content{
 /* ── TABLE ── */
 .table-wrap{padding:12px 24px 24px;overflow-x:auto;flex:1;}
 table{width:100%;border-collapse:collapse;background:var(--white);border-radius:16px;overflow:hidden;border:1px solid var(--border);box-shadow:var(--shadow);table-layout:fixed;}
+/* Flux table: override table-layout pour permettre auto-sizing */
+#fluxTable{table-layout:auto;border-radius:0;border:none;box-shadow:none;}
 
 /* THEAD */
 thead tr.thead-angled th{background:var(--green);padding:0;vertical-align:bottom;border-right:1px solid rgba(255,255,255,.08);white-space:nowrap;height:80px;}
@@ -456,6 +476,50 @@ tr.hidden{display:none!important;}
 }
 
 
+
+/* ── FLUX LAYOUT OVERRIDE ─────────────────────────── */
+.layout {
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  grid-template-rows: 64px 1fr;
+  height: 100vh; overflow: hidden;
+  transition: grid-template-columns .32s cubic-bezier(.4,0,.2,1);
+}
+.layout.sb-collapsed,
+body.sb-collapsed .layout {
+  grid-template-columns: 62px 1fr;
+}
+header {
+  grid-column: 1/-1;
+  background: var(--sidebar);
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 24px;
+  box-shadow: 0 2px 12px rgba(0,0,0,.18);
+  z-index: 100;
+  height: 64px;
+}
+header img.logo { height: 32px; width: auto; object-fit: contain; display: block; flex-shrink: 0; }
+header .sep { width: 1px; height: 20px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+header .title { color: rgba(255,255,255,.7); font-size: 12px; font-weight: 500; letter-spacing: .04em; font-family: var(--f); }
+header .role-select {
+  margin-left: auto;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  color: #fff; font-family: var(--f); font-size: 11px;
+  padding: 5px 10px; border-radius: 6px; cursor: pointer;
+}
+header .role-select option { background: var(--sidebar); }
+aside {
+  background: var(--sidebar);
+  padding: 0;
+  border-right: 1px solid rgba(255,255,255,.06);
+  display: flex; flex-direction: column;
+  overflow: hidden; overflow-y: auto;
+  transition: width .32s cubic-bezier(.4,0,.2,1);
+}
+aside::-webkit-scrollbar { width: 3px; }
+aside::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); }
+main { overflow-y: auto; display: flex; flex-direction: column; background: var(--pageBg); }
+
 /* Main ────────────────────────────────────────────────────── */
 
 main { overflow-y: auto; display: flex; flex-direction: column; }
@@ -489,34 +553,38 @@ main { overflow-y: auto; display: flex; flex-direction: column; }
   background: var(--border);
   border-top: 1px solid var(--border);
 }
-.kpi {
-  flex: 1; background: var(--surface);
+.kpi-strip .kpi {
+  flex: 1; background: var(--white);
   padding: 10px 18px;
   display: flex; flex-direction: column; gap: 2px;
+  border-radius: 0; border: none; box-shadow: none; cursor: default;
+  transform: none !important;
 }
-.kpi .val { font-family: var(--mono); font-size: 1.4rem; font-weight: 500; line-height: 1; }
-.kpi .lbl { font-size: .72rem; color: var(--text-3); }
-.kpi.red   .val { color: var(--red); }
-.kpi.orange .val { color: var(--orange); }
-.kpi.green  .val { color: var(--green); }
-.kpi.grey   .val { color: var(--grey); }
+.kpi-strip .kpi:hover { transform: none !important; box-shadow: none !important; }
+.kpi-strip .kpi .val { font-family: var(--f); font-size: 1.4rem; font-weight: 700; line-height: 1; }
+.kpi-strip .kpi .lbl { font-size: .72rem; color: var(--textMid); }
+.kpi-strip .kpi.red   .val { color: var(--red); }
+.kpi-strip .kpi.orange .val { color: var(--ora); }
+.kpi-strip .kpi.green  .val { color: var(--greenMid); }
+.kpi-strip .kpi.grey   .val { color: var(--textLight); }
 
 
 /* Toolbar ─────────────────────────────────────────────────── */
 
 .toolbar {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  padding: 12px 24px;
-  background: var(--bg);
+  padding: 10px 24px;
+  background: var(--white);
   border-bottom: 1px solid var(--border);
 }
 .toolbar select, .toolbar input {
-  font-family: var(--sans); font-size: .78rem;
-  padding: 5px 8px; border-radius: var(--radius);
-  border: 1px solid var(--border); background: var(--surface);
-  color: var(--text); cursor: pointer;
+  font-family: var(--f); font-size: 11px;
+  padding: 5px 9px; border-radius: 7px;
+  border: 1px solid var(--border); background: var(--searchBg);
+  color: var(--g700); cursor: pointer; outline: none;
+  transition: border-color .13s;
 }
-.toolbar select:focus, .toolbar input:focus { outline: none; border-color: var(--q400); }
+.toolbar select:focus, .toolbar input:focus { border-color: var(--greenMid); }
 .filter-group { display: flex; gap: 4px; }
 .btn-filter {
   padding: 4px 10px; border-radius: var(--radius);
@@ -749,38 +817,38 @@ tr.detail-row td { padding: 0; }
 <div class="layout">
 
 <!-- Header -->
-<header>
-  <img class="logo" src="https://macosq.github.io/maq-dashboard/assets/logo.png" alt="QUERCY" onerror="this.style.display='none'; document.getElementById('logo-text').style.display='flex'">
-  <div id="logo-text" style="display:none; align-items:center; justify-content:center; width:28px; height:28px; background:rgba(255,255,255,.15); border-radius:4px; color:#fff; font-weight:600; font-size:.85rem;">Q</div>
-  <div class="sep"></div>
-  <div class="title">Dashboard — QUERCY &amp; Associés</div>
-  <select class="role-select" id="roleSelect" onchange="onRoleChange()">
+<div class="header">
+  <div class="logo"><img src="https://macosq.github.io/maq-dashboard/assets/logo.png" alt="QUERCY" style="height:30px;width:auto;object-fit:contain;" onerror="this.style.display='none';this.parentElement.querySelector('.logo-fallback').style.display='flex'"></div>
+  <div class="logo-fallback" style="display:none;align-items:center;gap:8px;"><div class="logo-mark">Q</div><span style="color:white;font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;">QUERCY</span></div>
+    <div class="sep"></div>
+  <span class="header-title">Connexions flux — QUERCY &amp; Associés</span>
+  <div class="header-right"><select class="tb-sel" id="roleSelect" onchange="onRoleChange()" style="background:rgba(0,0,0,.18);border-color:rgba(255,255,255,.2);color:rgba(255,255,255,.7);">
     <option value="collab">Collaborateur</option>
     <option value="rm">Responsable</option>
     <option value="associe">Associé</option>
     <option value="admin">Administrateur</option>
-  </select>
-</header>
+  </select></div>
+</div><!-- end header -->
 
 <!-- Sidebar -->
-<aside>
+<aside class="sidebar">
   <div class="nav-section">Tableau de bord</div>
   <a class="nav-item" href="index.html" data-label="Supervision dossiers">
-    <span class="icon">◫</span>
+    <span class="nav-icon">◫</span>
     <span class="nav-label">Supervision dossiers</span>
   </a>
   <a class="nav-item active" href="flux_quercy.html" data-label="Connexions flux">
-    <span class="icon">⇄</span>
+    <span class="nav-icon">⇄</span>
     <span class="nav-label">Connexions flux</span>
   </a>
   <div class="nav-section" style="margin-top:8px;">Fiscal &amp; Social</div>
   <a class="nav-item" href="echeances.html" data-label="Échéances fiscales">
-    <span class="icon">📅</span>
+    <span class="nav-icon">📅</span>
     <span class="nav-label">Échéances fiscales</span>
   </a>
   <div class="nav-section" style="margin-top:8px;">À venir</div>
   <a class="nav-item nav-disabled" href="#" data-label="Paramétrage">
-    <span class="icon">⚙</span>
+    <span class="nav-icon">⚙</span>
     <span class="nav-label">Paramétrage</span>
   </a>
   <button class="sb-toggle" id="sbToggle" onclick="toggleSidebar()">
@@ -789,7 +857,7 @@ tr.detail-row td { padding: 0; }
 </aside>
 
 <!-- Main -->
-<main>
+<main class="main-content">
   <div class="page-header">
     <div class="page-header-top">
       <div>
@@ -1399,6 +1467,7 @@ renderKPIs(filteredData);
 function toggleSidebar(){
   const layout = document.querySelector('.layout');
   const collapsed = document.body.classList.toggle('sb-collapsed');
+  if(layout) layout.classList.toggle('sb-collapsed', collapsed);
   document.getElementById('sbToggleIcon').textContent = collapsed ? '▶' : '◀';
   localStorage.setItem('qSidebarCollapsed', collapsed ? '1' : '0');
 }
