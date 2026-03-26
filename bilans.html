@@ -7,228 +7,187 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   :root {
-    --brg:        #1B4332;
-    --brg-mid:    #2D6A4F;
-    --brg-faint:  #f0f4f1;
-    --brg-10:     rgba(27,67,50,0.10);
-    --green-ok:   #166534;
-    --green-bg:   #dcfce7;
-    --amber:      #d97706;
-    --amber-bg:   #fef3c7;
-    --gray-50:    #f9fafb;
-    --gray-100:   #f3f4f6;
-    --gray-200:   #e5e7eb;
-    --gray-400:   #9ca3af;
-    --gray-600:   #4b5563;
-    --gray-800:   #1f2937;
-    --sb-width:   220px;
+    --brg:       #1B4332;
+    --brg-faint: #f0f4f1;
+    --brg-10:    rgba(27,67,50,0.10);
+    --green-ok:  #166534;
+    --green-bg:  #dcfce7;
+    --amber:     #d97706;
+    --amber-bg:  #fef3c7;
+    --gray-50:   #f9fafb;
+    --gray-100:  #f3f4f6;
+    --gray-200:  #e5e7eb;
+    --gray-400:  #9ca3af;
+    --gray-600:  #4b5563;
+    --gray-800:  #1f2937;
+    --sb-width:  220px;
   }
-  html, body { height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; background: var(--gray-50); color: var(--gray-800); }
+  html, body { height:100%; font-family:'Segoe UI',system-ui,sans-serif; font-size:13px; background:var(--gray-50); color:var(--gray-800); }
 
   /* ── LAYOUT ── */
-  .layout { display: flex; height: 100vh; overflow: hidden; }
+  .layout { display:flex; height:100vh; overflow:hidden; }
 
   /* ── SIDEBAR ── */
-  .sidebar {
-    width: var(--sb-width); min-width: var(--sb-width);
-    background: var(--brg); display: flex; flex-direction: column;
-    transition: width 0.22s ease; overflow: hidden; position: relative; z-index: 10; flex-shrink: 0;
-  }
-  .sidebar.collapsed { width: 48px; min-width: 48px; }
-
-  .sb-logo {
-    display: flex; align-items: center; gap: 10px;
-    padding: 14px 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;
-  }
-  .sb-logo-mark {
-    width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15);
-    color: #fff; font-weight: 800; font-size: 14px;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .sb-logo img { width: 28px; height: 28px; border-radius: 6px; object-fit: contain; flex-shrink: 0; }
-  .sb-logo-text { color: #fff; font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; }
-
-  .nav-section {
-    color: rgba(255,255,255,0.35); font-size: 9px; font-weight: 700;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    padding: 10px 14px 4px; white-space: nowrap; overflow: hidden;
-  }
-  .sidebar.collapsed .nav-section { opacity: 0; pointer-events: none; }
-
-  .nav-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px 14px; color: rgba(255,255,255,0.65);
-    text-decoration: none; font-size: 12px; transition: all 0.15s;
-    white-space: nowrap; overflow: hidden; border-left: 3px solid transparent;
-  }
-  .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
-  .nav-item.active { background: rgba(255,255,255,0.14); color: #fff; font-weight: 600; border-left-color: #86efac; }
-  .nav-item.nav-disabled { opacity: 0.35; pointer-events: none; }
-  .nav-icon  { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
-  .nav-label { overflow: hidden; }
-
-  .sb-toggle {
-    margin: auto 14px 12px; background: none; border: none;
-    color: rgba(255,255,255,0.45); cursor: pointer; font-size: 13px;
-    padding: 4px 6px; border-radius: 4px; transition: all 0.15s; display: block; text-align: left;
-  }
-  .sb-toggle:hover { color: #fff; background: rgba(255,255,255,0.1); }
+  .sidebar { width:var(--sb-width); min-width:var(--sb-width); background:var(--brg); display:flex; flex-direction:column; transition:width .22s ease; overflow:hidden; z-index:10; flex-shrink:0; }
+  .sidebar.collapsed { width:48px; min-width:48px; }
+  .sb-logo { display:flex; align-items:center; gap:10px; padding:14px 14px 12px; border-bottom:1px solid rgba(255,255,255,.1); flex-shrink:0; }
+  .sb-logo-mark { width:28px; height:28px; border-radius:6px; background:rgba(255,255,255,.15); color:#fff; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .sb-logo img  { width:28px; height:28px; border-radius:6px; object-fit:contain; flex-shrink:0; }
+  .sb-logo-text { color:#fff; font-weight:700; font-size:14px; white-space:nowrap; overflow:hidden; }
+  .nav-section  { color:rgba(255,255,255,.35); font-size:9px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:10px 14px 4px; white-space:nowrap; overflow:hidden; }
+  .sidebar.collapsed .nav-section { opacity:0; pointer-events:none; }
+  .nav-item { display:flex; align-items:center; gap:10px; padding:8px 14px; color:rgba(255,255,255,.65); text-decoration:none; font-size:12px; transition:all .15s; white-space:nowrap; overflow:hidden; border-left:3px solid transparent; }
+  .nav-item:hover { background:rgba(255,255,255,.08); color:#fff; }
+  .nav-item.active { background:rgba(255,255,255,.14); color:#fff; font-weight:600; border-left-color:#86efac; }
+  .nav-item.nav-disabled { opacity:.35; pointer-events:none; }
+  .nav-icon  { font-size:14px; width:18px; text-align:center; flex-shrink:0; }
+  .nav-label { overflow:hidden; }
+  .sb-toggle { margin:auto 14px 12px; background:none; border:none; color:rgba(255,255,255,.45); cursor:pointer; font-size:13px; padding:4px 6px; border-radius:4px; transition:all .15s; display:block; text-align:left; }
+  .sb-toggle:hover { color:#fff; background:rgba(255,255,255,.1); }
 
   /* ── MAIN ── */
-  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+  .main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+  .topbar { height:52px; background:#fff; border-bottom:1px solid var(--gray-200); display:flex; align-items:center; padding:0 20px; gap:14px; flex-shrink:0; }
+  .topbar-title { font-size:15px; font-weight:700; color:var(--brg); }
+  .topbar-sep { width:1px; height:20px; background:var(--gray-200); }
+  .topbar-periode { font-size:12px; color:var(--gray-400); }
+  .view-toggle { display:flex; background:var(--gray-100); border-radius:7px; padding:3px; gap:2px; margin-left:auto; }
+  .view-btn { padding:5px 14px; border-radius:5px; border:none; cursor:pointer; font-size:11px; font-weight:600; transition:all .15s; background:transparent; color:var(--gray-400); }
+  .view-btn.active { background:#fff; color:var(--brg); box-shadow:0 1px 3px rgba(0,0,0,.1); }
 
-  .topbar {
-    height: 52px; background: #fff; border-bottom: 1px solid var(--gray-200);
-    display: flex; align-items: center; padding: 0 20px; gap: 14px; flex-shrink: 0;
-  }
-  .topbar-title   { font-size: 15px; font-weight: 700; color: var(--brg); }
-  .topbar-sep     { width: 1px; height: 20px; background: var(--gray-200); }
-  .topbar-periode { font-size: 12px; color: var(--gray-400); }
-
-  .view-toggle { display: flex; background: var(--gray-100); border-radius: 7px; padding: 3px; gap: 2px; margin-left: auto; }
-  .view-btn {
-    padding: 5px 14px; border-radius: 5px; border: none; cursor: pointer;
-    font-size: 11px; font-weight: 600; transition: all 0.15s;
-    background: transparent; color: var(--gray-400);
-  }
-  .view-btn.active { background: #fff; color: var(--brg); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-
-  /* ── FILTRES ── */
-  .filters-bar {
-    background: #fff; border-bottom: 1px solid var(--gray-200);
-    padding: 8px 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex-shrink: 0;
-  }
-  .filter-label { font-size: 11px; color: var(--gray-400); font-weight: 700; white-space: nowrap; }
-  .filter-sep   { width: 1px; height: 20px; background: var(--gray-200); }
-  select.f-sel {
-    font-size: 11px; font-weight: 600; color: var(--brg);
-    border: 1px solid rgba(27,67,50,0.25); border-radius: 5px;
-    padding: 4px 8px; background: #fff; cursor: pointer; outline: none;
-  }
-  .search-wrap { position: relative; margin-left: auto; }
-  .search-wrap svg { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); pointer-events: none; }
-  .search-wrap input {
-    padding: 5px 10px 5px 26px; border: 1px solid var(--gray-200);
-    border-radius: 6px; font-size: 11px; width: 180px; outline: none; transition: border-color 0.15s;
-  }
-  .search-wrap input:focus { border-color: var(--brg-mid); }
+  /* ── FILTRES GLOBAUX ── */
+  .filters-bar { background:#fff; border-bottom:1px solid var(--gray-200); padding:8px 20px; display:flex; align-items:center; gap:10px; flex-wrap:wrap; flex-shrink:0; }
+  .filter-label { font-size:11px; color:var(--gray-400); font-weight:700; white-space:nowrap; }
+  .filter-sep { width:1px; height:20px; background:var(--gray-200); }
+  select.f-sel { font-size:11px; font-weight:600; color:var(--brg); border:1px solid rgba(27,67,50,.25); border-radius:5px; padding:4px 8px; background:#fff; cursor:pointer; outline:none; }
+  .search-wrap { position:relative; margin-left:auto; }
+  .search-wrap svg { position:absolute; left:8px; top:50%; transform:translateY(-50%); pointer-events:none; }
+  .search-wrap input { padding:5px 10px 5px 26px; border:1px solid var(--gray-200); border-radius:6px; font-size:11px; width:180px; outline:none; transition:border-color .15s; }
+  .search-wrap input:focus { border-color:#40916C; }
 
   /* ── STATS ── */
-  .stats-bar {
-    background: var(--gray-50); border-bottom: 1px solid var(--gray-200);
-    padding: 6px 20px; display: flex; gap: 24px; align-items: center; flex-shrink: 0;
-  }
-  .stat-item { display: flex; align-items: center; gap: 6px; }
-  .stat-val  { font-size: 16px; font-weight: 800; }
-  .stat-lbl  { font-size: 11px; color: var(--gray-400); }
+  .stats-bar { background:var(--gray-50); border-bottom:1px solid var(--gray-200); padding:6px 20px; display:flex; gap:24px; align-items:center; flex-shrink:0; }
+  .stat-item { display:flex; align-items:center; gap:6px; }
+  .stat-val  { font-size:16px; font-weight:800; }
+  .stat-lbl  { font-size:11px; color:var(--gray-400); }
 
   /* ── CONTENT ── */
-  .content { flex: 1; overflow: auto; padding: 16px 20px; }
+  .content { flex:1; overflow:auto; padding:16px 20px; }
 
   /* ── TABLEAU ── */
-  .table-wrap { border-radius: 8px; box-shadow: 0 1px 8px rgba(0,0,0,0.07); border: 1px solid var(--gray-200); overflow: auto; }
+  .table-wrap { border-radius:8px; box-shadow:0 1px 8px rgba(0,0,0,.07); border:1px solid var(--gray-200); overflow:auto; }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
 
-  table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+  /* En-tête principal */
+  thead tr.tr-header { background:var(--brg); position:sticky; top:0; z-index:3; }
+  thead th { padding:9px 5px; font-weight:700; font-size:10px; letter-spacing:.05em; text-transform:uppercase; color:#fff; text-align:center; white-space:nowrap; }
+  thead th.th-left { text-align:left; padding-left:12px; }
+  thead th.th-etape { font-size:9px; line-height:1.2; white-space:normal; width:36px; min-width:36px; vertical-align:bottom; padding:6px 2px 5px; }
+  thead th.th-etape.sp { color:#fde68a; }
+  thead th.th-etape:not(.sp) { color:#bbf7d0; }
 
-  /* Largeurs des colonnes fixes */
-  col.col-num   { width: 54px; }
-  col.col-nom   { /* fluide, prend le reste */ }
-  col.col-type  { width: 46px; }
-  col.col-ass   { width: 42px; }
-  col.col-rm    { width: 38px; }
-  col.col-etape { width: 30px; }
+  /* Ligne de filtres par étape */
+  thead tr.tr-filters { background:#f0f4f1; position:sticky; top:37px; z-index:2; border-bottom:2px solid var(--gray-200); }
+  thead tr.tr-filters td { padding:3px 2px; text-align:center; }
+  thead tr.tr-filters td.td-spacer { padding:0; }
 
-  thead tr { background: var(--brg); position: sticky; top: 0; z-index: 2; }
-  thead th {
-    padding: 9px 4px; font-weight: 700; font-size: 10px; letter-spacing: 0.05em;
-    text-transform: uppercase; color: #fff; text-align: center; overflow: hidden;
+  /* Boutons filtres étape */
+  .etape-filter-btn {
+    width:26px; height:22px; border-radius:4px; border:1.5px solid var(--gray-200);
+    background:#fff; cursor:pointer; font-size:9px; font-weight:700;
+    display:flex; align-items:center; justify-content:center; margin:0 auto;
+    transition:all .12s; color:var(--gray-400); position:relative;
   }
-  thead th.th-left  { text-align: left; padding-left: 10px; }
-  thead th.th-etape { font-size: 8px; line-height: 1.2; white-space: normal; vertical-align: bottom; padding: 5px 1px 4px; }
-  thead th.th-etape.special { color: #fde68a; }
-  thead th.th-etape:not(.special) { color: #bbf7d0; }
+  .etape-filter-btn:hover { border-color:var(--brg); color:var(--brg); }
+  .etape-filter-btn.on-ok   { background:var(--green-bg); border-color:var(--green-ok); color:var(--green-ok); }
+  .etape-filter-btn.on-no   { background:#fee2e2; border-color:#ef4444; color:#ef4444; }
+  .etape-filter-btn.on-sp   { background:var(--amber-bg); border-color:var(--amber); color:var(--amber); }
 
-  tbody tr { border-bottom: 1px solid #f0f0f0; transition: background 0.1s; }
-  tbody tr:nth-child(even) { background: var(--gray-50); }
-  tbody tr:hover { background: var(--brg-faint) !important; }
-  tbody td { padding: 6px 4px; text-align: center; overflow: hidden; }
-  tbody td.td-left { text-align: left; padding-left: 10px; font-weight: 600; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  tbody td.td-mono { font-family: 'Courier New', monospace; color: var(--gray-400); font-size: 11px; }
+  /* Légende filtres */
+  .filter-legend { font-size:10px; color:var(--gray-400); padding:4px 20px 0; display:flex; gap:14px; align-items:center; flex-shrink:0; }
+  .fl-item { display:flex; align-items:center; gap:4px; }
+  .fl-dot  { width:10px; height:10px; border-radius:2px; }
 
-  .badge-type { display: inline-block; font-size: 9px; font-weight: 700; padding: 2px 4px; border-radius: 3px; }
-  .badge-P    { background: #dbeafe; color: #1e40af; }
-  .badge-SP   { background: #ede9fe; color: #7c3aed; }
-  .badge-SCI  { background: #fef3c7; color: #b45309; }
-  .badge-ST   { background: #ccfbf1; color: #0f766e; }
+  /* Corps du tableau */
+  tbody tr { border-bottom:1px solid #f0f0f0; transition:background .1s; }
+  tbody tr:nth-child(even) { background:var(--gray-50); }
+  tbody tr:hover { background:var(--brg-faint) !important; }
+  tbody td { padding:5px 4px; text-align:center; }
+  tbody td.td-left { text-align:left; padding-left:12px; }
+  tbody td.td-mono { font-family:'Courier New',monospace; color:var(--gray-400); font-size:11px; }
 
-  /* Initiales badge — rond coloré comme index.html */
-  .init-badge {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 24px; height: 24px; border-radius: 50%;
-    font-size: 9px; font-weight: 800; letter-spacing: 0;
-  }
-  .init-ass { background: var(--brg-10); color: var(--brg); }
-  .init-rm  { background: var(--gray-100); color: var(--gray-600); }
+  /* Colonne nom — compacte, tronquée */
+  .nom-cell { max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600; color:var(--gray-800); font-size:12px; display:block; }
+
+  /* Type / badges */
+  .badge-type { display:inline-block; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; }
+  .badge-P   { background:#dbeafe; color:#1e40af; }
+  .badge-SP  { background:#ede9fe; color:#7c3aed; }
+  .badge-SCI { background:#fef3c7; color:#b45309; }
+  .badge-ST  { background:#ccfbf1; color:#0f766e; }
+  .badge-assoc { display:inline-block; font-size:10px; font-weight:600; padding:2px 8px; border-radius:20px; background:var(--brg-10); color:var(--brg); }
+  .rm-text { font-size:11px; color:var(--gray-600); }
 
   /* Cases à cocher */
-  .check-cell {
-    width: 24px; height: 24px; border-radius: 4px; margin: 0 auto;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: all 0.12s;
-    border: 1.5px solid var(--gray-200); background: var(--gray-100);
+  .check-cell { width:26px; height:26px; border-radius:5px; margin:0 auto; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .12s; border:1.5px solid var(--gray-200); background:var(--gray-100); }
+  .check-cell svg { display:none; }
+  .check-cell.ok  { background:var(--green-bg); border-color:var(--green-ok); }
+  .check-cell.ok svg { display:block; }
+  .check-cell.sp  { background:var(--amber-bg); border-color:var(--amber); }
+  .check-cell.sp svg { display:block; }
+
+  /* ── BARRE DE PROGRESSION ── */
+  .progress-wrap { display:flex; gap:2px; align-items:center; padding:0 2px; }
+  .prog-seg {
+    height:10px; flex:1; border-radius:2px; background:var(--gray-200);
+    transition:background .15s;
   }
-  .check-cell svg { display: none; }
-  .check-cell.ok     { background: var(--green-bg); border-color: var(--green-ok); }
-  .check-cell.ok svg { display: block; }
-  .check-cell.sp     { background: var(--amber-bg); border-color: var(--amber); }
-  .check-cell.sp svg { display: block; }
+  .prog-seg.done    { background:#4ade80; }
+  .prog-seg.done-sp { background:var(--amber); }
+  .prog-seg.active  { background:#86efac; }
 
   /* ── PAGINATION ── */
-  .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
-  .pag-info   { font-size: 11px; color: var(--gray-400); }
-  .pag-btns   { display: flex; gap: 3px; }
-  .p-btn {
-    width: 28px; height: 28px; border-radius: 5px; border: 1px solid var(--gray-200);
-    background: #fff; color: var(--gray-600); font-size: 12px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center; transition: all 0.12s;
-  }
-  .p-btn:hover:not(:disabled) { border-color: var(--brg); color: var(--brg); }
-  .p-btn.active { background: var(--brg); border-color: var(--brg); color: #fff; font-weight: 700; }
-  .p-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-  .pag-ell { font-size: 11px; color: var(--gray-400); align-self: center; padding: 0 2px; }
+  .pagination { display:flex; align-items:center; justify-content:space-between; margin-top:12px; }
+  .pag-info { font-size:11px; color:var(--gray-400); }
+  .pag-btns { display:flex; gap:3px; }
+  .p-btn { width:28px; height:28px; border-radius:5px; border:1px solid var(--gray-200); background:#fff; color:var(--gray-600); font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .12s; }
+  .p-btn:hover:not(:disabled) { border-color:var(--brg); color:var(--brg); }
+  .p-btn.active { background:var(--brg); border-color:var(--brg); color:#fff; font-weight:700; }
+  .p-btn:disabled { opacity:.3; cursor:not-allowed; }
+  .pag-ell { font-size:11px; color:var(--gray-400); align-self:center; padding:0 2px; }
 
   /* ── KANBAN ── */
-  .kanban-wrap { display: flex; gap: 8px; align-items: flex-start; padding-bottom: 12px; }
-  .kanban-col {
-    min-width: 170px; max-width: 170px; flex-shrink: 0;
-    background: var(--gray-100); border-radius: 10px; padding: 10px 8px;
-    border: 2px solid transparent; transition: all 0.15s;
+  .kanban-wrap { display:flex; gap:8px; align-items:flex-start; padding-bottom:12px; }
+  .kanban-col  { min-width:172px; max-width:172px; flex-shrink:0; background:var(--gray-100); border-radius:10px; padding:10px 8px; border:2px solid transparent; transition:all .15s; }
+  .kanban-col.drag-over { background:#e8f5e9; border-color:var(--brg); }
+  .kcol-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid var(--brg); }
+  .kcol-header.sp { border-bottom-color:var(--amber); }
+  .kcol-title { font-size:10px; font-weight:700; color:var(--brg); text-transform:uppercase; letter-spacing:.05em; }
+  .kcol-title.sp { color:var(--amber); }
+  .kcol-count { font-size:11px; font-weight:700; border-radius:20px; padding:1px 8px; background:var(--brg-faint); color:var(--brg); }
+  .kcol-count.sp { background:var(--amber-bg); color:var(--amber); }
+  .kcol-cards { display:flex; flex-direction:column; gap:6px; max-height:calc(100vh - 240px); overflow-y:auto; }
+  .kcard { background:#fff; border-radius:7px; padding:9px 11px; box-shadow:0 1px 3px rgba(0,0,0,.07); cursor:grab; border:1px solid var(--gray-200); transition:box-shadow .15s; user-select:none; }
+  .kcard:hover { box-shadow:0 3px 8px rgba(27,67,50,.15); }
+  .kcard.dragging { opacity:.4; }
+  .kcard-name { font-size:12px; font-weight:700; color:var(--gray-800); margin-bottom:3px; line-height:1.3; }
+  .kcard-meta { display:flex; gap:5px; align-items:center; margin-bottom:6px; }
+  .kcard-num  { font-size:9px; font-family:monospace; color:var(--gray-400); }
+  .kcard-tags { display:flex; gap:4px; flex-wrap:wrap; }
+  .ktag { font-size:9px; font-weight:600; padding:2px 6px; border-radius:20px; }
+  .ktag.assoc { background:var(--brg-10); color:var(--brg); }
+  .ktag.rm    { background:var(--gray-100); color:var(--gray-600); }
+  .kcol-empty { text-align:center; padding:16px 0; color:var(--gray-200); font-size:11px; }
+
+  ::-webkit-scrollbar { width:5px; height:5px; }
+  ::-webkit-scrollbar-thumb { background:var(--gray-200); border-radius:3px; }
+
+  /* Tooltip nom complet */
+  .nom-cell[title]:hover::after {
+    content:attr(title); position:fixed; background:#1f2937; color:#fff;
+    font-size:11px; padding:4px 8px; border-radius:5px; z-index:100;
+    white-space:nowrap; pointer-events:none; margin-top:20px;
   }
-  .kanban-col.drag-over { background: #e8f5e9; border-color: var(--brg); }
-  .kcol-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--brg); }
-  .kcol-header.sp { border-bottom-color: var(--amber); }
-  .kcol-title { font-size: 10px; font-weight: 700; color: var(--brg); text-transform: uppercase; letter-spacing: 0.05em; }
-  .kcol-title.sp { color: var(--amber); }
-  .kcol-count { font-size: 11px; font-weight: 700; border-radius: 20px; padding: 1px 8px; background: var(--brg-faint); color: var(--brg); }
-  .kcol-count.sp { background: var(--amber-bg); color: var(--amber); }
-  .kcol-cards { display: flex; flex-direction: column; gap: 6px; max-height: calc(100vh - 240px); overflow-y: auto; }
-
-  .kcard {
-    background: #fff; border-radius: 7px; padding: 9px 11px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.07); cursor: grab;
-    border: 1px solid var(--gray-200); transition: box-shadow 0.15s; user-select: none;
-  }
-  .kcard:hover { box-shadow: 0 3px 8px rgba(27,67,50,0.15); }
-  .kcard.dragging { opacity: 0.4; }
-  .kcard-name { font-size: 12px; font-weight: 700; color: var(--gray-800); margin-bottom: 4px; line-height: 1.3; }
-  .kcard-meta { display: flex; gap: 5px; align-items: center; margin-bottom: 7px; }
-  .kcard-num  { font-size: 9px; font-family: monospace; color: var(--gray-400); }
-  .kcard-tags { display: flex; gap: 5px; flex-wrap: wrap; align-items: center; }
-
-  .kcol-empty { text-align: center; padding: 16px 0; color: var(--gray-200); font-size: 11px; }
-
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
 </style>
 </head>
 <body>
@@ -237,37 +196,28 @@
   <!-- ── SIDEBAR ── -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-logo">
-      <img src="assets/logo.png" onerror="this.style.display='none';document.getElementById('logoFb').style.display='flex';" alt="QUERCY">
-      <div class="sb-logo-mark" id="logoFb" style="display:none">Q</div>
+      <img src="assets/logo.png" onerror="this.style.display='none';document.getElementById('lf').style.display='flex';" alt="Q">
+      <div class="sb-logo-mark" id="lf" style="display:none">Q</div>
       <div class="sb-logo-text">QUERCY</div>
     </div>
-
     <div class="nav-section">Tableau de bord</div>
     <a class="nav-item" href="index.html" data-label="Supervision dossiers">
-      <span class="nav-icon">◫</span>
-      <span class="nav-label">Supervision dossiers</span>
+      <span class="nav-icon">◫</span><span class="nav-label">Supervision dossiers</span>
     </a>
     <a class="nav-item" href="flux_quercy.html" data-label="Connexions flux">
-      <span class="nav-icon">⇄</span>
-      <span class="nav-label">Connexions flux</span>
+      <span class="nav-icon">⇄</span><span class="nav-label">Connexions flux</span>
     </a>
     <a class="nav-item active" href="bilans.html" data-label="Suivi des bilans">
-      <span class="nav-icon">☑</span>
-      <span class="nav-label">Suivi des bilans</span>
+      <span class="nav-icon">☑</span><span class="nav-label">Suivi des bilans</span>
     </a>
-
     <div class="nav-section" style="margin-top:8px">Fiscal &amp; Social</div>
     <a class="nav-item" href="echeances.html" data-label="Échéances fiscales">
-      <span class="nav-icon">📅</span>
-      <span class="nav-label">Échéances fiscales</span>
+      <span class="nav-icon">📅</span><span class="nav-label">Échéances fiscales</span>
     </a>
-
     <div class="nav-section" style="margin-top:8px">À venir</div>
     <a class="nav-item nav-disabled" href="#" data-label="Paramétrage">
-      <span class="nav-icon">⚙</span>
-      <span class="nav-label">Paramétrage</span>
+      <span class="nav-icon">⚙</span><span class="nav-label">Paramétrage</span>
     </a>
-
     <button class="sb-toggle" id="sbToggle" onclick="toggleSidebar()" title="Réduire/agrandir">
       <span id="sbToggleIcon">◀</span>
     </button>
@@ -275,7 +225,6 @@
 
   <!-- ── MAIN ── -->
   <main class="main">
-
     <div class="topbar">
       <span class="topbar-title">Suivi des bilans</span>
       <div class="topbar-sep"></div>
@@ -291,22 +240,19 @@
       <select class="f-sel" id="sel-annee" onchange="onAnneeChange()"></select>
       <select class="f-sel" id="sel-mois"  onchange="renderAll()"></select>
       <div class="filter-sep"></div>
-      <select class="f-sel" id="sel-type" onchange="renderAll()">
+      <select class="f-sel" id="sel-type"  onchange="renderAll()">
         <option value="">Tous types</option>
         <option>P</option><option>SP</option><option>SCI</option><option>ST</option>
       </select>
       <select class="f-sel" id="sel-assoc" onchange="renderAll()">
-        <option value="">Tous ass.</option>
-        <option value="MA">MA</option>
-        <option value="DU">DU</option>
-        <option value="LE">LE</option>
+        <option value="">Tous associés</option>
+        <option>MARTIN</option><option>DUPONT</option><option>LEFEBVRE</option>
       </select>
       <select class="f-sel" id="sel-rm" onchange="renderAll()">
         <option value="">Tous RM</option>
-        <option value="MO">MO</option><option value="BE">BE</option>
-        <option value="PE">PE</option><option value="RI">RI</option>
-        <option value="GA">GA</option><option value="TH">TH</option>
-        <option value="LR">LR</option><option value="SI">SI</option>
+        <option>MOREAU</option><option>BERNARD</option><option>PETIT</option>
+        <option>RICHARD</option><option>GARCIA</option><option>THOMAS</option>
+        <option>LEROY</option><option>SIMON</option>
       </select>
       <div class="search-wrap">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
@@ -314,6 +260,14 @@
         </svg>
         <input type="text" id="search" placeholder="Nom ou N° dossier…" oninput="renderAll()">
       </div>
+    </div>
+
+    <!-- Légende filtres étape -->
+    <div class="filter-legend" id="filter-legend" style="display:none">
+      <span style="font-size:11px;color:var(--gray-600);font-weight:600">Filtres actifs par étape :</span>
+      <span class="fl-item"><span class="fl-dot" style="background:var(--green-bg);border:1px solid var(--green-ok)"></span> ✓ = étape cochée</span>
+      <span class="fl-item"><span class="fl-dot" style="background:#fee2e2;border:1px solid #ef4444"></span> ✗ = étape non cochée</span>
+      <button onclick="clearEtapeFilters()" style="margin-left:auto;font-size:11px;color:var(--brg);background:none;border:1px solid var(--brg);border-radius:4px;padding:2px 8px;cursor:pointer">Effacer filtres étapes</button>
     </div>
 
     <div class="stats-bar">
@@ -330,73 +284,64 @@
 <script>
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 const ETAPES = [
-  { id:'afaire',     label:'À faire',          short:'À<br>faire',        sp:false },
-  { id:'prod',       label:'Prod ok',           short:'Prod<br>ok',        sp:false },
-  { id:'rm',         label:'RM ok',             short:'RM<br>ok',          sp:false },
-  { id:'associe',    label:'Associé ok',        short:'Ass.<br>ok',        sp:false },
-  { id:'prez',       label:'Préz client',       short:'Préz<br>client',    sp:false },
-  { id:'modif',      label:'Modif à faire',     short:'Modif<br>à faire',  sp:true  },
-  { id:'liasse_rev', label:'Liasse à réviser',  short:'Liasse<br>rév.',    sp:false },
-  { id:'liasse_ok',  label:'Liasse ok',         short:'Liasse<br>ok',      sp:false },
-  { id:'liasse_env', label:'Liasse envoyée',    short:'Liasse<br>env.',    sp:false },
+  { id:'afaire',     label:'À faire',         short:'À<br>faire',        sp:false },
+  { id:'prod',       label:'Prod ok',          short:'Prod<br>ok',        sp:false },
+  { id:'rm',         label:'RM ok',            short:'RM<br>ok',          sp:false },
+  { id:'associe',    label:'Associé ok',       short:'Associé<br>ok',     sp:false },
+  { id:'prez',       label:'Préz client',      short:'Préz<br>client',    sp:false },
+  { id:'modif',      label:'Modif à faire',    short:'Modif<br>à faire',  sp:true  },
+  { id:'liasse_rev', label:'Liasse à réviser', short:'Liasse<br>réviser', sp:false },
+  { id:'liasse_ok',  label:'Liasse ok',        short:'Liasse<br>ok',      sp:false },
+  { id:'liasse_env', label:'Liasse envoyée',   short:'Liasse<br>envoyée', sp:false },
 ];
 
 const CLOTURES  = [{a:'2025',m:'12'},{a:'2025',m:'09'},{a:'2025',m:'06'},{a:'2024',m:'12'}];
 const MOIS_NOMS = ['','Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
-const PER_PAGE  = 50;
-
-// Initiales — cohérent avec index.html (MA DU LE / MO BE PE RI + GA TH LR SI)
-const ASSOC_INI = ['MA','DU','LE'];
-const RM_INI    = ['MO','BE','PE','RI','GA','TH','LR','SI'];
-
+const ASSOCIES  = ['MARTIN','DUPONT','LEFEBVRE'];
+const RMS       = ['MOREAU','BERNARD','PETIT','RICHARD','GARCIA','THOMAS','LEROY','SIMON'];
 const NOMS = {
-  P:   ['PHARMACIE DU CENTRE','GRANDE PHARMACIE','PHARMACIE DE LA GARE','PHARMACIE DES HALLES',
-         'PHARMACIE SAINT-JEAN','PHARMACIE DU MARCHÉ','PHARMACIE DE L\'ÉGLISE','PHARMACIE DES FLEURS',
-         'PHARMACIE PRINCIPALE','PHARMACIE DU PARC','PHARMACIE DU BOURG','PHARMACIE DE LA PLACE',
-         'PHARMACIE DES ARCADES','PHARMACIE DU CHÂTEAU','PHARMACIE LAFAYETTE','PHARMACIE VOLTAIRE',
-         'PHARMACIE VICTOR HUGO','PHARMACIE GAMBETTA','PHARMACIE JEAN JAURÈS','PHARMACIE FOCH',
-         'PHARMACIE CLEMENCEAU','PHARMACIE DU LAC','PHARMACIE PASTEUR','PHARMACIE CENTRALE'],
-  SP:  ['SPFPL SANTÉ QUERCY','SPFPL PHARMA INVEST','SPFPL DU MIDI','SPFPL LOTOISE',
-         'SPFPL OFFICINE PLUS','SPFPL MÉDICAP','SPFPL PHARMA SUD','SPFPL AVENIR SANTÉ'],
-  SCI: ['SCI LES ACACIAS','SCI DU PARC','SCI SAINT-PIERRE','SCI LES OLIVIERS',
-         'SCI LA BASTIDE','SCI DU CHÂTAIGNIER','SCI LES PLATANES','SCI DU MOULIN',
-         'SCI LES CERISIERS','SCI BELLE VUE','SCI LES VIGNES','SCI DU CAUSSE'],
-  ST:  ['SAS PHARMA GESTION','SARL OFFICINE SERVICES','SAS SANTÉ PLUS','SARL MÉDICO CONSEIL',
-         'SAS QUERCY SANTÉ','SARL PHARMA DÉVELOPP.','SAS OFFICINE HOLDING','SARL SANTÉ INVEST'],
+  P:   ['PHARMACIE DU CENTRE','GRANDE PHARMACIE','PHARMACIE DE LA GARE','PHARMACIE DES HALLES','PHARMACIE SAINT-JEAN','PHARMACIE DU MARCHÉ','PHARMACIE DE L\'ÉGLISE','PHARMACIE DES FLEURS','PHARMACIE PRINCIPALE','PHARMACIE DU PARC','PHARMACIE DU BOURG','PHARMACIE DE LA PLACE','PHARMACIE DES ARCADES','PHARMACIE DU CHÂTEAU','PHARMACIE LAFAYETTE','PHARMACIE VOLTAIRE','PHARMACIE VICTOR HUGO','PHARMACIE GAMBETTA','PHARMACIE JEAN JAURÈS','PHARMACIE FOCH','PHARMACIE CLEMENCEAU','PHARMACIE DU LAC','PHARMACIE PASTEUR','PHARMACIE CENTRALE'],
+  SP:  ['SPFPL SANTÉ QUERCY','SPFPL PHARMA INVEST','SPFPL DU MIDI','SPFPL LOTOISE','SPFPL OFFICINE PLUS','SPFPL MÉDICAP','SPFPL PHARMA SUD','SPFPL AVENIR SANTÉ'],
+  SCI: ['SCI LES ACACIAS','SCI DU PARC','SCI SAINT-PIERRE','SCI LES OLIVIERS','SCI LA BASTIDE','SCI DU CHÂTAIGNIER','SCI LES PLATANES','SCI DU MOULIN','SCI LES CERISIERS','SCI BELLE VUE','SCI LES VIGNES','SCI DU CAUSSE'],
+  ST:  ['SAS PHARMA GESTION','SARL OFFICINE SERVICES','SAS SANTÉ PLUS','SARL MÉDICO CONSEIL','SAS QUERCY SANTÉ','SARL PHARMA DÉVELOPP.','SAS OFFICINE HOLDING','SARL SANTÉ INVEST'],
 };
+const PER_PAGE = 50;
+const BATCHES  = [['2025-12',548],['2025-09',78],['2025-06',42],['2024-12',95]];
 
-const BATCHES = [['2025-12',548],['2025-09',78],['2025-06',42],['2024-12',95]];
+function seededRng(s) { return () => { s=(s*16807)%2147483647; return (s-1)/2147483646; }; }
 
-function seededRng(s) { return ()=>{ s=(s*16807)%2147483647; return (s-1)/2147483646; }; }
-
-const ALL = (()=>{
+const ALL = (function() {
   const all=[]; let gid=1;
-  for(const [cl,count] of BATCHES){
+  for (const [cl,count] of BATCHES) {
     const rng=seededRng(parseInt(cl.replace('-',''))+count*7);
     const ri=n=>Math.floor(rng()*n);
-    for(let i=0;i<count;i++){
+    for (let i=0;i<count;i++) {
       const tr=rng();
-      const type=tr<0.55?'P':tr<0.70?'SP':tr<0.85?'SCI':'ST';
+      const type=tr<.55?'P':tr<.70?'SP':tr<.85?'SCI':'ST';
       const pool=NOMS[type];
-      // Pas de suffixe numérique — le numéro de dossier est dans la colonne N°
-      const nom=pool[ri(pool.length)];
+      const nom=pool[ri(pool.length)]+' '+String(gid).padStart(4,'0');
       const num=String(1000+ri(8999));
       const stage=ri(9);
       const st={afaire:false,prod:false,rm:false,associe:false,prez:false,modif:false,liasse_rev:false,liasse_ok:false,liasse_env:false};
       const seq=['afaire','prod','rm','associe','prez','liasse_rev','liasse_ok','liasse_env'];
-      if(stage===5){ ['afaire','prod','rm','associe','prez','modif'].forEach(k=>st[k]=true); }
-      else{ seq.slice(0,Math.min(stage,seq.length)).forEach(k=>st[k]=true); }
-      all.push({ id:gid++, num, nom, type, associe:ASSOC_INI[ri(3)], rm:RM_INI[ri(8)], cloture:cl, statuts:st });
+      if(stage===5){['afaire','prod','rm','associe','prez','modif'].forEach(k=>st[k]=true);}
+      else{seq.slice(0,Math.min(stage,seq.length)).forEach(k=>st[k]=true);}
+      all.push({id:gid++,num,nom,type,associe:ASSOCIES[ri(3)],rm:RMS[ri(8)],cloture:cl,statuts:st});
     }
   }
   return all;
 })();
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
-let currentView='tableau', currentPage=1, dragId=null;
+let currentView = 'tableau';
+let currentPage = 1;
+let dragId      = null;
+// Filtres par étape : null = pas de filtre, true = coché, false = non coché
+const etapeFilters = {};
+ETAPES.forEach(e => etapeFilters[e.id] = null);
 
 // ── SIDEBAR ───────────────────────────────────────────────────────────────────
-function toggleSidebar(){
+function toggleSidebar() {
   const sb=document.getElementById('sidebar');
   const ico=document.getElementById('sbToggleIcon');
   sb.classList.toggle('collapsed');
@@ -404,171 +349,248 @@ function toggleSidebar(){
 }
 
 // ── SÉLECTEURS ────────────────────────────────────────────────────────────────
-function initSelectors(){
+function initSelectors() {
   const annees=[...new Set(CLOTURES.map(c=>c.a))];
   const selA=document.getElementById('sel-annee');
-  annees.forEach(a=>{ const o=document.createElement('option'); o.value=a; o.textContent=a; selA.appendChild(o); });
-  selA.value='2025';
-  populateMois('2025');
+  annees.forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;selA.appendChild(o);});
+  selA.value='2025'; populateMois('2025');
 }
-function populateMois(annee){
-  const selM=document.getElementById('sel-mois');
-  selM.innerHTML='';
-  CLOTURES.filter(c=>c.a===annee).forEach(c=>{
-    const o=document.createElement('option'); o.value=c.m; o.textContent=MOIS_NOMS[parseInt(c.m)]; selM.appendChild(o);
+function populateMois(annee) {
+  const selM=document.getElementById('sel-mois'); selM.innerHTML='';
+  CLOTURES.filter(c=>c.a===annee).forEach(c=>{const o=document.createElement('option');o.value=c.m;o.textContent=MOIS_NOMS[parseInt(c.m)];selM.appendChild(o);});
+}
+function onAnneeChange(){populateMois(document.getElementById('sel-annee').value);renderAll();}
+
+// ── FILTRES ÉTAPE ─────────────────────────────────────────────────────────────
+// Cycle : null → true (coché) → false (non coché) → null
+function cycleEtapeFilter(etapeId) {
+  const cur=etapeFilters[etapeId];
+  etapeFilters[etapeId] = cur===null ? true : cur===true ? false : null;
+  updateFilterLegend();
+  currentPage=1;
+  renderAll();
+}
+function clearEtapeFilters() {
+  ETAPES.forEach(e=>etapeFilters[e.id]=null);
+  updateFilterLegend();
+  currentPage=1;
+  renderAll();
+}
+function updateFilterLegend() {
+  const active=ETAPES.some(e=>etapeFilters[e.id]!==null);
+  document.getElementById('filter-legend').style.display=active?'flex':'none';
+}
+
+// ── DONNÉES FILTRÉES ──────────────────────────────────────────────────────────
+function getFiltered() {
+  const annee =document.getElementById('sel-annee').value;
+  const mois  =document.getElementById('sel-mois').value;
+  const type  =document.getElementById('sel-type').value;
+  const assoc =document.getElementById('sel-assoc').value;
+  const rm    =document.getElementById('sel-rm').value;
+  const search=document.getElementById('search').value.toLowerCase().trim();
+  const cl    =annee+'-'+mois;
+  return ALL.filter(d => {
+    if(d.cloture!==cl) return false;
+    if(type   && d.type!==type) return false;
+    if(assoc  && d.associe!==assoc) return false;
+    if(rm     && d.rm!==rm) return false;
+    if(search && !d.nom.toLowerCase().includes(search) && !d.num.includes(search)) return false;
+    // Filtres par étape
+    for(const e of ETAPES) {
+      if(etapeFilters[e.id]===null) continue;
+      if(etapeFilters[e.id]===true  && !d.statuts[e.id]) return false;
+      if(etapeFilters[e.id]===false &&  d.statuts[e.id]) return false;
+    }
+    return true;
   });
 }
-function onAnneeChange(){ populateMois(document.getElementById('sel-annee').value); renderAll(); }
 
-// ── FILTRES ───────────────────────────────────────────────────────────────────
-function getFiltered(){
-  const annee=document.getElementById('sel-annee').value;
-  const mois=document.getElementById('sel-mois').value;
-  const type=document.getElementById('sel-type').value;
-  const assoc=document.getElementById('sel-assoc').value;
-  const rm=document.getElementById('sel-rm').value;
-  const search=document.getElementById('search').value.toLowerCase().trim();
-  const cl=annee+'-'+mois;
-  return ALL.filter(d=>
-    d.cloture===cl&&
-    (!type  ||d.type===type)&&
-    (!assoc ||d.associe===assoc)&&
-    (!rm    ||d.rm===rm)&&
-    (!search||d.nom.toLowerCase().includes(search)||d.num.includes(search))
-  );
-}
-
-// ── RENDER ────────────────────────────────────────────────────────────────────
-function setView(v){
+// ── VUE ───────────────────────────────────────────────────────────────────────
+function setView(v) {
   currentView=v; currentPage=1;
   document.getElementById('btn-tableau').classList.toggle('active',v==='tableau');
-  document.getElementById('btn-kanban').classList.toggle('active',v==='kanban');
+  document.getElementById('btn-kanban').classList.toggle('active', v==='kanban');
   renderAll();
 }
 
-function renderAll(){
-  const f=getFiltered();
-  document.getElementById('s-total').textContent=f.length;
-  document.getElementById('s-env').textContent=f.filter(d=>d.statuts.liasse_env).length;
-  document.getElementById('s-modif').textContent=f.filter(d=>d.statuts.modif&&!d.statuts.liasse_rev).length;
-  document.getElementById('s-debut').textContent=f.filter(d=>!d.statuts.prod).length;
+function renderAll() {
+  const filtered=getFiltered();
+  document.getElementById('s-total').textContent=filtered.length;
+  document.getElementById('s-env').textContent  =filtered.filter(d=>d.statuts.liasse_env).length;
+  document.getElementById('s-modif').textContent=filtered.filter(d=>d.statuts.modif&&!d.statuts.liasse_rev).length;
+  document.getElementById('s-debut').textContent=filtered.filter(d=>!d.statuts.prod).length;
   const annee=document.getElementById('sel-annee').value;
-  const mois=document.getElementById('sel-mois').value;
+  const mois =document.getElementById('sel-mois').value;
   document.getElementById('topbar-periode').textContent='Clôture '+MOIS_NOMS[parseInt(mois)]+' '+annee;
-  if(currentView==='tableau') renderTableau(f);
-  else renderKanban(f);
+  if(currentView==='tableau') renderTableau(filtered);
+  else renderKanban(filtered);
 }
 
 // ── TABLEAU ───────────────────────────────────────────────────────────────────
-function renderTableau(filtered){
+function renderTableau(filtered) {
   const totalPages=Math.max(1,Math.ceil(filtered.length/PER_PAGE));
   if(currentPage>totalPages) currentPage=1;
   const paged=filtered.slice((currentPage-1)*PER_PAGE,currentPage*PER_PAGE);
-
   const content=document.getElementById('content');
   content.innerHTML='';
   const wrap=document.createElement('div');
+
   const twrap=document.createElement('div'); twrap.className='table-wrap';
-  const tbl=document.createElement('table');
+  const tbl  =document.createElement('table');
 
-  // colgroup pour contrôle précis des largeurs
-  const cg=document.createElement('colgroup');
-  const cols=[
-    {cls:'col-num'},
-    {cls:'col-nom'},
-    {cls:'col-type'},
-    {cls:'col-ass'},
-    {cls:'col-rm'},
-    ...ETAPES.map(()=>({cls:'col-etape'}))
-  ];
-  cols.forEach(c=>{ const col=document.createElement('col'); col.className=c.cls; cg.appendChild(col); });
-  tbl.appendChild(cg);
-
-  // Thead
+  // ── Thead
   const thead=document.createElement('thead');
-  const trh=document.createElement('tr');
-  [{l:'N°',cls:''},{l:'Nom du dossier',cls:'th-left'},{l:'Type',cls:''},{l:'Ass.',cls:''},{l:'RM',cls:''}].forEach(h=>{
-    const th=document.createElement('th'); th.className=h.cls; th.textContent=h.l; trh.appendChild(th);
+
+  // Ligne 1 : labels colonnes
+  const trh=document.createElement('tr'); trh.className='tr-header';
+  // Colonnes fixes
+  [
+    {l:'N°',     w:48,  cls:''},
+    {l:'Nom',    w:160, cls:'th-left'},  // ← largeur fixe compacte
+    {l:'Prog.',  w:160, cls:''},         // ← barre de progression prioritaire
+    {l:'Type',   w:44,  cls:''},
+    {l:'Associé',w:88,  cls:''},
+    {l:'RM',     w:74,  cls:''},
+  ].forEach(h=>{
+    const th=document.createElement('th'); th.className=h.cls;
+    if(h.w) {th.style.width=h.w+'px'; th.style.minWidth=h.w+'px';}
+    th.textContent=h.l; trh.appendChild(th);
   });
+  // Colonnes étapes
   ETAPES.forEach(e=>{
     const th=document.createElement('th');
-    th.className='th-etape'+(e.sp?' special':'');
-    th.title=e.label; th.innerHTML=e.short;
-    trh.appendChild(th);
+    th.className='th-etape'+(e.sp?' sp':'');
+    th.title=e.label; th.innerHTML=e.short; trh.appendChild(th);
   });
-  thead.appendChild(trh); tbl.appendChild(thead);
+  thead.appendChild(trh);
 
-  // Tbody
+  // Ligne 2 : filtres par étape
+  const trf=document.createElement('tr'); trf.className='tr-filters';
+  // Cellules vides pour les colonnes fixes (6 colonnes)
+  for(let i=0;i<6;i++){
+    const td=document.createElement('td'); td.className='td-spacer'; trf.appendChild(td);
+  }
+  // Boutons filtre pour chaque étape
+  ETAPES.forEach(e=>{
+    const td=document.createElement('td');
+    const btn=document.createElement('button');
+    btn.className='etape-filter-btn';
+    btn.title='Filtrer : '+e.label;
+    // État visuel selon le filtre actif
+    const f=etapeFilters[e.id];
+    if(f===true)       { btn.classList.add(e.sp?'on-sp':'on-ok'); btn.textContent='✓'; }
+    else if(f===false) { btn.classList.add('on-no'); btn.textContent='✗'; }
+    else               { btn.textContent='·'; }
+    btn.addEventListener('click',()=>cycleEtapeFilter(e.id));
+    td.appendChild(btn);
+    trf.appendChild(td);
+  });
+  thead.appendChild(trf);
+  tbl.appendChild(thead);
+
+  // ── Tbody
   const tbody=document.createElement('tbody');
   paged.forEach(d=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`
-      <td class="td-mono">${d.num}</td>
-      <td class="td-left" title="${d.nom}">${d.nom}</td>
-      <td><span class="badge-type badge-${d.type}">${d.type}</span></td>
-      <td><span class="init-badge init-ass">${d.associe}</span></td>
-      <td><span class="init-badge init-rm">${d.rm}</span></td>
-    `;
+
+    // N°
+    const tdNum=document.createElement('td'); tdNum.className='td-mono'; tdNum.textContent=d.num; tr.appendChild(tdNum);
+
+    // Nom (compact, tronqué avec tooltip)
+    const tdNom=document.createElement('td'); tdNom.className='td-left';
+    const nomSpan=document.createElement('span'); nomSpan.className='nom-cell';
+    nomSpan.textContent=d.nom; nomSpan.title=d.nom;
+    tdNom.appendChild(nomSpan); tr.appendChild(tdNom);
+
+    // Barre de progression
+    const tdProg=document.createElement('td');
+    const progWrap=document.createElement('div'); progWrap.className='progress-wrap';
+    ETAPES.forEach(e=>{
+      const seg=document.createElement('div');
+      seg.className='prog-seg';
+      if(d.statuts[e.id]) seg.classList.add(e.sp?'done-sp':'done');
+      seg.title=e.label+(d.statuts[e.id]?' ✓':' —');
+      progWrap.appendChild(seg);
+    });
+    tdProg.appendChild(progWrap); tr.appendChild(tdProg);
+
+    // Type
+    const tdType=document.createElement('td');
+    tdType.innerHTML=`<span class="badge-type badge-${d.type}">${d.type}</span>`;
+    tr.appendChild(tdType);
+
+    // Associé
+    const tdAssoc=document.createElement('td');
+    tdAssoc.innerHTML=`<span class="badge-assoc">${d.associe}</span>`;
+    tr.appendChild(tdAssoc);
+
+    // RM
+    const tdRm=document.createElement('td');
+    tdRm.innerHTML=`<span class="rm-text">${d.rm}</span>`;
+    tr.appendChild(tdRm);
+
+    // Cases étapes
     ETAPES.forEach(e=>{
       const td=document.createElement('td');
       const checked=d.statuts[e.id];
       const cls=checked?(e.sp?'sp':'ok'):'';
-      const stroke=e.sp?'#d97706':'#166534';
+      const strokeColor=e.sp?'#d97706':'#166534';
       td.innerHTML=`<div class="check-cell ${cls}" title="${e.label}" data-id="${d.id}" data-etape="${e.id}">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="3.5"><polyline points="20 6 9 17 4 12"/></svg>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${strokeColor}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
       </div>`;
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
   });
   tbl.appendChild(tbody);
-  twrap.appendChild(tbl);
-  wrap.appendChild(twrap);
 
+  // Délégation
   tbody.addEventListener('click',e=>{
     const cell=e.target.closest('.check-cell');
     if(!cell) return;
     toggleStatut(parseInt(cell.dataset.id),cell.dataset.etape);
   });
 
+  twrap.appendChild(tbl); wrap.appendChild(twrap);
   if(totalPages>1) wrap.appendChild(buildPagination(currentPage,totalPages,filtered.length));
   content.appendChild(wrap);
 }
 
-function buildPagination(page,totalPages,total){
+function buildPagination(page,totalPages,total) {
   const div=document.createElement('div'); div.className='pagination';
   const info=document.createElement('span'); info.className='pag-info';
   info.textContent=`${(page-1)*PER_PAGE+1}–${Math.min(page*PER_PAGE,total)} sur ${total} dossiers`;
   const btns=document.createElement('div'); btns.className='pag-btns';
-  const pages=[]; const delta=2;
-  for(let i=Math.max(1,page-delta);i<=Math.min(totalPages,page+delta);i++) pages.push(i);
-
   const btn=(label,target,disabled,active)=>{
     const b=document.createElement('button'); b.className='p-btn'+(active?' active':'');
     b.textContent=label; b.disabled=!!disabled;
-    if(!disabled) b.onclick=()=>{ currentPage=target; renderAll(); };
+    if(!disabled) b.onclick=()=>{currentPage=target;renderAll();};
     btns.appendChild(b);
   };
-  btn('«',1,page===1,false); btn('‹',page-1,page===1,false);
-  if(pages[0]>1){ const e=document.createElement('span'); e.className='pag-ell'; e.textContent='…'; btns.appendChild(e); }
+  const pages=[]; const delta=2;
+  for(let i=Math.max(1,page-delta);i<=Math.min(totalPages,page+delta);i++) pages.push(i);
+  btn('«',1,page===1,false);
+  btn('‹',page-1,page===1,false);
+  if(pages[0]>1){const e=document.createElement('span');e.className='pag-ell';e.textContent='…';btns.appendChild(e);}
   pages.forEach(p=>btn(p,p,false,p===page));
-  if(pages[pages.length-1]<totalPages){ const e=document.createElement('span'); e.className='pag-ell'; e.textContent='…'; btns.appendChild(e); }
-  btn('›',page+1,page===totalPages,false); btn('»',totalPages,page===totalPages,false);
-
-  div.appendChild(info); div.appendChild(btns); return div;
+  if(pages[pages.length-1]<totalPages){const e=document.createElement('span');e.className='pag-ell';e.textContent='…';btns.appendChild(e);}
+  btn('›',page+1,page===totalPages,false);
+  btn('»',totalPages,page===totalPages,false);
+  div.appendChild(info); div.appendChild(btns);
+  return div;
 }
 
 // ── KANBAN ────────────────────────────────────────────────────────────────────
-function getColonne(st){
+function getColonne(st) {
   const ordre=['afaire','prod','rm','associe','prez','modif','liasse_rev','liasse_ok','liasse_env'];
-  let last=null; ordre.forEach(e=>{ if(st[e]) last=e; }); return last;
+  let last=null; ordre.forEach(e=>{if(st[e]) last=e;}); return last;
 }
 
-function renderKanban(filtered){
+function renderKanban(filtered) {
   const content=document.getElementById('content');
   content.innerHTML='';
   const wrap=document.createElement('div'); wrap.className='kanban-wrap';
-
   ETAPES.forEach(etape=>{
     const items=filtered.filter(d=>getColonne(d.statuts)===etape.id);
     const col=document.createElement('div'); col.className='kanban-col'; col.dataset.etape=etape.id;
@@ -580,8 +602,8 @@ function renderKanban(filtered){
       <div class="kcol-cards"></div>
     `;
     const cardsDiv=col.querySelector('.kcol-cards');
-    if(!items.length){ cardsDiv.innerHTML='<div class="kcol-empty">—</div>'; }
-    else{
+    if(items.length===0){cardsDiv.innerHTML='<div class="kcol-empty">—</div>';}
+    else {
       items.forEach(d=>{
         const card=document.createElement('div'); card.className='kcard'; card.draggable=true; card.dataset.id=d.id;
         card.innerHTML=`
@@ -591,30 +613,29 @@ function renderKanban(filtered){
             <span class="badge-type badge-${d.type}">${d.type}</span>
           </div>
           <div class="kcard-tags">
-            <span class="init-badge init-ass">${d.associe}</span>
-            <span class="init-badge init-rm">${d.rm}</span>
+            <span class="ktag assoc">${d.associe}</span>
+            <span class="ktag rm">${d.rm}</span>
           </div>
         `;
-        card.addEventListener('dragstart',()=>{ dragId=d.id; setTimeout(()=>card.classList.add('dragging'),0); });
-        card.addEventListener('dragend',  ()=>{ dragId=null; card.classList.remove('dragging'); });
+        card.addEventListener('dragstart',()=>{dragId=d.id;setTimeout(()=>card.classList.add('dragging'),0);});
+        card.addEventListener('dragend',  ()=>{dragId=null;card.classList.remove('dragging');});
         cardsDiv.appendChild(card);
       });
     }
-    col.addEventListener('dragover', e=>{ e.preventDefault(); col.classList.add('drag-over'); });
+    col.addEventListener('dragover', e=>{e.preventDefault();col.classList.add('drag-over');});
     col.addEventListener('dragleave',()=>col.classList.remove('drag-over'));
-    col.addEventListener('drop',     ()=>{ col.classList.remove('drag-over'); if(dragId!==null) moveToColonne(dragId,etape.id); });
+    col.addEventListener('drop',     ()=>{col.classList.remove('drag-over');if(dragId!==null) moveToColonne(dragId,etape.id);});
     wrap.appendChild(col);
   });
   content.appendChild(wrap);
 }
 
 // ── ACTIONS ───────────────────────────────────────────────────────────────────
-function toggleStatut(id,etape){
+function toggleStatut(id,etape) {
   const d=ALL.find(x=>x.id===id); if(!d) return;
   d.statuts[etape]=!d.statuts[etape]; renderAll();
 }
-
-function moveToColonne(dossierId,colonneId){
+function moveToColonne(dossierId,colonneId) {
   const d=ALL.find(x=>x.id===dossierId); if(!d) return;
   const seq=['afaire','prod','rm','associe','prez','liasse_rev','liasse_ok','liasse_env'];
   if(colonneId==='modif'){
