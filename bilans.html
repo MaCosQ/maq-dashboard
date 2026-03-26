@@ -136,16 +136,6 @@
   .check-cell.sp  { background:var(--amber-bg); border-color:var(--amber); }
   .check-cell.sp svg { display:block; }
 
-  /* ── BARRE DE PROGRESSION ── */
-  .progress-wrap { display:flex; gap:2px; align-items:center; padding:0 2px; }
-  .prog-seg {
-    height:10px; flex:1; border-radius:2px; background:var(--gray-200);
-    transition:background .15s;
-  }
-  .prog-seg.done    { background:#4ade80; }
-  .prog-seg.done-sp { background:var(--amber); }
-  .prog-seg.active  { background:#86efac; }
-
   /* ── PAGINATION ── */
   .pagination { display:flex; align-items:center; justify-content:space-between; margin-top:12px; }
   .pag-info { font-size:11px; color:var(--gray-400); }
@@ -451,7 +441,6 @@ function renderTableau(filtered) {
     {l:'Type',    w:44,  cls:''},
     {l:'Ass.',    w:44,  cls:''},
     {l:'RM',      w:44,  cls:''},
-    {l:'Progression', w:160, cls:''},  // barre de progression
   ].forEach(h=>{
     const th=document.createElement('th'); th.className=h.cls;
     if(h.w) {th.style.width=h.w+'px'; th.style.minWidth=h.w+'px';}
@@ -467,8 +456,8 @@ function renderTableau(filtered) {
 
   // Ligne 2 : filtres par étape
   const trf=document.createElement('tr'); trf.className='tr-filters';
-  // Cellules vides pour les colonnes fixes (6 colonnes)
-  for(let i=0;i<6;i++){
+  // Cellules vides pour les colonnes fixes (5 colonnes)
+  for(let i=0;i<5;i++){
     const td=document.createElement('td'); td.className='td-spacer'; trf.appendChild(td);
   }
   // Boutons filtre pour chaque étape
@@ -517,18 +506,6 @@ function renderTableau(filtered) {
     const tdRm=document.createElement('td');
     tdRm.innerHTML=`<span class="rm-text" title="${d.rm}">${ini(d.rm)}</span>`;
     tr.appendChild(tdRm);
-
-    // Barre de progression
-    const tdProg=document.createElement('td');
-    const progWrap=document.createElement('div'); progWrap.className='progress-wrap';
-    ETAPES.forEach(e=>{
-      const seg=document.createElement('div');
-      seg.className='prog-seg';
-      if(d.statuts[e.id]) seg.classList.add(e.sp?'done-sp':'done');
-      seg.title=e.label+(d.statuts[e.id]?' ✓':' —');
-      progWrap.appendChild(seg);
-    });
-    tdProg.appendChild(progWrap); tr.appendChild(tdProg);
 
     // Cases étapes
     ETAPES.forEach(e=>{
