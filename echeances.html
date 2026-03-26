@@ -287,7 +287,12 @@ tbody tr.row-client:hover{background:#f5e8ff;}
 tbody tr.row-selected{outline:2px solid var(--greenMid);outline-offset:-2px;}
 tbody td{padding:5px 3px;border-right:1px solid var(--g100);text-align:center;vertical-align:middle;font-family:var(--f);}
 tbody td.td-num  {position:sticky;left:0;z-index:5;font-family:var(--f);font-size:9px;color:var(--textLight);width:40px;border-right:1px solid var(--border);}
-tbody td.td-type {position:sticky;left:40px;z-index:5;width:34px;border-right:1px solid var(--border);}
+tbody td.td-type {position:sticky;left:0px;z-index:5;width:36px;min-width:36px;max-width:36px;border-right:1px solid var(--border);text-align:center;padding:0 2px;}
+.badge-type{display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;font-family:var(--f);border-radius:3px;padding:2px 4px;letter-spacing:.04em;line-height:1.2;}
+.badge-P  {background:#e6f4ea;color:#006922;border:1px solid #a8d5b0;}
+.badge-SP {background:#e8eaf6;color:#1a237e;border:1px solid #9fa8da;}
+.badge-SCI{background:#fff3e0;color:#e65100;border:1px solid #ffcc80;}
+.badge-ST {background:#f3e5f5;color:#6a1b9a;border:1px solid #ce93d8;}
 tbody td.td-score{position:sticky;left:74px;z-index:5;width:48px;border-right:1px solid var(--border);padding:3px 4px;}
 tbody td.td-name {position:sticky;left:122px;z-index:5;text-align:left;font-weight:600;font-size:11px;color:var(--green);width:170px;min-width:170px;max-width:170px;padding-left:8px;border-left:3px solid transparent;font-family:var(--f);}
 tbody tr.row-red    td.td-num,tbody tr.row-red    td.td-type,tbody tr.row-red    td.td-score,tbody tr.row-red    td.td-name{background:#fff5f5;}
@@ -581,10 +586,6 @@ tbody td.td-status{
     <span class="nav-icon">⇄</span>
     <span class="nav-label">Connexions flux</span>
   </a>
-  <a class="nav-item" href="bilans.html" data-label="Suivi des bilans">
-  <span class="nav-icon">☑</span>
-  <span class="nav-label">Suivi des bilans</span>
-</a>
   <div class="nav-section" style="margin-top:8px;">Fiscal &amp; Social</div>
   <a class="nav-item active" href="echeances.html" data-label="Échéances fiscales">
     <span class="nav-icon">📅</span>
@@ -640,8 +641,9 @@ tbody td.td-status{
 
   <!-- onglets fiscal / social -->
   <div class="tab-group" id="mainTabs">
-    <button class="tab-btn active" data-tab="fiscal">📋 Fiscal</button>
-    <button class="tab-btn" data-tab="social">👥 Social</button>
+    <button class="tab-btn active" data-tab="fiscal">Fiscal</button>
+    <button class="tab-btn" data-tab="social">Social</button>
+    <button class="tab-btn" data-tab="total">Total</button>
   </div>
 
   <div class="tb-sep"></div>
@@ -655,8 +657,8 @@ tbody td.td-status{
   <div class="tb-sep"></div>
 
   <select class="tb-sel" id="typeFilter" onchange="renderAll()">
-    <option value="pharmacie">💊 Pharmacies</option>
-    <option value="satellite">🏢 Satellites</option>
+    <option value="pharmacie">P — Pharmacies</option>
+    <option value="satellite">SP/SCI/ST — Satellites</option>
     <option value="all">Tous les dossiers</option>
   </select>
 
@@ -1236,27 +1238,35 @@ function getColumns(year, month, tab) {
       });
     }
 
-    // Solde TA + DOETH (DSN avril → déclarés en avril)
-    if (month === 4) {
+    // Solde TA + DOETH déposés via DSN Avril (dépôt en Mai)
+    // On les rattache au mois de MAI, après DSN Avril
+    // yyyymm = avril (mois déclaré), mais ils apparaissent en mai
+    if (month === 5) {
+      const avrilYYYYMM = `${year}04`;
       cols.push({
         key: 'solde_ta',
         label: 'Solde TA',
-        sub: `DSN ${pad(month)}`,
-        cloturesTxt: 'Si salariés · via DSN',
+        sub: `DSN 04/${pad(month)}`,
+        cloturesTxt: 'Si salariés · via DSN avr.',
         deadlineDay: 15,
         applicable: (c) => c.eff > 0 || c.dsnDay != null,
-        yyyymm,
+        yyyymm: avrilYYYYMM,
       });
       cols.push({
         key: 'doeth',
         label: 'DOETH',
-        sub: `DSN ${pad(month)}`,
-        cloturesTxt: '≥ 20 salariés · via DSN',
+        sub: `DSN 04/${pad(month)}`,
+        cloturesTxt: '≥ 20 salariés · via DSN avr.',
         deadlineDay: 15,
         applicable: (c) => (c.eff || 0) >= 20,
-        yyyymm,
+        yyyymm: avrilYYYYMM,
       });
     }
+  }
+
+  // ── ONGLET TOTAL : fiscal + social ──
+  if (tab === 'total') {
+    return [...getColumns(year, month, 'fiscal'), ...getColumns(year, month, 'social')];
   }
 
   return cols;
@@ -1349,26 +1359,26 @@ function renderTable() {
   const STICKY_CSS = 'position:sticky;z-index:20;background:var(--green);';
   let html = '<thead>';
 
-  // Row 1 : label échéance
-  html += '<tr class="tr-date-groups">';
-  html += `<th class="th-sticky th-sticky-0" rowspan="3" style="${STICKY_CSS}left:0;width:36px;"></th>`;
-  html += `<th class="th-sticky th-sticky-1" rowspan="3" style="${STICKY_CSS}left:36px;width:190px;text-align:left;padding-left:10px;font-size:10px;font-weight:700;letter-spacing:.06em;color:rgba(255,255,255,.6);">Client</th>`;
+  // Row 1 : label échéance (fond vert très sombre, texte blanc fort)
+  html += '<tr>';
+  html += `<th rowspan="3" style="position:sticky;left:0;z-index:21;background:#002918;width:36px;"></th>`;
+  html += `<th rowspan="3" style="position:sticky;left:36px;z-index:21;background:#002918;width:190px;min-width:190px;text-align:left;padding-left:10px;font-size:10px;font-weight:700;letter-spacing:.06em;color:#fff;border-right:2px solid rgba(255,255,255,.12);">CLIENT</th>`;
   cols.forEach(col => {
-    html += `<th style="font-size:10px;font-weight:700;color:rgba(255,255,255,.9);padding:6px 8px 2px;text-align:center;border-right:1px solid rgba(255,255,255,.08);white-space:nowrap;">${col.label}</th>`;
+    html += `<th style="background:#002918;font-size:10px;font-weight:700;color:#fff;padding:7px 10px 3px;text-align:center;border-right:1px solid rgba(255,255,255,.1);white-space:nowrap;letter-spacing:.03em;">${col.label}</th>`;
   });
   html += '</tr>';
 
-  // Row 2 : date
+  // Row 2 : date (fond intermédiaire, date en lime vif)
   html += '<tr>';
   cols.forEach(col => {
-    html += `<th style="font-size:9px;font-weight:600;color:var(--lime);padding:2px 8px;text-align:center;border-right:1px solid rgba(255,255,255,.08);letter-spacing:.04em;font-family:var(--f);">${col.sub}</th>`;
+    html += `<th style="background:#003a20;font-size:10px;font-weight:700;color:#d4ff7a;padding:3px 10px;text-align:center;border-right:1px solid rgba(255,255,255,.1);letter-spacing:.04em;">${col.sub}</th>`;
   });
   html += '</tr>';
 
-  // Row 3 : clôtures concernées
+  // Row 3 : clôtures concernées (fond encore plus clair, texte gris clair lisible)
   html += '<tr>';
   cols.forEach(col => {
-    html += `<th style="font-size:8px;font-weight:400;color:rgba(255,255,255,.4);padding:2px 8px 6px;text-align:center;border-right:1px solid rgba(255,255,255,.08);border-bottom:2px solid rgba(255,255,255,.15);white-space:nowrap;font-family:var(--f);">${col.cloturesTxt}</th>`;
+    html += `<th style="background:#004a28;font-size:8.5px;font-weight:500;color:rgba(255,255,255,.7);padding:3px 10px 6px;text-align:center;border-right:1px solid rgba(255,255,255,.1);border-bottom:2px solid rgba(255,255,255,.18);white-space:nowrap;">${col.cloturesTxt}</th>`;
   });
   html += '</tr>';
 
@@ -1383,7 +1393,15 @@ function renderTable() {
     let s = `<tr class="tr-section"><td colspan="${2 + cols.length}">${label} (${list.length})</td></tr>`;
     list.forEach(c => {
       s += '<tr class="tr-data">';
-      s += `<td class="td-type">${c.type === 'pharmacie' ? '💊' : (c.stype === 'SPFPL' ? '🏛' : '🏢')}</td>`;
+      const _badge = c.type === 'pharmacie' ? 'P'
+        : c.stype === 'SPFPL' ? 'SP'
+        : c.stype === 'SCI'   ? 'SCI'
+        : 'ST';
+      const _cls = c.type === 'pharmacie' ? 'badge-P'
+        : c.stype === 'SPFPL' ? 'badge-SP'
+        : c.stype === 'SCI'   ? 'badge-SCI'
+        : 'badge-ST';
+      s += `<td class="td-type"><span class="badge-type ${_cls}">${_badge}</span></td>`;
       s += `<td class="td-name" onclick="openDossier('${c.id}')">${c.nom}<div class="td-name-sub">${c.type === 'pharmacie' ? `${c.eff} sal. · Clôt. ${formatCloture(c.cloture)}` : `${c.stype} · Clôt. ${formatCloture(c.cloture)}`}</div></td>`;
       cols.forEach(col => { s += renderCell(getCellState(c, col)); });
       s += '</tr>';
@@ -1391,9 +1409,9 @@ function renderTable() {
     return s;
   }
 
-  const label1 = activeTab === 'fiscal' ? '📋 Fiscal' : '👥 Social';
-  html += renderSection(pharmas, '💊 Pharmacies');
-  html += renderSection(sats, '🏢 Satellites');
+  const label1 = activeTab === 'fiscal' ? 'Fiscal' : 'Social';
+  html += renderSection(pharmas, 'Pharmacies');
+  html += renderSection(sats, 'Satellites');
   html += '</tbody>';
 
   document.getElementById('mainTable').innerHTML = html;
