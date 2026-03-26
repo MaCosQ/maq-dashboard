@@ -125,8 +125,8 @@
   .badge-SP  { background:#ede9fe; color:#7c3aed; }
   .badge-SCI { background:#fef3c7; color:#b45309; }
   .badge-ST  { background:#ccfbf1; color:#0f766e; }
-  .badge-assoc { display:inline-block; font-size:10px; font-weight:600; padding:2px 8px; border-radius:20px; background:var(--brg-10); color:var(--brg); }
-  .rm-text { font-size:11px; color:var(--gray-600); }
+  .badge-assoc { display:inline-block; font-size:10px; font-weight:700; padding:2px 6px; border-radius:4px; background:var(--brg-10); color:var(--brg); min-width:28px; text-align:center; }
+  .rm-text { font-size:11px; font-weight:600; color:var(--gray-600); }
 
   /* Cases à cocher */
   .check-cell { width:26px; height:26px; border-radius:5px; margin:0 auto; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .12s; border:1.5px solid var(--gray-200); background:var(--gray-100); }
@@ -446,12 +446,12 @@ function renderTableau(filtered) {
   const trh=document.createElement('tr'); trh.className='tr-header';
   // Colonnes fixes
   [
-    {l:'N°',     w:48,  cls:''},
-    {l:'Nom',    w:160, cls:'th-left'},  // ← largeur fixe compacte
-    {l:'Prog.',  w:160, cls:''},         // ← barre de progression prioritaire
-    {l:'Type',   w:44,  cls:''},
-    {l:'Associé',w:88,  cls:''},
-    {l:'RM',     w:74,  cls:''},
+    {l:'N°',      w:48,  cls:''},
+    {l:'Nom',     w:160, cls:'th-left'},
+    {l:'Type',    w:44,  cls:''},
+    {l:'Ass.',    w:44,  cls:''},
+    {l:'RM',      w:44,  cls:''},
+    {l:'Progression', w:160, cls:''},  // barre de progression
   ].forEach(h=>{
     const th=document.createElement('th'); th.className=h.cls;
     if(h.w) {th.style.width=h.w+'px'; th.style.minWidth=h.w+'px';}
@@ -503,6 +503,21 @@ function renderTableau(filtered) {
     nomSpan.textContent=d.nom; nomSpan.title=d.nom;
     tdNom.appendChild(nomSpan); tr.appendChild(tdNom);
 
+    // Type
+    const tdType=document.createElement('td');
+    tdType.innerHTML=`<span class="badge-type badge-${d.type}">${d.type}</span>`;
+    tr.appendChild(tdType);
+
+    // Associé — initiales
+    const tdAssoc=document.createElement('td');
+    tdAssoc.innerHTML=`<span class="badge-assoc" title="${d.associe}">${ini(d.associe)}</span>`;
+    tr.appendChild(tdAssoc);
+
+    // RM — initiales
+    const tdRm=document.createElement('td');
+    tdRm.innerHTML=`<span class="rm-text" title="${d.rm}">${ini(d.rm)}</span>`;
+    tr.appendChild(tdRm);
+
     // Barre de progression
     const tdProg=document.createElement('td');
     const progWrap=document.createElement('div'); progWrap.className='progress-wrap';
@@ -514,21 +529,6 @@ function renderTableau(filtered) {
       progWrap.appendChild(seg);
     });
     tdProg.appendChild(progWrap); tr.appendChild(tdProg);
-
-    // Type
-    const tdType=document.createElement('td');
-    tdType.innerHTML=`<span class="badge-type badge-${d.type}">${d.type}</span>`;
-    tr.appendChild(tdType);
-
-    // Associé
-    const tdAssoc=document.createElement('td');
-    tdAssoc.innerHTML=`<span class="badge-assoc">${d.associe}</span>`;
-    tr.appendChild(tdAssoc);
-
-    // RM
-    const tdRm=document.createElement('td');
-    tdRm.innerHTML=`<span class="rm-text">${d.rm}</span>`;
-    tr.appendChild(tdRm);
 
     // Cases étapes
     ETAPES.forEach(e=>{
@@ -613,8 +613,8 @@ function renderKanban(filtered) {
             <span class="badge-type badge-${d.type}">${d.type}</span>
           </div>
           <div class="kcard-tags">
-            <span class="ktag assoc">${d.associe}</span>
-            <span class="ktag rm">${d.rm}</span>
+            <span class="ktag assoc" title="${d.associe}">${ini(d.associe)}</span>
+            <span class="ktag rm" title="${d.rm}">${ini(d.rm)}</span>
           </div>
         `;
         card.addEventListener('dragstart',()=>{dragId=d.id;setTimeout(()=>card.classList.add('dragging'),0);});
@@ -647,6 +647,12 @@ function moveToColonne(dossierId,colonneId) {
     d.statuts.modif=false;
   }
   renderAll();
+}
+
+// ── INITIALES ─────────────────────────────────────────────────────────────────
+function ini(name) {
+  // "MOREAU" → "MO", "LEFEBVRE" → "LE", etc.
+  return name.substring(0,2);
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
