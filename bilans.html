@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi des bilans — QUERCY & Associés</title>
+<style>
+  /* ── RESET & BASE ─────────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --brg:       #1B4332;
+    --brg-mid:   #2D6A4F;
+    --brg-light: #40916C;
+    --brg-faint: #f0f4f1;
+    --brg-10:    rgba(27,67,50,0.10);
+    --green-ok:  #166534;
+    --green-bg:  #dcfce7;
+    --amber:     #d97706;
+    --amber-bg:  #fef3c7;
+    --amber-bdr: #fcd34d;
+    --gray-50:   #f9fafb;
+    --gray-100:  #f3f4f6;
+    --gray-200:  #e5e7eb;
+    --gray-400:  #9ca3af;
+    --gray-600:  #4b5563;
+    --gray-800:  #1f2937;
+    --sidebar-w: 220px;
+    --header-h:  52px;
+  }
+  html, body { height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 13px; background: var(--gray-50); color: var(--gray-800); }
+
+  /* ── LAYOUT ───────────────────────────────────────────────────────────── */
+  .layout { display: flex; height: 100vh; overflow: hidden; }
+
+  /* ── SIDEBAR ──────────────────────────────────────────────────────────── */
+  .sidebar {
+    width: var(--sidebar-w); min-width: var(--sidebar-w);
+    background: var(--brg); display: flex; flex-direction: column;
+    transition: width 0.2s; overflow: hidden; position: relative; z-index: 10;
+  }
+  .sidebar.collapsed { width: 52px; min-width: 52px; }
+
+  .sidebar-logo {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .sidebar-logo img { width: 28px; height: 28px; border-radius: 6px; object-fit: contain; flex-shrink: 0; }
+  .logo-fallback {
+    width: 28px; height: 28px; border-radius: 6px; background: rgba(255,255,255,0.15);
+    color: #fff; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .sidebar-logo-text { color: #fff; font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; }
+  .sidebar-subtitle { color: rgba(255,255,255,0.5); font-size: 10px; }
+
+  /* Profile switcher */
+  .profile-area { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+  .profile-label { color: rgba(255,255,255,0.45); font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; white-space: nowrap; }
+  .profile-btns { display: flex; flex-direction: column; gap: 3px; }
+  .profile-btn {
+    background: transparent; border: none; color: rgba(255,255,255,0.6);
+    padding: 5px 8px; border-radius: 5px; cursor: pointer; font-size: 11px;
+    text-align: left; transition: all 0.15s; white-space: nowrap; overflow: hidden;
+  }
+  .profile-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+  .profile-btn.active { background: rgba(255,255,255,0.18); color: #fff; font-weight: 600; }
+  .sidebar.collapsed .profile-area { display: none; }
+
+  /* Nav */
+  .sidebar-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px 0; }
+  .nav-section-label {
+    color: rgba(255,255,255,0.35); font-size: 9px; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 10px 16px 4px; white-space: nowrap; overflow: hidden;
+  }
+  .sidebar.collapsed .nav-section-label { opacity: 0; }
+  .nav-link {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px; color: rgba(255,255,255,0.65);
+    text-decoration: none; font-size: 12px; transition: all 0.15s;
+    white-space: nowrap; overflow: hidden; border-left: 3px solid transparent;
+  }
+  .nav-link:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-link.active { background: rgba(255,255,255,0.14); color: #fff; font-weight: 600; border-left-color: #86efac; }
+  .nav-link.disabled { opacity: 0.35; pointer-events: none; }
+  .nav-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
+  .nav-text { overflow: hidden; }
+
+  /* Collapse btn */
+  .sidebar-collapse {
+    padding: 10px 14px; border-top: 1px solid rgba(255,255,255,0.1);
+    flex-shrink: 0;
+  }
+  .collapse-btn {
+    background: none; border: none; color: rgba(255,255,255,0.45);
+    cursor: pointer; font-size: 14px; padding: 4px 8px; border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .collapse-btn:hover { color: #fff; background: rgba(255,255,255,0.1); }
+
+  /* ── MAIN ─────────────────────────────────────────────────────────────── */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  .topbar {
+    height: var(--header-h); background: #fff; border-bottom: 1px solid var(--gray-200);
+    display: flex; align-items: center; padding: 0 20px; gap: 16px; flex-shrink: 0;
+  }
+  .topbar-title { font-size: 15px; font-weight: 700; color: var(--brg); }
+  .topbar-sep { width: 1px; height: 20px; background: var(--gray-200); }
+
+  /* Vue toggle */
+  .view-toggle { display: flex; background: var(--gray-100); border-radius: 7px; padding: 3px; gap: 2px; margin-left: auto; }
+  .view-btn {
+    padding: 5px 14px; border-radius: 5px; border: none; cursor: pointer;
+    font-size: 11px; font-weight: 600; transition: all 0.15s;
+    background: transparent; color: var(--gray-400);
+  }
+  .view-btn.active { background: #fff; color: var(--brg); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+  /* ── FILTRES ──────────────────────────────────────────────────────────── */
+  .filters-bar {
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    padding: 8px 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex-shrink: 0;
+  }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .filter-label { font-size: 11px; color: var(--gray-400); font-weight: 700; white-space: nowrap; }
+  .filter-sep { width: 1px; height: 20px; background: var(--gray-200); }
+  select.f-sel {
+    font-size: 11px; font-weight: 600; color: var(--brg);
+    border: 1px solid rgba(27,67,50,0.25); border-radius: 5px;
+    padding: 4px 8px; background: #fff; cursor: pointer; outline: none;
+  }
+  .search-wrap { position: relative; margin-left: auto; }
+  .search-wrap svg { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); }
+  .search-wrap input {
+    padding: 5px 10px 5px 26px; border: 1px solid var(--gray-200);
+    border-radius: 6px; font-size: 11px; width: 180px; outline: none;
+    transition: border-color 0.15s;
+  }
+  .search-wrap input:focus { border-color: var(--brg-light); }
+
+  /* ── STATS ────────────────────────────────────────────────────────────── */
+  .stats-bar {
+    background: var(--gray-50); border-bottom: 1px solid var(--gray-200);
+    padding: 6px 20px; display: flex; gap: 24px; align-items: center; flex-shrink: 0;
+  }
+  .stat-item { display: flex; align-items: center; gap: 6px; }
+  .stat-val { font-size: 16px; font-weight: 800; }
+  .stat-lbl { font-size: 11px; color: var(--gray-400); }
+
+  /* ── CONTENT ──────────────────────────────────────────────────────────── */
+  .content { flex: 1; overflow: auto; padding: 16px 20px; }
+
+  /* ── TABLEAU ──────────────────────────────────────────────────────────── */
+  .table-wrap { border-radius: 8px; box-shadow: 0 1px 8px rgba(0,0,0,0.07); border: 1px solid var(--gray-200); overflow: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 860px; }
+  thead tr { background: var(--brg); position: sticky; top: 0; z-index: 2; }
+  thead th {
+    padding: 8px 5px; font-weight: 700; font-size: 9px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #fff; white-space: nowrap; text-align: center;
+  }
+  thead th.left { text-align: left; padding-left: 12px; }
+  thead th.etape-header { font-size: 9px; line-height: 1.2; white-space: normal; width: 34px; min-width: 34px; vertical-align: bottom; padding: 6px 2px 5px; }
+  thead th.etape-header.special { color: #fde68a; }
+  thead th.etape-header:not(.special) { color: #bbf7d0; }
+
+  tbody tr { border-bottom: 1px solid #f0f0f0; transition: background 0.1s; }
+  tbody tr:nth-child(even) { background: var(--gray-50); }
+  tbody tr:hover { background: var(--brg-faint); }
+  tbody td { padding: 6px 5px; text-align: center; }
+  tbody td.left { text-align: left; padding-left: 12px; font-weight: 600; color: var(--gray-800); }
+  tbody td.mono { font-family: 'Courier New', monospace; color: var(--gray-400); font-size: 11px; }
+
+  /* Type badge */
+  .badge-type {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .badge-P   { background: #dbeafe; color: #1e40af; }
+  .badge-SP  { background: #ede9fe; color: #7c3aed; }
+  .badge-SCI { background: #fef3c7; color: #b45309; }
+  .badge-ST  { background: #ccfbf1; color: #0f766e; }
+
+  /* Associé badge */
+  .badge-assoc {
+    display: inline-block; font-size: 10px; font-weight: 600;
+    padding: 2px 8px; border-radius: 20px;
+    background: var(--brg-10); color: var(--brg);
+  }
+  .rm-text { font-size: 11px; color: var(--gray-600); }
+
+  /* Check cell */
+  .check-cell {
+    width: 26px; height: 26px; border-radius: 5px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.12s; border: 1.5px solid var(--gray-200);
+    background: var(--gray-100);
+  }
+  .check-cell.checked-ok     { background: var(--green-bg); border-color: var(--green-ok); }
+  .check-cell.checked-special { background: var(--amber-bg); border-color: var(--amber); }
+  .check-cell svg { display: none; }
+  .check-cell.checked-ok svg, .check-cell.checked-special svg { display: block; }
+  .check-cell:hover { filter: brightness(0.95); }
+
+  /* ── PAGINATION ───────────────────────────────────────────────────────── */
+  .pagination { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; }
+  .pag-info { font-size: 11px; color: var(--gray-400); }
+  .pag-btns { display: flex; gap: 3px; }
+  .p-btn {
+    width: 28px; height: 28px; border-radius: 5px; border: 1px solid var(--gray-200);
+    background: #fff; color: var(--gray-600); font-size: 11px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: all 0.12s;
+  }
+  .p-btn:hover:not(:disabled) { border-color: var(--brg); color: var(--brg); }
+  .p-btn.active { background: var(--brg); border-color: var(--brg); color: #fff; font-weight: 700; }
+  .p-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .pag-ellipsis { font-size: 11px; color: var(--gray-400); align-self: center; padding: 0 2px; }
+
+  /* ── KANBAN ───────────────────────────────────────────────────────────── */
+  .kanban-wrap { display: flex; gap: 8px; align-items: flex-start; padding-bottom: 12px; }
+  .kanban-col {
+    min-width: 172px; max-width: 172px; flex-shrink: 0;
+    background: var(--gray-100); border-radius: 10px; padding: 10px 8px;
+    border: 2px solid transparent; transition: all 0.15s;
+  }
+  .kanban-col.drag-over { background: #e8f5e9; border-color: var(--brg); }
+  .kanban-col-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid var(--brg);
+  }
+  .kanban-col-header.special { border-bottom-color: var(--amber); }
+  .kanban-col-title { font-size: 10px; font-weight: 700; color: var(--brg); text-transform: uppercase; letter-spacing: 0.05em; }
+  .kanban-col-title.special { color: var(--amber); }
+  .kanban-col-count {
+    font-size: 11px; font-weight: 700; border-radius: 20px; padding: 1px 8px;
+    background: var(--brg-faint); color: var(--brg);
+  }
+  .kanban-col-count.special { background: var(--amber-bg); color: var(--amber); }
+  .kanban-cards { display: flex; flex-direction: column; gap: 6px; max-height: calc(100vh - 250px); overflow-y: auto; }
+  .kanban-card {
+    background: #fff; border-radius: 7px; padding: 9px 11px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.07); cursor: grab;
+    border: 1px solid var(--gray-200); transition: box-shadow 0.15s;
+    user-select: none;
+  }
+  .kanban-card:hover { box-shadow: 0 3px 8px rgba(27,67,50,0.15); }
+  .kanban-card.dragging { opacity: 0.4; cursor: grabbing; }
+  .kcard-name { font-size: 12px; font-weight: 700; color: var(--gray-800); margin-bottom: 3px; line-height: 1.3; }
+  .kcard-meta { display: flex; gap: 5px; align-items: center; margin-bottom: 6px; }
+  .kcard-num { font-size: 9px; font-family: monospace; color: var(--gray-400); }
+  .kcard-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .kcard-tag { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 20px; }
+  .kcard-tag.assoc { background: var(--brg-10); color: var(--brg); }
+  .kcard-tag.rm { background: var(--gray-100); color: var(--gray-600); }
+  .kanban-empty { text-align: center; padding: 16px 0; color: var(--gray-200); font-size: 11px; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 3px; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <!-- ── SIDEBAR ─────────────────────────────────────────────────────────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/logo.png" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" alt="QUERCY">
+      <div class="logo-fallback" style="display:none">Q</div>
+      <div class="sidebar-logo-text">
+        <div>QUERCY</div>
+        <div class="sidebar-subtitle">& Associés</div>
+      </div>
+    </div>
+
+    <div class="profile-area">
+      <div class="profile-label">Profil</div>
+      <div class="profile-btns">
+        <button class="profile-btn" onclick="setProfile('collab')">Collaborateur</button>
+        <button class="profile-btn active" onclick="setProfile('resp')">Responsable</button>
+        <button class="profile-btn" onclick="setProfile('assoc')">Associé</button>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Tableau de bord</div>
+      <a href="index.html" class="nav-link">
+        <span class="nav-icon">◫</span>
+        <span class="nav-text">Supervision dossiers</span>
+      </a>
+      <a href="flux_quercy.html" class="nav-link">
+        <span class="nav-icon">⇄</span>
+        <span class="nav-text">Connexions flux</span>
+      </a>
+      <a href="bilans.html" class="nav-link active">
+        <span class="nav-icon">☑</span>
+        <span class="nav-text">Suivi des bilans</span>
+      </a>
+
+      <div class="nav-section-label">Fiscal &amp; Social</div>
+      <a href="echeances.html" class="nav-link">
+        <span class="nav-icon">📅</span>
+        <span class="nav-text">Échéances fiscales</span>
+      </a>
+
+      <div class="nav-section-label">À venir</div>
+      <a href="#" class="nav-link disabled">
+        <span class="nav-icon">⚙</span>
+        <span class="nav-text">Paramétrage</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-collapse">
+      <button class="collapse-btn" onclick="toggleSidebar()" title="Réduire">◀</button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ────────────────────────────────────────────────────────────── -->
+  <main class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <span class="topbar-title">Suivi des bilans</span>
+      <div class="topbar-sep"></div>
+      <span id="topbar-periode" style="font-size:12px;color:var(--gray-400)">—</span>
+      <div class="view-toggle">
+        <button class="view-btn active" id="btn-tableau" onclick="setView('tableau')">⊞ Tableau</button>
+        <button class="view-btn" id="btn-kanban" onclick="setView('kanban')">⋮⋮ Kanban</button>
+      </div>
+    </div>
+
+    <!-- Filtres -->
+    <div class="filters-bar">
+      <div class="filter-group">
+        <span class="filter-label">Clôture</span>
+        <select class="f-sel" id="sel-annee" onchange="onAnneeChange()"></select>
+        <select class="f-sel" id="sel-mois" onchange="renderAll()"></select>
+      </div>
+      <div class="filter-sep"></div>
+      <select class="f-sel" id="sel-type" onchange="renderAll()">
+        <option value="">Tous types</option>
+        <option>P</option><option>SP</option><option>SCI</option><option>ST</option>
+      </select>
+      <select class="f-sel" id="sel-assoc" onchange="renderAll()">
+        <option value="">Tous associés</option>
+        <option>MARTIN</option><option>DUPONT</option><option>LEFEBVRE</option>
+      </select>
+      <select class="f-sel" id="sel-rm" onchange="renderAll()">
+        <option value="">Tous RM</option>
+        <option>MOREAU</option><option>BERNARD</option><option>PETIT</option>
+        <option>RICHARD</option><option>GARCIA</option><option>THOMAS</option>
+        <option>LEROY</option><option>SIMON</option>
+      </select>
+      <div class="search-wrap">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="search" placeholder="Nom ou N° dossier…" oninput="renderAll()">
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-item">
+        <span class="stat-val" id="stat-total" style="color:var(--brg)">—</span>
+        <span class="stat-lbl">Total</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="stat-env" style="color:#166534">—</span>
+        <span class="stat-lbl">Envoyées</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="stat-modif" style="color:var(--amber)">—</span>
+        <span class="stat-lbl">Modif en cours</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-val" id="stat-debut" style="color:var(--gray-400)">—</span>
+        <span class="stat-lbl">Non démarrés</span>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content" id="content">
+      <!-- rempli par JS -->
+    </div>
+  </main>
+</div>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const ETAPES = [
+  { id:'afaire',     label:'À faire',         short:'À\nfaire',        special:false },
+  { id:'prod',       label:'Prod ok',          short:'Prod\nok',        special:false },
+  { id:'rm',         label:'RM ok',            short:'RM\nok',          special:false },
+  { id:'associe',    label:'Associé ok',       short:'Associé\nok',     special:false },
+  { id:'prez',       label:'Préz client',      short:'Préz\nclient',    special:false },
+  { id:'modif',      label:'Modif à faire',    short:'Modif\nà faire',  special:true  },
+  { id:'liasse_rev', label:'Liasse à réviser', short:'Liasse\nréviser', special:false },
+  { id:'liasse_ok',  label:'Liasse ok',        short:'Liasse\nok',      special:false },
+  { id:'liasse_env', label:'Liasse envoyée',   short:'Liasse\nenvoyée', special:false },
+];
+
+const CLOTURES = [
+  { annee:'2025', mois:'12' },
+  { annee:'2025', mois:'09' },
+  { annee:'2025', mois:'06' },
+  { annee:'2024', mois:'12' },
+];
+
+const MOIS_NOMS = ['','Jan','Fév','Mar','Avr','Mai','Jun','Jul','Aoû','Sep','Oct','Nov','Déc'];
+const ASSOCIES  = ['MARTIN','DUPONT','LEFEBVRE'];
+const RMS       = ['MOREAU','BERNARD','PETIT','RICHARD','GARCIA','THOMAS','LEROY','SIMON'];
+const NOMS = {
+  P:   ['PHARMACIE DU CENTRE','GRANDE PHARMACIE','PHARMACIE DE LA GARE','PHARMACIE DES HALLES',
+         'PHARMACIE SAINT-JEAN','PHARMACIE DU MARCHÉ','PHARMACIE DE L\'ÉGLISE','PHARMACIE DES FLEURS',
+         'PHARMACIE PRINCIPALE','PHARMACIE DU PARC','PHARMACIE DU BOURG','PHARMACIE DE LA PLACE',
+         'PHARMACIE DES ARCADES','PHARMACIE DU CHÂTEAU','PHARMACIE LAFAYETTE','PHARMACIE VOLTAIRE',
+         'PHARMACIE VICTOR HUGO','PHARMACIE GAMBETTA','PHARMACIE JEAN JAURÈS','PHARMACIE FOCH',
+         'PHARMACIE CLEMENCEAU','PHARMACIE DU LAC','PHARMACIE PASTEUR','PHARMACIE CENTRALE'],
+  SP:  ['SPFPL SANTÉ QUERCY','SPFPL PHARMA INVEST','SPFPL DU MIDI','SPFPL LOTOISE',
+         'SPFPL OFFICINE PLUS','SPFPL MÉDICAP','SPFPL PHARMA SUD','SPFPL AVENIR SANTÉ'],
+  SCI: ['SCI LES ACACIAS','SCI DU PARC','SCI SAINT-PIERRE','SCI LES OLIVIERS',
+         'SCI LA BASTIDE','SCI DU CHÂTAIGNIER','SCI LES PLATANES','SCI DU MOULIN',
+         'SCI LES CERISIERS','SCI BELLE VUE','SCI LES VIGNES','SCI DU CAUSSE'],
+  ST:  ['SAS PHARMA GESTION','SARL OFFICINE SERVICES','SAS SANTÉ PLUS','SARL MÉDICO CONSEIL',
+         'SAS QUERCY SANTÉ','SARL PHARMA DÉVELOPP.','SAS OFFICINE HOLDING','SARL SANTÉ INVEST'],
+};
+
+const PER_PAGE = 50;
+const BATCH = { '2025-12':548, '2025-09':78, '2025-06':42, '2024-12':95 };
+
+// ── GÉNÉRATEUR DÉTERMINISTE ───────────────────────────────────────────────────
+function seededRng(seed) {
+  let s = seed;
+  return () => { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
+}
+
+function generateAll() {
+  const all = [];
+  let gid = 1;
+  for (const [cloture, count] of Object.entries(BATCH)) {
+    const rng = seededRng(parseInt(cloture.replace('-','')) + count * 7);
+    const ri = n => Math.floor(rng() * n);
+    for (let i = 0; i < count; i++) {
+      const tr = rng();
+      const type = tr < 0.55 ? 'P' : tr < 0.70 ? 'SP' : tr < 0.85 ? 'SCI' : 'ST';
+      const pool = NOMS[type];
+      const nom  = pool[ri(pool.length)] + ' ' + String(gid).padStart(4,'0');
+      const num  = String(1000 + ri(8999));
+      const stage = ri(9);
+      const statuts = { afaire:false, prod:false, rm:false, associe:false, prez:false, modif:false, liasse_rev:false, liasse_ok:false, liasse_env:false };
+      const seq = ['afaire','prod','rm','associe','prez','liasse_rev','liasse_ok','liasse_env'];
+      if (stage === 5) { ['afaire','prod','rm','associe','prez','modif'].forEach(k => statuts[k]=true); }
+      else { seq.slice(0, Math.min(stage, seq.length)).forEach(k => statuts[k]=true); }
+      all.push({ id:gid++, num, nom, type, associe:ASSOCIES[ri(3)], rm:RMS[ri(8)], cloture, statuts });
+    }
+  }
+  return all;
+}
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const ALL = generateAll();
+let currentView = 'tableau';
+let currentPage = 1;
+let dragId = null;
+
+// ── PROFIL ────────────────────────────────────────────────────────────────────
+function setProfile(p) {
+  document.querySelectorAll('.profile-btn').forEach(b => b.classList.remove('active'));
+  const btns = document.querySelectorAll('.profile-btn');
+  const map = { collab:0, resp:1, assoc:2 };
+  btns[map[p]].classList.add('active');
+}
+
+// ── SIDEBAR ───────────────────────────────────────────────────────────────────
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const btn = sb.querySelector('.collapse-btn');
+  sb.classList.toggle('collapsed');
+  btn.textContent = sb.classList.contains('collapsed') ? '▶' : '◀';
+}
+
+// ── SÉLECTEURS ANNÉE/MOIS ─────────────────────────────────────────────────────
+function initSelectors() {
+  const annees = [...new Set(CLOTURES.map(c => c.annee))];
+  const selA = document.getElementById('sel-annee');
+  annees.forEach(a => { const o = document.createElement('option'); o.value = a; o.textContent = a; selA.appendChild(o); });
+  selA.value = '2025';
+  populateMois('2025');
+}
+
+function populateMois(annee) {
+  const selM = document.getElementById('sel-mois');
+  selM.innerHTML = '';
+  const moisDispo = CLOTURES.filter(c => c.annee === annee).map(c => c.mois);
+  moisDispo.forEach(m => {
+    const o = document.createElement('option');
+    o.value = m; o.textContent = MOIS_NOMS[parseInt(m)];
+    selM.appendChild(o);
+  });
+}
+
+function onAnneeChange() {
+  populateMois(document.getElementById('sel-annee').value);
+  renderAll();
+}
+
+// ── FILTRE ────────────────────────────────────────────────────────────────────
+function getFiltered() {
+  const annee   = document.getElementById('sel-annee').value;
+  const mois    = document.getElementById('sel-mois').value;
+  const type    = document.getElementById('sel-type').value;
+  const assoc   = document.getElementById('sel-assoc').value;
+  const rm      = document.getElementById('sel-rm').value;
+  const search  = document.getElementById('search').value.toLowerCase().trim();
+  const cloture = `${annee}-${mois}`;
+
+  return ALL.filter(d =>
+    d.cloture === cloture &&
+    (!type   || d.type    === type) &&
+    (!assoc  || d.associe === assoc) &&
+    (!rm     || d.rm      === rm) &&
+    (!search || d.nom.toLowerCase().includes(search) || d.num.includes(search))
+  );
+}
+
+// ── VUE ───────────────────────────────────────────────────────────────────────
+function setView(v) {
+  currentView = v;
+  document.getElementById('btn-tableau').classList.toggle('active', v === 'tableau');
+  document.getElementById('btn-kanban').classList.toggle('active', v === 'kanban');
+  currentPage = 1;
+  renderAll();
+}
+
+function renderAll() {
+  const filtered = getFiltered();
+  updateStats(filtered);
+  updatePeriodeLabel();
+  if (currentView === 'tableau') renderTableau(filtered);
+  else renderKanban(filtered);
+}
+
+function updatePeriodeLabel() {
+  const annee = document.getElementById('sel-annee').value;
+  const mois  = document.getElementById('sel-mois').value;
+  document.getElementById('topbar-periode').textContent = `Clôture ${MOIS_NOMS[parseInt(mois)]} ${annee}`;
+}
+
+function updateStats(filtered) {
+  document.getElementById('stat-total').textContent = filtered.length;
+  document.getElementById('stat-env').textContent   = filtered.filter(d => d.statuts.liasse_env).length;
+  document.getElementById('stat-modif').textContent = filtered.filter(d => d.statuts.modif && !d.statuts.liasse_rev).length;
+  document.getElementById('stat-debut').textContent = filtered.filter(d => !d.statuts.prod).length;
+}
+
+// ── TABLEAU ───────────────────────────────────────────────────────────────────
+function renderTableau(filtered) {
+  const totalPages = Math.ceil(filtered.length / PER_PAGE);
+  if (currentPage > totalPages) currentPage = 1;
+  const paginated = filtered.slice((currentPage - 1) * PER_PAGE, currentPage * PER_PAGE);
+
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+
+  // Wrapper
+  const wrapper = document.createElement('div');
+
+  // Table
+  const twrap = document.createElement('div');
+  twrap.className = 'table-wrap';
+
+  const table = document.createElement('table');
+
+  // Thead
+  const thead = document.createElement('thead');
+  const trh = document.createElement('tr');
+  const headers = [
+    { label:'N°', cls:'', w:52 },
+    { label:'Nom du dossier', cls:'left', w:0 },
+    { label:'Type', cls:'', w:44 },
+    { label:'Associé', cls:'', w:88 },
+    { label:'RM', cls:'', w:80 },
+  ];
+  headers.forEach(h => {
+    const th = document.createElement('th');
+    th.className = h.cls;
+    if (h.w) th.style.width = h.w + 'px';
+    th.textContent = h.label;
+    trh.appendChild(th);
+  });
+  ETAPES.forEach(e => {
+    const th = document.createElement('th');
+    th.className = 'etape-header' + (e.special ? ' special' : '');
+    th.title = e.label;
+    th.innerHTML = e.short.replace('\n','<br>');
+    trh.appendChild(th);
+  });
+  thead.appendChild(trh);
+  table.appendChild(thead);
+
+  // Tbody
+  const tbody = document.createElement('tbody');
+  paginated.forEach(d => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="mono">${d.num}</td>
+      <td class="left">${d.nom}</td>
+      <td><span class="badge-type badge-${d.type}">${d.type}</span></td>
+      <td><span class="badge-assoc">${d.associe}</span></td>
+      <td class="rm-text">${d.rm}</td>
+    `;
+    ETAPES.forEach(e => {
+      const td = document.createElement('td');
+      const cell = document.createElement('div');
+      cell.className = 'check-cell' + (d.statuts[e.id] ? (e.special ? ' checked-special' : ' checked-ok') : '');
+      cell.title = e.label;
+      cell.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="${e.special ? '#d97706' : '#166534'}" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+      cell.addEventListener('click', () => toggleStatut(d.id, e.id));
+      td.appendChild(cell);
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+  table.appendChild(tbody);
+  twrap.appendChild(table);
+  wrapper.appendChild(twrap);
+
+  // Pagination
+  if (totalPages > 1) {
+    wrapper.appendChild(buildPagination(currentPage, totalPages, filtered.length));
+  }
+
+  content.appendChild(wrapper);
+}
+
+function buildPagination(page, totalPages, total) {
+  const div = document.createElement('div');
+  div.className = 'pagination';
+
+  const info = document.createElement('span');
+  info.className = 'pag-info';
+  info.textContent = `${(page-1)*PER_PAGE+1}–${Math.min(page*PER_PAGE,total)} sur ${total} dossiers`;
+
+  const btns = document.createElement('div');
+  btns.className = 'pag-btns';
+
+  const addBtn = (label, target, disabled, active) => {
+    const b = document.createElement('button');
+    b.className = 'p-btn' + (active ? ' active' : '');
+    b.textContent = label;
+    if (disabled) b.disabled = true;
+    else b.addEventListener('click', () => { currentPage = target; renderAll(); });
+    btns.appendChild(b);
+  };
+
+  addBtn('«', 1, page === 1, false);
+  addBtn('‹', page - 1, page === 1, false);
+
+  const delta = 2;
+  const pages = [];
+  for (let i = Math.max(1, page - delta); i <= Math.min(totalPages, page + delta); i++) pages.push(i);
+
+  if (pages[0] > 1) { const e = document.createElement('span'); e.className='pag-ellipsis'; e.textContent='…'; btns.appendChild(e); }
+  pages.forEach(p => addBtn(p, p, false, p === page));
+  if (pages[pages.length-1] < totalPages) { const e = document.createElement('span'); e.className='pag-ellipsis'; e.textContent='…'; btns.appendChild(e); }
+
+  addBtn('›', page + 1, page === totalPages, false);
+  addBtn('»', totalPages, page === totalPages, false);
+
+  div.appendChild(info);
+  div.appendChild(btns);
+  return div;
+}
+
+// ── KANBAN ────────────────────────────────────────────────────────────────────
+function getColonne(statuts) {
+  const ordre = ['afaire','prod','rm','associe','prez','modif','liasse_rev','liasse_ok','liasse_env'];
+  let last = null;
+  ordre.forEach(e => { if (statuts[e]) last = e; });
+  return last;
+}
+
+function renderKanban(filtered) {
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'kanban-wrap';
+
+  ETAPES.forEach(etape => {
+    const colDossiers = filtered.filter(d => getColonne(d.statuts) === etape.id);
+    const col = document.createElement('div');
+    col.className = 'kanban-col';
+    col.dataset.etape = etape.id;
+
+    col.innerHTML = `
+      <div class="kanban-col-header ${etape.special ? 'special':''}">
+        <span class="kanban-col-title ${etape.special?'special':''}">${etape.label}</span>
+        <span class="kanban-col-count ${etape.special?'special':''}">${colDossiers.length}</span>
+      </div>
+      <div class="kanban-cards"></div>
+    `;
+
+    const cardsWrap = col.querySelector('.kanban-cards');
+
+    if (colDossiers.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'kanban-empty';
+      empty.textContent = '—';
+      cardsWrap.appendChild(empty);
+    } else {
+      colDossiers.forEach(d => {
+        const card = document.createElement('div');
+        card.className = 'kanban-card';
+        card.draggable = true;
+        card.dataset.id = d.id;
+        card.innerHTML = `
+          <div class="kcard-name">${d.nom}</div>
+          <div class="kcard-meta">
+            <span class="kcard-num">${d.num}</span>
+            <span class="badge-type badge-${d.type}">${d.type}</span>
+          </div>
+          <div class="kcard-tags">
+            <span class="kcard-tag assoc">${d.associe}</span>
+            <span class="kcard-tag rm">${d.rm}</span>
+          </div>
+        `;
+        card.addEventListener('dragstart', () => {
+          dragId = d.id;
+          setTimeout(() => card.classList.add('dragging'), 0);
+        });
+        card.addEventListener('dragend', () => {
+          dragId = null;
+          card.classList.remove('dragging');
+        });
+        cardsWrap.appendChild(card);
+      });
+    }
+
+    // Drop events
+    col.addEventListener('dragover', e => { e.preventDefault(); col.classList.add('drag-over'); });
+    col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+    col.addEventListener('drop', () => {
+      col.classList.remove('drag-over');
+      if (dragId !== null) { moveToColonne(dragId, etape.id); }
+    });
+
+    wrap.appendChild(col);
+  });
+
+  content.appendChild(wrap);
+}
+
+// ── INTERACTIONS ──────────────────────────────────────────────────────────────
+function toggleStatut(id, etape) {
+  const d = ALL.find(x => x.id === id);
+  if (!d) return;
+  d.statuts[etape] = !d.statuts[etape];
+  renderAll();
+}
+
+function moveToColonne(dossierId, colonneId) {
+  const d = ALL.find(x => x.id === dossierId);
+  if (!d) return;
+  const seq = ['afaire','prod','rm','associe','prez','liasse_rev','liasse_ok','liasse_env'];
+  if (colonneId === 'modif') {
+    ['afaire','prod','rm','associe','prez','modif'].forEach(k => d.statuts[k] = true);
+    ['liasse_rev','liasse_ok','liasse_env'].forEach(k => d.statuts[k] = false);
+  } else {
+    const idx = seq.indexOf(colonneId);
+    seq.forEach((k, i) => d.statuts[k] = i <= idx);
+    d.statuts.modif = false;
+  }
+  renderAll();
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+initSelectors();
+renderAll();
+</script>
+</body>
+</html>
